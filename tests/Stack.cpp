@@ -82,5 +82,40 @@ BOOST_AUTO_TEST_SUITE(StackTests)
         BOOST_CHECK_EQUAL(stack.size(), 0);
     }
 
+    BOOST_AUTO_TEST_CASE(canPushAndPopByShiftOperators)
+    {
+        Stack<int> stack;
+        int temp = -4;
+        stack << temp;
+        BOOST_CHECK_EQUAL(stack.size(), 1);
+        BOOST_CHECK_EQUAL(stack.front(), -4);
+        stack << 93 << 24;
+        BOOST_CHECK_EQUAL(stack.size(), 3);
+        BOOST_CHECK_EQUAL(stack.front(), 24);
+        stack << 325 << 0 << 3267;
+        BOOST_CHECK_EQUAL(stack.size(), 6);
+        BOOST_CHECK_EQUAL(stack.front(), 3267);
+        int result[6];
+        stack >> result[0];
+        BOOST_CHECK_EQUAL(stack.size(), 5);
+        BOOST_CHECK_EQUAL(stack.front(), 0);
+        stack >> result[1] >> result[2] >> result[3] >> result[4] >> result[5];
+        BOOST_CHECK_EQUAL(stack.size(), 0);
+        BOOST_CHECK_EQUAL(result[0], 3267);
+        BOOST_CHECK_EQUAL(result[1], 0);
+        BOOST_CHECK_EQUAL(result[2], 325);
+        BOOST_CHECK_EQUAL(result[3], 24);
+        BOOST_CHECK_EQUAL(result[4], 93);
+        BOOST_CHECK_EQUAL(result[5], -4);
+    }
+
+    BOOST_AUTO_TEST_CASE(canThrowOnEmptyStack)
+    {
+        Stack<int> stack;
+        int result;
+        BOOST_CHECK_THROW(stack.pop(), EmptyContainerException);
+        BOOST_CHECK_THROW(stack.front(), EmptyContainerException);
+        BOOST_CHECK_THROW(stack >> result, EmptyContainerException);
+    }
 
 BOOST_AUTO_TEST_SUITE_END()

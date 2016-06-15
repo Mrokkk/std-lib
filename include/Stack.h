@@ -11,29 +11,48 @@ class Stack : private List<ElementType>
 {
 public:
 
-    void push(ElementType &element)
+    inline void push(ElementType &element)
     {
         List<ElementType>::push_back(element);
     }
 
-    void push(const ElementType &element)
+    inline void push(const ElementType &element)
     {
         List<ElementType>::push_back(element);
     }
 
-    void pop()
+    inline void pop()
     {
         List<ElementType>::pop_back();
     }
 
-    ElementType front()
+    inline ElementType front()
     {
         return List<ElementType>::back();
     }
 
-    unsigned long size()
+    inline unsigned long size()
     {
         return List<ElementType>::size();
+    }
+
+    inline Stack &operator <<(const ElementType &element)
+    {
+        push(element);
+        return *this;
+    }
+
+    inline Stack &operator <<(ElementType &element)
+    {
+        push(element);
+        return *this;
+    }
+
+    inline Stack &operator >>(ElementType &element)
+    {
+        element = front();
+        pop();
+        return *this;
     }
 
 };
