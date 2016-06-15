@@ -7,33 +7,37 @@
 #include <List.h>
 
 template <typename ElementType>
-class Stack : private List<ElementType>
+class Stack
 {
+private:
+
+    List<ElementType> _list;
+
 public:
 
     inline void push(ElementType &element)
     {
-        List<ElementType>::push_back(element);
+        _list.push_back(element);
     }
 
     inline void push(const ElementType &element)
     {
-        List<ElementType>::push_back(element);
+        _list.push_back(element);
     }
 
     inline void pop()
     {
-        List<ElementType>::pop_back();
+        _list.pop_back();
     }
 
     inline ElementType front()
     {
-        return List<ElementType>::back();
+        return _list.back();
     }
 
     inline unsigned long size()
     {
-        return List<ElementType>::size();
+        return _list.size();
     }
 
     inline Stack &operator <<(const ElementType &element)
