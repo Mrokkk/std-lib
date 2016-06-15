@@ -37,6 +37,11 @@ public:
         : _node(node)
     { }
 
+    inline ListElement<ElementType> *node()
+    {
+        return _node;
+    }
+
     inline ListIterator<ElementType> &operator ++()
     {
         _node = _node->next;
@@ -203,6 +208,25 @@ public:
             else
                 pop_back();
         }
+    }
+
+    inline void erase(ListIterator<ElementType> position)
+    {
+        __del(position.node()->prev, position.node()->next);
+    }
+
+    inline void erase(ListIterator<ElementType> first, ListIterator<ElementType> last)
+    {
+        auto firstNode = first.node();
+        auto lastNode = last.node();
+        auto temp = firstNode;
+        while (firstNode != lastNode)
+        {
+            temp = firstNode->prev;
+            __del(firstNode->prev, firstNode->next);
+            firstNode = temp->next;
+        }
+        //__del(position.node()->prev, position.node()->next);
     }
 
     inline List<ElementType> &operator =(List<ElementType> &other)

@@ -272,5 +272,42 @@ BOOST_AUTO_TEST_SUITE(ListTests)
         BOOST_CHECK_EQUAL(result[3], 3);
     }
 
+    BOOST_AUTO_TEST_CASE(canEraseSingleElement)
+    {
+        List<int> list;
+        list.push_front(43);
+        list.push_front(-59);
+        list.push_back(23);
+        auto it = list.begin();
+        ++it;
+        BOOST_CHECK_EQUAL(list.front(), -59);
+        BOOST_CHECK_EQUAL(list.back(), 23);
+        list.erase(it);
+        BOOST_CHECK_EQUAL(list.size(), 2);
+        BOOST_CHECK_EQUAL(list.front(), -59);
+        BOOST_CHECK_EQUAL(list.back(), 23);
+        list.erase(list.begin());
+        BOOST_CHECK_EQUAL(list.size(), 1);
+        BOOST_CHECK_EQUAL(list.front(), 23);
+        BOOST_CHECK_EQUAL(list.back(), 23);
+        list.erase(list.end()--);
+        BOOST_CHECK_EQUAL(list.size(), 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(canEraseElements)
+    {
+        List<int> list;
+        list.push_front(43);
+        list.push_front(-59);
+        list.push_back(23);
+        list.push_back(13);
+        list.erase(++list.begin(), list.end());
+        BOOST_CHECK_EQUAL(list.size(), 1);
+        BOOST_CHECK_EQUAL(list.front(), -59);
+        BOOST_CHECK_EQUAL(list.back(), -59);
+        list.erase(list.begin(), list.end());
+        BOOST_CHECK_EQUAL(list.size(), 0);
+    }
+
 BOOST_AUTO_TEST_SUITE_END()
 
