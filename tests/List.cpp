@@ -111,12 +111,26 @@ BOOST_AUTO_TEST_SUITE(ListTests)
         list.push_front(2);
         list.push_front(1);
         list.push_front(10);
-
         BOOST_CHECK_EQUAL(list.front(), 10);
         list.pop_front();
         BOOST_CHECK_EQUAL(list.size(), 3);
         BOOST_CHECK_EQUAL(list.back(), 3);
         BOOST_CHECK_EQUAL(list.front(), 1);
+    }
+
+    BOOST_AUTO_TEST_CASE(canBeResized)
+    {
+        List<int> list;
+        list.resize(20);
+        BOOST_CHECK_EQUAL(list.size(), 20);
+        for (auto &it : list)
+            it = 38;
+        BOOST_CHECK_EQUAL(list.front(), 38);
+        BOOST_CHECK_EQUAL(list.back(), 38);
+        list.resize(2);
+        BOOST_CHECK_EQUAL(list.front(), 38);
+        BOOST_CHECK_EQUAL(list.back(), 38);
+        BOOST_CHECK_EQUAL(list.size(), 2);
     }
 
     BOOST_AUTO_TEST_CASE(canIncrementIterator)
@@ -132,6 +146,10 @@ BOOST_AUTO_TEST_SUITE(ListTests)
         BOOST_CHECK_EQUAL(*it, 1);
         ++it;
         BOOST_CHECK_EQUAL(*it, 2);
+        it = list.begin();
+        *it = 34;
+        BOOST_CHECK_EQUAL(*it, 34);
+        BOOST_CHECK_EQUAL(list.front(), 34);
     }
 
     BOOST_AUTO_TEST_CASE(canDecrementIterator)
@@ -215,7 +233,7 @@ BOOST_AUTO_TEST_SUITE(ListTests)
         list1.push_front(2);
         list1.push_front(1);
         list1.push_front(10);
-        List<int> list2(move<List<int>>(list1));
+        List<int> list2(move(list1));
         int result[4];
         int i = 0;
         for (auto it : list2)
@@ -239,7 +257,7 @@ BOOST_AUTO_TEST_SUITE(ListTests)
         list1.push_front(10);
         List<int> list2;
         list2.push_back(4);
-        list2 = (move<List<int>>(list1));
+        list2 = move(list1);
         int result[4];
         int i = 0;
         for (auto it : list2)

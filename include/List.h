@@ -194,6 +194,17 @@ public:
         __del(_head.next->prev, _head.next->next);
     }
 
+    inline void resize(unsigned long count, ElementType val = ElementType())
+    {
+        while (_size != count)
+        {
+            if (_size < count)
+                push_back(val);
+            else
+                pop_back();
+        }
+    }
+
     inline List<ElementType> &operator =(List<ElementType> &other)
     {
         while (_size)
