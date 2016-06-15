@@ -257,6 +257,7 @@ BOOST_AUTO_TEST_SUITE(ListTests)
         list1.push_front(10);
         List<int> list2;
         list2.push_back(4);
+        list2.push_back(54);
         list2 = move(list1);
         int result[4];
         int i = 0;

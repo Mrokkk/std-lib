@@ -27,6 +27,7 @@ template <typename ElementType>
 class ListIterator
 {
 private:
+
     ListElement<ElementType> *_node = nullptr;
 
 public:
@@ -98,8 +99,18 @@ private:
     ListElement<ElementType> _head;
     unsigned int _size = 0;
 
-    inline void _add(ListElement<ElementType> *newElement, ListElement<ElementType> *prev,
-                     ListElement<ElementType> *next)
+    inline ListElement<ElementType> *last() const
+    {
+        return _head.prev;
+    }
+
+    inline ListElement<ElementType> *first() const
+    {
+        return _head.next;
+    }
+
+    inline void __add(ListElement<ElementType> *newElement, ListElement<ElementType> *prev,
+                      ListElement<ElementType> *next)
     {
         next->prev = newElement;
         prev->next = newElement;
@@ -118,6 +129,21 @@ private:
         --_size;
         if (temp)
             delete temp;
+    }
+
+    inline void addFrontElement(ListElement<ElementType> *newElement)
+    {
+        __add(newElement, &_head, _head.next);
+    }
+
+    inline void addBackElement(ListElement<ElementType> *newElement)
+    {
+        __add(newElement, _head.prev, &_head);
+    }
+
+    inline void deleteElement(ListElement<ElementType> *element)
+    {
+        __del(element->prev, element->next);
     }
 
 public:
@@ -142,8 +168,7 @@ public:
 
     inline ~List()
     {
-        while (_size)
-            pop_front();
+        clear();
     }
 
     inline unsigned int size() const
@@ -154,49 +179,55 @@ public:
     inline void push_front(ElementType element)
     {
         ListElement<ElementType> *newElement = new ListElement<ElementType>(element);
-        _add(newElement, &_head, _head.next);
+        addFrontElement(newElement);
     }
 
     inline void push_back(ElementType element)
     {
         ListElement<ElementType> *newElement = new ListElement<ElementType>(element);
-        _add(newElement, _head.prev, &_head);
+        addBackElement(newElement);
     }
 
     inline ElementType front() const
     {
         if (!_size)
             throw EmptyContainerException();
-        return _head.next->data;
+        return first()->data;
     }
 
     inline ElementType back() const
     {
         if (!_size)
             throw EmptyContainerException();
-        return _head.prev->data;
+        return last()->data;
     }
 
     inline ListIterator<ElementType> begin()
     {
-        ListIterator<ElementType> it(_head.next);
+        ListIterator<ElementType> it(first());
         return it;
     }
 
     inline ListIterator<ElementType> end()
     {
-        ListIterator<ElementType> it(&_head);
+        ListIterator<ElementType> it(last()->next);
         return it;
     }
 
     inline void pop_back()
     {
-        __del(_head.prev->prev, _head.prev->next);
+        deleteElement(last());
     }
 
     inline void pop_front()
     {
-        __del(_head.next->prev, _head.next->next);
+        deleteElement(first());
+    }
+
+    inline void clear()
+    {
+        while (_size)
+            pop_front();
     }
 
     inline void resize(unsigned long count, ElementType val = ElementType())
@@ -212,39 +243,36 @@ public:
 
     inline void erase(ListIterator<ElementType> position)
     {
-        __del(position.node()->prev, position.node()->next);
+        deleteElement(position.node());
     }
 
     inline void erase(ListIterator<ElementType> first, ListIterator<ElementType> last)
     {
-        auto firstNode = first.node();
-        auto lastNode = last.node();
-        auto temp = firstNode;
-        while (firstNode != lastNode)
+        auto firstElement = first.node();
+        auto lastElement = last.node();
+        while (firstElement != lastElement)
         {
-            temp = firstNode->prev;
-            __del(firstNode->prev, firstNode->next);
-            firstNode = temp->next;
+            auto temp = firstElement->prev;
+            deleteElement(firstElement);
+            firstElement = temp->next;
         }
-        //__del(position.node()->prev, position.node()->next);
     }
 
     inline List<ElementType> &operator =(List<ElementType> &other)
     {
-        while (_size)
-            pop_front();
+        clear();
         for (const auto &e : other)
             push_back(e);
     }
 
     inline List<ElementType> &operator =(List<ElementType> &&other)
     {
-        while (_size)
-            pop_front();
-        for (const auto &e : other)
-            push_back(e);
+        clear();
         while (other._size)
+        {
+            push_back(other.front());
             other.pop_front();
+        }
     }
 
 };
