@@ -17,57 +17,25 @@ BOOST_AUTO_TEST_SUITE(ListTests)
     BOOST_AUTO_TEST_CASE(canThrowExceptionOnFrontAccess)
     {
         List<int> list;
-        try
-        {
-            auto a = list.front();
-            BOOST_FAIL("No exception throwed");
-        }
-        catch (EmptyContainerException &exc)
-        { }
-        catch (...)
-        { BOOST_FAIL("Bad exception throwed"); }
+        BOOST_CHECK_THROW(list.front(), EmptyContainerException);
     }
 
     BOOST_AUTO_TEST_CASE(canThrowExceptionOnBackAccess)
     {
         List<int> list;
-        try
-        {
-            auto a = list.back();
-            BOOST_FAIL("No exception throwed");
-        }
-        catch (EmptyContainerException &exc)
-        { }
-        catch (...)
-        { BOOST_FAIL("Bad exception throwed"); }
+        BOOST_CHECK_THROW(list.back(), EmptyContainerException);
     }
 
     BOOST_AUTO_TEST_CASE(canThrowExceptionOnPopBack)
     {
         List<int> list;
-        try
-        {
-            list.pop_back();
-            BOOST_FAIL("No exception throwed");
-        }
-        catch (EmptyContainerException &exc)
-        { }
-        catch (...)
-        { BOOST_FAIL("Bad exception throwed"); }
+        BOOST_CHECK_THROW(list.pop_back(), EmptyContainerException);
     }
 
     BOOST_AUTO_TEST_CASE(canThrowExceptionOnPopFront)
     {
         List<int> list;
-        try
-        {
-            list.pop_front();
-            BOOST_FAIL("No exception throwed");
-        }
-        catch (EmptyContainerException &exc)
-        { }
-        catch (...)
-        { BOOST_FAIL("Bad exception throwed"); }
+        BOOST_CHECK_THROW(list.pop_front(), EmptyContainerException);
     }
 
     BOOST_AUTO_TEST_CASE(canAddFrontItem)
