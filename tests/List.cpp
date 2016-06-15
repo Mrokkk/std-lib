@@ -248,10 +248,18 @@ BOOST_AUTO_TEST_SUITE(ListTests)
         list1.push_front(1);
         list1.push_front(10);
         List<int> list2(move<List<int>>(list1));
+        int result[4];
+        int i = 0;
+        for (auto it : list2)
+            result[i++] = it;
         BOOST_CHECK_EQUAL(list1.size(), 0);
         BOOST_CHECK_EQUAL(list2.size(), 4);
         BOOST_CHECK_EQUAL(list2.front(), 10);
         BOOST_CHECK_EQUAL(list2.back(), 3);
+        BOOST_CHECK_EQUAL(result[0], 10);
+        BOOST_CHECK_EQUAL(result[1], 1);
+        BOOST_CHECK_EQUAL(result[2], 2);
+        BOOST_CHECK_EQUAL(result[3], 3);
     }
 
     BOOST_AUTO_TEST_CASE(canBeMoved)
@@ -264,10 +272,18 @@ BOOST_AUTO_TEST_SUITE(ListTests)
         List<int> list2;
         list2.push_back(4);
         list2 = (move<List<int>>(list1));
+        int result[4];
+        int i = 0;
+        for (auto it : list2)
+            result[i++] = it;
         BOOST_CHECK_EQUAL(list1.size(), 0);
         BOOST_CHECK_EQUAL(list2.size(), 4);
         BOOST_CHECK_EQUAL(list2.front(), 10);
         BOOST_CHECK_EQUAL(list2.back(), 3);
+        BOOST_CHECK_EQUAL(result[0], 10);
+        BOOST_CHECK_EQUAL(result[1], 1);
+        BOOST_CHECK_EQUAL(result[2], 2);
+        BOOST_CHECK_EQUAL(result[3], 3);
     }
 
 BOOST_AUTO_TEST_SUITE_END()

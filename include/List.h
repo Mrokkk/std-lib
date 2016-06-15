@@ -128,10 +128,11 @@ public:
 
     explicit inline List(List<ElementType> &&list)
     {
-        for (auto e : list)
-            push_back(e);
         while (list._size)
+        {
+            push_back(list.front());
             list.pop_front();
+        }
     }
 
     inline ~List()
