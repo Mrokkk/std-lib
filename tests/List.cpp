@@ -14,30 +14,6 @@ BOOST_AUTO_TEST_SUITE(ListTests)
         BOOST_CHECK_EQUAL(list.size(), 0);
     }
 
-    BOOST_AUTO_TEST_CASE(canThrowExceptionOnFrontAccess)
-    {
-        List<int> list;
-        BOOST_CHECK_THROW(list.front(), EmptyContainerException);
-    }
-
-    BOOST_AUTO_TEST_CASE(canThrowExceptionOnBackAccess)
-    {
-        List<int> list;
-        BOOST_CHECK_THROW(list.back(), EmptyContainerException);
-    }
-
-    BOOST_AUTO_TEST_CASE(canThrowExceptionOnPopBack)
-    {
-        List<int> list;
-        BOOST_CHECK_THROW(list.pop_back(), EmptyContainerException);
-    }
-
-    BOOST_AUTO_TEST_CASE(canThrowExceptionOnPopFront)
-    {
-        List<int> list;
-        BOOST_CHECK_THROW(list.pop_front(), EmptyContainerException);
-    }
-
     BOOST_AUTO_TEST_CASE(canAddFrontItem)
     {
         List<int> list;
@@ -74,13 +50,29 @@ BOOST_AUTO_TEST_SUITE(ListTests)
         BOOST_CHECK_EQUAL(list.back(), 3);
     }
 
+    BOOST_AUTO_TEST_CASE(canBeInitializedWithInitializerList)
+    {
+        List<int> list{2, 5, 6, 88, 4};
+        BOOST_CHECK_EQUAL(list.size(), 5);
+        BOOST_CHECK_EQUAL(list.front(), 2);
+        BOOST_CHECK_EQUAL(list.back(), 4);
+        int result[5];
+        int i = 0;
+        for (auto &it : list)
+            result[i++] = it;
+        BOOST_CHECK_EQUAL(result[0], 2);
+        BOOST_CHECK_EQUAL(result[1], 5);
+        BOOST_CHECK_EQUAL(result[2], 6);
+        BOOST_CHECK_EQUAL(result[3], 88);
+        BOOST_CHECK_EQUAL(result[4], 4);
+    }
+
     BOOST_AUTO_TEST_CASE(canAccessElements)
     {
         List<int> list;
         list.push_back(3);
         list.push_front(2);
         list.push_front(1);
-
         int result[3];
         int i = 0;
         for (auto it : list)
@@ -96,7 +88,6 @@ BOOST_AUTO_TEST_SUITE(ListTests)
         list.push_back(3);
         list.push_front(2);
         list.push_front(1);
-
         BOOST_CHECK_EQUAL(list.front(), 1);
         list.pop_back();
         BOOST_CHECK_EQUAL(list.size(), 2);

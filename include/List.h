@@ -17,7 +17,7 @@ struct ListElement
         : prev(this), next(this)
     { }
 
-    inline ListElement(ElementType e)
+    inline ListElement(const ElementType &e)
         : data(e), prev(this), next(this)
     { }
 
@@ -121,8 +121,6 @@ private:
 
     inline void __del(ListElement<ElementType> *prev, ListElement<ElementType> *next)
     {
-        if (!_size)
-            throw EmptyContainerException();
         auto temp = prev->next;
         next->prev = prev;
         prev->next = next;
@@ -145,7 +143,8 @@ private:
         __del(element->prev, element->next);
     }
 
-    inline void copyElementsFrom(List<ElementType> &other)
+    template <typename Type>
+    inline void copyElementsFrom(Type &other)
     {
         for (const auto &e : other)
             push_back(e);
@@ -175,6 +174,11 @@ public:
     explicit inline List()
     { }
 
+    explicit inline List(const std::initializer_list<ElementType> &list)
+    {
+        copyElementsFrom(list);
+    }
+
     explicit inline List(List<ElementType> &list)
     {
         copyElementsFrom(list);
@@ -197,50 +201,42 @@ public:
 
     inline void push_front(const ElementType &element)
     {
-        ListElement<ElementType> *newElement = new ListElement<ElementType>(element);
-        addFrontElement(newElement);
+        addFrontElement(new ListElement<ElementType>(element));
     }
 
     inline void push_back(const ElementType &element)
     {
-        ListElement<ElementType> *newElement = new ListElement<ElementType>(element);
-        addBackElement(newElement);
+        addBackElement(new ListElement<ElementType>(element));
     }
 
     inline const ElementType &front() const
     {
-        if (!_size)
-            throw EmptyContainerException();
         return frontElement()->data;
     }
 
     inline const ElementType &back() const
     {
-        if (!_size)
-            throw EmptyContainerException();
         return backElement()->data;
     }
 
     inline ListIterator<ElementType> begin()
     {
-        ListIterator<ElementType> it(frontElement());
-        return it;
+        return ListIterator<ElementType>(frontElement());
     }
 
     inline ListIterator<ElementType> end()
     {
-        ListIterator<ElementType> it(backElement()->next);
-        return it;
+        return ListIterator<ElementType>(backElement()->next);
     }
 
     inline void pop_back()
     {
-        deleteElement(backElement());
+        eraseElements(backElement(), backElement()->next);
     }
 
     inline void pop_front()
     {
-        deleteElement(frontElement());
+        eraseElements(frontElement(), frontElement()->next);
     }
 
     inline void clear()
@@ -261,7 +257,7 @@ public:
 
     inline void erase(ListIterator<ElementType> position)
     {
-        deleteElement(position.node());
+        eraseElements(position.node(), position.node()->next);
     }
 
     inline void erase(ListIterator<ElementType> first, ListIterator<ElementType> last)
