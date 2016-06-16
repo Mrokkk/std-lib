@@ -99,12 +99,12 @@ private:
     ListElement<ElementType> _head;
     unsigned int _size = 0;
 
-    inline ListElement<ElementType> *last() const
+    inline ListElement<ElementType> *backElement() const
     {
         return _head.prev;
     }
 
-    inline ListElement<ElementType> *first() const
+    inline ListElement<ElementType> *frontElement() const
     {
         return _head.next;
     }
@@ -123,12 +123,11 @@ private:
     {
         if (!_size)
             throw EmptyContainerException();
-        ListElement<ElementType> *temp = prev->next;
+        auto temp = prev->next;
         next->prev = prev;
         prev->next = next;
         --_size;
-        if (temp)
-            delete temp;
+        delete temp;
     }
 
     inline void addFrontElement(ListElement<ElementType> *newElement)
@@ -146,6 +145,31 @@ private:
         __del(element->prev, element->next);
     }
 
+    inline void copyElementsFrom(List<ElementType> &other)
+    {
+        for (const auto &e : other)
+            push_back(e);
+    }
+
+    inline void moveElementsFrom(List<ElementType> &other)
+    {
+        while (other._size)
+        {
+            push_back(other.front());
+            other.pop_front();
+        }
+    }
+
+    inline void eraseElements(ListElement<ElementType> *firstElement, const ListElement<ElementType> *lastElement)
+    {
+        while (firstElement != lastElement)
+        {
+            auto temp = firstElement->prev;
+            deleteElement(firstElement);
+            firstElement = temp->next;
+        }
+    }
+
 public:
 
     explicit inline List()
@@ -153,17 +177,12 @@ public:
 
     explicit inline List(List<ElementType> &list)
     {
-        for (auto e : list)
-            push_back(e);
+        copyElementsFrom(list);
     }
 
     explicit inline List(List<ElementType> &&list)
     {
-        while (list._size)
-        {
-            push_back(list.front());
-            list.pop_front();
-        }
+        moveElementsFrom(list);
     }
 
     inline ~List()
@@ -176,58 +195,57 @@ public:
         return _size;
     }
 
-    inline void push_front(ElementType element)
+    inline void push_front(const ElementType &element)
     {
         ListElement<ElementType> *newElement = new ListElement<ElementType>(element);
         addFrontElement(newElement);
     }
 
-    inline void push_back(ElementType element)
+    inline void push_back(const ElementType &element)
     {
         ListElement<ElementType> *newElement = new ListElement<ElementType>(element);
         addBackElement(newElement);
     }
 
-    inline ElementType front() const
+    inline const ElementType &front() const
     {
         if (!_size)
             throw EmptyContainerException();
-        return first()->data;
+        return frontElement()->data;
     }
 
-    inline ElementType back() const
+    inline const ElementType &back() const
     {
         if (!_size)
             throw EmptyContainerException();
-        return last()->data;
+        return backElement()->data;
     }
 
     inline ListIterator<ElementType> begin()
     {
-        ListIterator<ElementType> it(first());
+        ListIterator<ElementType> it(frontElement());
         return it;
     }
 
     inline ListIterator<ElementType> end()
     {
-        ListIterator<ElementType> it(last()->next);
+        ListIterator<ElementType> it(backElement()->next);
         return it;
     }
 
     inline void pop_back()
     {
-        deleteElement(last());
+        deleteElement(backElement());
     }
 
     inline void pop_front()
     {
-        deleteElement(first());
+        deleteElement(frontElement());
     }
 
     inline void clear()
     {
-        while (_size)
-            pop_front();
+        eraseElements(frontElement(), backElement()->next);
     }
 
     inline void resize(unsigned long count, ElementType val = ElementType())
@@ -248,31 +266,19 @@ public:
 
     inline void erase(ListIterator<ElementType> first, ListIterator<ElementType> last)
     {
-        auto firstElement = first.node();
-        auto lastElement = last.node();
-        while (firstElement != lastElement)
-        {
-            auto temp = firstElement->prev;
-            deleteElement(firstElement);
-            firstElement = temp->next;
-        }
+        eraseElements(first.node(), last.node());
     }
 
     inline List<ElementType> &operator =(List<ElementType> &other)
     {
         clear();
-        for (const auto &e : other)
-            push_back(e);
+        copyElementsFrom(other);
     }
 
     inline List<ElementType> &operator =(List<ElementType> &&other)
     {
         clear();
-        while (other._size)
-        {
-            push_back(other.front());
-            other.pop_front();
-        }
+        moveElementsFrom(other);
     }
 
 };
