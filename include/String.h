@@ -88,12 +88,12 @@ public:
         string._ptr = nullptr;
     }
 
-    inline bool isEmpty()
+    inline bool isEmpty() const
     {
         return _maxSize == 0;
     }
 
-    inline unsigned long size()
+    inline unsigned long size() const
     {
         return _len;
     }
@@ -119,7 +119,7 @@ public:
         appendString(string);
     }
 
-    inline void append(String &string)
+    inline void append(const String &string)
     {
         appendString(string._ptr);
     }
@@ -127,16 +127,17 @@ public:
     inline void append(String &&string)
     {
         appendString(string._ptr);
+        string.clear();
     }
 
-    inline void append(int number)
+    inline void append(const int &number)
     {
         char string[32];
         sprintf(string, "%d", number);
         appendString(string);
     }
 
-    inline void append(unsigned int number)
+    inline void append(const unsigned int &number)
     {
         char string[32];
         sprintf(string, "%u", number);
@@ -150,7 +151,7 @@ public:
         appendString(string);
     }
 
-    inline String &operator <<(String &string)
+    inline String &operator <<(const String &string)
     {
         appendString(string._ptr);
         return *this;
@@ -162,27 +163,27 @@ public:
         return *this;
     }
 
-    inline bool operator ==(const String &string)
+    inline bool operator ==(const String &string) const
     {
         return strcmp(_ptr, string._ptr) == 0;
     }
 
-    inline bool operator ==(const char *string)
+    inline bool operator ==(const char *string) const
     {
         return strcmp(_ptr, string) == 0;
     }
 
-    inline bool operator !=(const String &string)
+    inline bool operator !=(const String &string) const
     {
         return strcmp(_ptr, string._ptr) != 0;
     }
 
-    inline bool operator !=(const char *string)
+    inline bool operator !=(const char *string) const
     {
         return strcmp(_ptr, string) != 0;
     }
 
-    inline operator char *()
+    inline operator char *() const
     {
         return _ptr;
     }
