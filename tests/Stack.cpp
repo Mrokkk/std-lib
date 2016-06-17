@@ -109,13 +109,4 @@ BOOST_AUTO_TEST_SUITE(StackTests)
         BOOST_CHECK_EQUAL(result[5], -4);
     }
 
-    BOOST_AUTO_TEST_CASE(canThrowOnEmptyStack)
-    {
-        Stack<int> stack;
-        int result;
-        BOOST_CHECK_THROW(stack.pop(), EmptyContainerException);
-        BOOST_CHECK_THROW(stack.front(), EmptyContainerException);
-        BOOST_CHECK_THROW(stack >> result, EmptyContainerException);
-    }
-
 BOOST_AUTO_TEST_SUITE_END()
