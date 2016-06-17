@@ -67,4 +67,59 @@ BOOST_AUTO_TEST_SUITE(MixedTests)
         BOOST_CHECK_EQUAL(count_if(list, [](const int &e){ return 0; }), 0);
     }
 
+    BOOST_AUTO_TEST_CASE(canSwapSameSizeLists)
+    {
+        List<int> list1{3, 7, 8, 6};
+        List<int> list2{9, 15, -3, 21};
+        swap(list1, list2);
+        BOOST_CHECK_EQUAL(list1.size(), 4);
+        BOOST_CHECK_EQUAL(list1.front(), 9);
+        BOOST_CHECK_EQUAL(list1.back(), 21);
+        BOOST_CHECK_EQUAL(list2.size(), 4);
+        BOOST_CHECK_EQUAL(list2.front(), 3);
+        BOOST_CHECK_EQUAL(list2.back(), 6);
+        swap(list1, list2);
+        BOOST_CHECK_EQUAL(list2.size(), 4);
+        BOOST_CHECK_EQUAL(list2.front(), 9);
+        BOOST_CHECK_EQUAL(list2.back(), 21);
+        BOOST_CHECK_EQUAL(list1.size(), 4);
+        BOOST_CHECK_EQUAL(list1.front(), 3);
+        BOOST_CHECK_EQUAL(list1.back(), 6);
+    }
+
+    BOOST_AUTO_TEST_CASE(canSwapDifferentSizeLists)
+    {
+        List<int> list1{3, 7, 8, 6, 8, 4};
+        List<int> list2{9, 15, -3, 21};
+        swap(list1, list2);
+        BOOST_CHECK_EQUAL(list1.size(), 4);
+        BOOST_CHECK_EQUAL(list1.front(), 9);
+        BOOST_CHECK_EQUAL(list1.back(), 21);
+        BOOST_CHECK_EQUAL(list2.size(), 6);
+        BOOST_CHECK_EQUAL(list2.front(), 3);
+        BOOST_CHECK_EQUAL(list2.back(), 4);
+        swap(list1, list2);
+        BOOST_CHECK_EQUAL(list2.size(), 4);
+        BOOST_CHECK_EQUAL(list2.front(), 9);
+        BOOST_CHECK_EQUAL(list2.back(), 21);
+        BOOST_CHECK_EQUAL(list1.size(), 6);
+        BOOST_CHECK_EQUAL(list1.front(), 3);
+        BOOST_CHECK_EQUAL(list1.back(), 4);
+    }
+
+    BOOST_AUTO_TEST_CASE(canFillList)
+    {
+        List<int> list;
+        list.resize(30);
+        fill(list, 945);
+        BOOST_CHECK_EQUAL(list.size(), 30);
+        BOOST_CHECK_EQUAL(list.front(), 945);
+        BOOST_CHECK_EQUAL(list.back(), 945);
+        list.resize(10);
+        fill(list, 3);
+        BOOST_CHECK_EQUAL(list.size(), 10);
+        BOOST_CHECK_EQUAL(list.front(), 3);
+        BOOST_CHECK_EQUAL(list.back(), 3);
+    }
+
 BOOST_AUTO_TEST_SUITE_END()

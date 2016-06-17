@@ -38,3 +38,17 @@ inline int count_if(Container &c, Lambda lambda)
     return result;
 };
 
+template <typename Container, typename Type>
+inline void fill(Container &c, const Type &e)
+{
+    for (auto &i : c)
+        i = e;
+};
+
+template <typename Container>
+inline void swap(Container &c1, Container &c2)
+{
+    auto temp(move(c1));
+    c1 = move(c2);
+    c2 = move(temp);
+}
