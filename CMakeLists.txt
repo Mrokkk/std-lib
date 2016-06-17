@@ -6,7 +6,7 @@ include(Coverage)
 
 set(CMAKE_C_COMPILER "gcc-6.1")
 set(CMAKE_CXX_COMPILER "g++-6.1")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -O0 -std=c++14 -lboost_unit_test_framework --coverage -fprofile-arcs -ftest-coverage")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -O0 -std=c++17 -lboost_unit_test_framework --coverage -fprofile-arcs -ftest-coverage")
 add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
 
 include_directories(include)
@@ -16,6 +16,7 @@ setup_target_for_coverage(${PROJECT_NAME}_coverage ${PROJECT_NAME} ${CMAKE_CURRE
 
 set(SOURCE_FILES main.cpp include/List.h include/Pointer.h include/Array.h tests/List.cpp tests/Array.cpp
         tests/SharedPointer.cpp tests/UniquePointer.cpp include/Move.h tests/String.cpp include/String.h
-        include/initializer_list.h tests/Stack.cpp include/Stack.h include/Queue.h include/Exception.h tests/Queue.cpp tests/Mixed.cpp)
+        include/initializer_list.h tests/Stack.cpp include/Stack.h include/Queue.h include/Exception.h tests/Queue.cpp
+        tests/Mixed.cpp include/Algorithm.h)
 
 add_executable(std_lib ${SOURCE_FILES})
