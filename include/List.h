@@ -38,7 +38,7 @@ public:
         : _node(node)
     { }
 
-    inline ListElement<ElementType> *node()
+    inline ListElement<ElementType> *node() const
     {
         return _node;
     }
@@ -69,22 +69,22 @@ public:
         return *this;
     }
 
-    inline ElementType &operator *()
+    inline ElementType &operator *() const
     {
         return _node->data;
     }
 
-    inline ElementType *operator ->()
+    inline ElementType *operator ->() const
     {
         return &_node->data;
     }
 
-    inline bool operator !=(ListIterator<ElementType> &element) const
+    inline bool operator !=(const ListIterator<ElementType> &element) const
     {
         return element._node != _node;
     }
 
-    inline bool operator ==(ListIterator<ElementType> &element) const
+    inline bool operator ==(const ListIterator<ElementType> &element) const
     {
         return element._node == _node;
     }
@@ -109,8 +109,8 @@ private:
         return _head.next;
     }
 
-    inline void __add(ListElement<ElementType> *newElement, ListElement<ElementType> *prev,
-                      ListElement<ElementType> *next)
+    inline void add(ListElement<ElementType> *newElement, ListElement<ElementType> *prev,
+                    ListElement<ElementType> *next)
     {
         next->prev = newElement;
         prev->next = newElement;
@@ -119,7 +119,7 @@ private:
         ++_size;
     }
 
-    inline void __del(ListElement<ElementType> *prev, ListElement<ElementType> *next)
+    inline void del(ListElement<ElementType> *prev, ListElement<ElementType> *next)
     {
         auto temp = prev->next;
         next->prev = prev;
@@ -130,21 +130,21 @@ private:
 
     inline void addFrontElement(ListElement<ElementType> *newElement)
     {
-        __add(newElement, &_head, _head.next);
+        add(newElement, &_head, _head.next);
     }
 
     inline void addBackElement(ListElement<ElementType> *newElement)
     {
-        __add(newElement, _head.prev, &_head);
+        add(newElement, _head.prev, &_head);
     }
 
     inline void deleteElement(ListElement<ElementType> *element)
     {
-        __del(element->prev, element->next);
+        del(element->prev, element->next);
     }
 
     template <typename Type>
-    inline void copyElementsFrom(Type &other)
+    inline void copyElementsFrom(const Type &other)
     {
         for (const auto &e : other)
             push_back(e);
@@ -219,12 +219,12 @@ public:
         return backElement()->data;
     }
 
-    inline ListIterator<ElementType> begin()
+    inline ListIterator<ElementType> begin() const
     {
         return ListIterator<ElementType>(frontElement());
     }
 
-    inline ListIterator<ElementType> end()
+    inline ListIterator<ElementType> end() const
     {
         return ListIterator<ElementType>(backElement()->next);
     }
@@ -246,11 +246,13 @@ public:
 
     inline void resize(unsigned long count, ElementType val = ElementType())
     {
-        while (_size != count)
+        if (_size < count)
         {
-            if (_size < count)
+            while (_size != count)
                 push_back(val);
-            else
+        } else
+        {
+            while (_size != count)
                 pop_back();
         }
     }
@@ -260,12 +262,12 @@ public:
         eraseElements(position.node(), position.node()->next);
     }
 
-    inline void erase(ListIterator<ElementType> first, ListIterator<ElementType> last)
+    inline void erase(const ListIterator<ElementType> &first, const ListIterator<ElementType> &last)
     {
         eraseElements(first.node(), last.node());
     }
 
-    inline List<ElementType> &operator =(List<ElementType> &other)
+    inline List<ElementType> &operator =(const List<ElementType> &other)
     {
         clear();
         copyElementsFrom(other);

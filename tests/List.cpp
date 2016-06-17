@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_SUITE(ListTests)
         list.push_front(1);
         int result[3];
         int i = 0;
-        for (auto it : list)
+        for (const auto &it : list)
             result[i++] = it;
         BOOST_CHECK_EQUAL(result[0], 1);
         BOOST_CHECK_EQUAL(result[1], 2);
@@ -227,7 +227,7 @@ BOOST_AUTO_TEST_SUITE(ListTests)
         List<int> list2(move(list1));
         int result[4];
         int i = 0;
-        for (auto it : list2)
+        for (const auto &it : list2)
             result[i++] = it;
         BOOST_CHECK_EQUAL(list1.size(), 0);
         BOOST_CHECK_EQUAL(list2.size(), 4);
@@ -252,7 +252,7 @@ BOOST_AUTO_TEST_SUITE(ListTests)
         list2 = move(list1);
         int result[4];
         int i = 0;
-        for (auto it : list2)
+        for (const auto &it : list2)
             result[i++] = it;
         BOOST_CHECK_EQUAL(list1.size(), 0);
         BOOST_CHECK_EQUAL(list2.size(), 4);
