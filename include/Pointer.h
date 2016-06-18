@@ -7,15 +7,19 @@
 template <typename Type>
 class UniquePointer
 {
+
+    using Reference = Type &;
+    using Pointer = Type *;
+
 private:
-    Type *_ptr = nullptr;
+    Pointer _ptr = nullptr;
 
 public:
 
-    constexpr inline UniquePointer()
+    inline UniquePointer()
     { }
 
-    constexpr inline UniquePointer(Type *ptr)
+    inline UniquePointer(Pointer ptr)
         : _ptr(ptr)
     { }
 
@@ -38,24 +42,25 @@ public:
     {
         _ptr = other._ptr;
         other._ptr = nullptr;
+        return *this;
     }
 
-    inline Type *get() const
+    inline Pointer get() const
     {
         return _ptr;
     }
 
-    inline Type operator *()
+    inline Reference operator *() const
     {
         return *_ptr;
     }
 
-    inline Type *operator ->()
+    inline Pointer operator ->() const
     {
         return _ptr;
     }
 
-    inline operator Type *()
+    inline operator Pointer() const
     {
         return _ptr;
     }
@@ -66,16 +71,19 @@ template <typename Type>
 class SharedPointer
 {
 
+    using Reference = Type &;
+    using Pointer = Type *;
+
 private:
-    Type *_ptr = nullptr;
+    Pointer _ptr = nullptr;
     unsigned *_refCount = nullptr;
 
 public:
 
-    constexpr inline SharedPointer()
+    inline SharedPointer()
     { }
 
-    constexpr inline SharedPointer(Type *ptr)
+    inline SharedPointer(Pointer ptr)
         : _ptr(ptr), _refCount(new unsigned(1))
     { }
 
@@ -84,6 +92,14 @@ public:
         _ptr = ptr._ptr;
         _refCount = ptr._refCount;
         ++*_refCount;
+    }
+
+    inline SharedPointer(SharedPointer &&other)
+    {
+        _ptr = other._ptr;
+        other._ptr = nullptr;
+        _refCount = other._refCount;
+        other._refCount = nullptr;
     }
 
     inline ~SharedPointer()
@@ -104,27 +120,36 @@ public:
         return *this;
     }
 
-    inline Type &operator *()
+    inline SharedPointer &operator =(SharedPointer &&other)
+    {
+        _ptr = other._ptr;
+        other._ptr = nullptr;
+        _refCount = other._refCount;
+        other._refCount = nullptr;
+        return *this;
+    }
+
+    inline Reference operator *() const
     {
         return *_ptr;
     }
 
-    inline Type *operator ->()
+    inline Pointer operator ->() const
     {
         return _ptr;
     }
 
-    inline operator Type *()
+    inline operator Pointer() const
     {
         return _ptr;
     }
 
-    inline Type *get() const
+    inline Pointer get() const
     {
         return _ptr;
     }
 
-    inline unsigned getRefCount()
+    inline unsigned getRefCount() const
     {
         if (_refCount)
             return *_refCount;

@@ -34,10 +34,27 @@ TEST(UniquePointerTests, canBeMoved)
     EXPECT_EQ(ptr1.get(), (void *) NULL);
 }
 
-TEST(UniquePointerTests, canBeConstructedFromOther)
+TEST(UniquePointerTests, canBeConstructedByMoving)
 {
     auto ptr1 = makeUnique<int>(10);
     UniquePointer<int> ptr2(move(ptr1));
     EXPECT_EQ(*ptr2, 10);
     EXPECT_EQ(ptr1.get(), (void *) NULL);
 }
+
+TEST(UniquePointerTests, canBeCastedToRawPointer)
+{
+    auto ptr = makeUnique(10);
+    int *rawPtr = ptr;
+    EXPECT_EQ(*ptr, 10);
+    EXPECT_EQ(*rawPtr, 10);
+    EXPECT_EQ(ptr.get(), rawPtr);
+}
+
+TEST(UniquePointerTests, canHaveItsValueModified)
+{
+    auto ptr = makeUnique(10);
+    *ptr = 39;
+    EXPECT_EQ(*ptr, 39);
+}
+
