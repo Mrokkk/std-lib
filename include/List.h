@@ -171,20 +171,20 @@ private:
 
 public:
 
-    explicit inline List()
+    inline List()
     { }
 
-    explicit inline List(const std::initializer_list<ElementType> &list)
+    inline List(const std::initializer_list<ElementType> &list)
     {
         copyElementsFrom(list);
     }
 
-    explicit inline List(List<ElementType> &list)
+    inline List(const List<ElementType> &list)
     {
         copyElementsFrom(list);
     }
 
-    explicit inline List(List<ElementType> &&list)
+    inline List(List<ElementType> &&list)
     {
         moveElementsFrom(list);
     }
@@ -271,12 +271,14 @@ public:
     {
         clear();
         copyElementsFrom(other);
+        return *this;
     }
 
     inline List<ElementType> &operator =(List<ElementType> &&other)
     {
         clear();
         moveElementsFrom(other);
+        return *this;
     }
 
 };
