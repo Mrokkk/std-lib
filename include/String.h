@@ -90,7 +90,7 @@ public:
 
     inline bool isEmpty() const
     {
-        return _maxSize == 0;
+        return _len == 0;
     }
 
     inline unsigned long size() const
@@ -98,11 +98,9 @@ public:
         return _len;
     }
 
-    inline char &operator [](int index)
+    inline char &operator [](unsigned long index)
     {
-        if (index > _len)
-            return _ptr[_len];
-        return _ptr[index];
+        return _ptr[index > _len ? _len : index];
     }
 
     inline String &operator =(const String &other)
@@ -147,7 +145,7 @@ public:
     inline void append(void *address)
     {
         char string[32];
-        sprintf(string, "0x%x", address);
+        sprintf(string, "%p", address);
         appendString(string);
     }
 
