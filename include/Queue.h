@@ -7,33 +7,50 @@
 #include <List.h>
 
 template <typename ElementType>
-class Queue : private List<ElementType>
+class Queue
 {
+private:
+
+    List<ElementType> _list;
+
 public:
 
-    void push(ElementType &element)
+    inline void push(ElementType &element)
     {
-        List<ElementType>::push_back(element);
+        _list.push_back(element);
     }
 
-    void push(const ElementType &element)
+    inline void push(const ElementType &element)
     {
-        List<ElementType>::push_back(element);
+        _list.push_back(element);
     }
 
-    void pop()
+    inline void pop()
     {
-        List<ElementType>::pop_front();
+        _list.pop_front();
     }
 
-    ElementType front()
+    constexpr inline const ElementType &front() const
     {
-        return List<ElementType>::front();
+        return _list.front();
     }
 
-    unsigned long size()
+    constexpr inline unsigned long size() const
     {
-        return List<ElementType>::size();
+        return _list.size();
+    }
+
+    inline Queue &operator <<(const ElementType &element)
+    {
+        push(element);
+        return *this;
+    }
+
+    inline Queue &operator >>(ElementType &element)
+    {
+        element = front();
+        pop();
+        return *this;
     }
 
 };

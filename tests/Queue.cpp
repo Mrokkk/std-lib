@@ -79,3 +79,30 @@ TEST(QueueTests, canPushAndPopMoreElements)
     queue.pop();
     EXPECT_EQ(queue.size(), 0);
 }
+
+TEST(QueueTests, canPushAndPopByShiftOperators)
+{
+    Queue<int> queue;
+    int temp = -4;
+    queue << temp;
+    EXPECT_EQ(queue.size(), 1);
+    EXPECT_EQ(queue.front(), -4);
+    queue << 93 << 24;
+    EXPECT_EQ(queue.size(), 3);
+    EXPECT_EQ(queue.front(), -4);
+    queue << 325 << 0 << 3267;
+    EXPECT_EQ(queue.size(), 6);
+    EXPECT_EQ(queue.front(), -4);
+    int result[6];
+    queue >> result[0];
+    EXPECT_EQ(queue.size(), 5);
+    EXPECT_EQ(queue.front(), 93);
+    queue >> result[1] >> result[2] >> result[3] >> result[4] >> result[5];
+    EXPECT_EQ(queue.size(), 0);
+    EXPECT_EQ(result[0], -4);
+    EXPECT_EQ(result[1], 93);
+    EXPECT_EQ(result[2], 24);
+    EXPECT_EQ(result[3], 325);
+    EXPECT_EQ(result[4], 0);
+    EXPECT_EQ(result[5], 3267);
+}
