@@ -8,7 +8,6 @@
 #include <Algorithm.h>
 #include <String.h>
 
-
 TEST(MixedTests, canCreateSharedPointerList)
 {
     List<SharedPointer<int>> list;
@@ -17,8 +16,10 @@ TEST(MixedTests, canCreateSharedPointerList)
     list.push_front(SharedPointer<int>(new int(6)));
     auto it = list.begin();
     EXPECT_EQ(**it, 6);
+    EXPECT_EQ(it->getRefCount(), 1);
     it++;
     EXPECT_EQ(**it, 5);
+    EXPECT_EQ(it->getRefCount(), 2);
 }
 
 TEST(MixedTests, canCreateStringList)
@@ -64,9 +65,17 @@ TEST(MixedTests, canUseCountOnList)
     EXPECT_EQ(result1, 10);
     auto result2 = count_if(list, [ ](const int &e) { return e < 3; });
     EXPECT_EQ(result2, 0);
-    auto result3 = count_if(list, [ ](const int &e) { return 1; });
+    auto result3 = count_if(list, [ ](const int &e)
+    {
+        (void) e;
+        return 1;
+    });
     EXPECT_EQ(result3, 12);
-    auto result4 = count_if(list, [ ](const int &e) { return 0; });
+    auto result4 = count_if(list, [ ](const int &e)
+    {
+        (void) e;
+        return 0;
+    });
     EXPECT_EQ(result4, 0);
 }
 
