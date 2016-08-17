@@ -1,3 +1,3 @@
 language: cpp
 compiler: gcc
-script: ci.sh
+script: ./ci.sh
