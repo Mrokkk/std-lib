@@ -6,6 +6,10 @@ addons:
         packages:
             - g++-6
 
+cache:
+    - ccache
+    - packages
+
 language: cpp
 compiler: g++-6
 script: ./ci.sh
