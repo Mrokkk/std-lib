@@ -1,4 +1,6 @@
-mkdir -p build; cd build
-cmake ..
+mkdir -p build
+pushd build
+cmake -DCMAKE_CXX_COMPILER=g++-6 ..
 make
-../bin/std_lib
+popd
+./bin/std_lib
