@@ -3,18 +3,14 @@ image: gcc:6.1
 
 build:
   stage: build
-  # instead of calling g++ directly you can also use some build toolkit like make
-  # install the necessary build tools when needed
-  # before_script: 
-  #   - apt update && apt -y install make autoconf 
+  before_script: 
+    - apt update && apt -y install make cmake 
   script: 
     - ./ci.sh build
-  # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
-  # cache:
-  #   paths:
-  #     - "*.o"
+  cache:
+    paths:
+        - "build/"
 
-# run tests using the binary built before
 test:
   stage: test
   script:
