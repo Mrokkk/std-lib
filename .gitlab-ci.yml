@@ -4,7 +4,8 @@ image: gcc:6.1
 build:
   stage: build
   before_script: 
-    - apt update && apt -y install make cmake 
+    - apt update && apt -y install make cmake
+    - git submodule --init --recursive
   script: 
     - ./ci.sh build
   cache:
