@@ -16,7 +16,7 @@ test:
 test-valgrind:
   stage: test
   before_script: 
-    - apt update && apt -y install make cmake
+    - apt update && apt -y install make cmake valgrind
     - git submodule update --init --recursive
   script:
     - ./ci.sh build
@@ -24,3 +24,16 @@ test-valgrind:
   cache:
     paths:
         - "build/"
+        
+test-coverage:
+  stage: test
+  before_script: 
+    - apt update && apt -y install make cmake gcovr
+    - git submodule update --init --recursive
+  script:
+    - ./ci.sh build
+    - COVERAGE=1 ./ci.sh run_tests
+  cache:
+    paths:
+        - "build/"    
+    
