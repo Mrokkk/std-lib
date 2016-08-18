@@ -28,6 +28,6 @@ add_executable(std_lib ${SOURCE_FILES})
 target_link_libraries(std_lib gtest gtest_main pthread)
 if(COVERAGE)
     ADD_CUSTOM_TARGET(coverage
-        COMMAND gcovr -o ut.coverage.raw -r ../include . && COMMAND gcovr -r ../include . && gcovr --html --html-details -o ut.coverage.html -r ../include .
+        COMMAND gcovr -o ut.coverage.raw -r ../include . && gcovr --html --html-details -o ut.coverage.html -r ../include . && cat ut.coverage.raw
     )
 endif()
