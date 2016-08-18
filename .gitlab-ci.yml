@@ -12,3 +12,15 @@ test:
   cache:
     paths:
         - "build/"
+
+test-valgrind:
+  stage: test
+  before_script: 
+    - apt update && apt -y install make cmake
+    - git submodule update --init --recursive
+  script:
+    - ./ci.sh build
+    - VALGRIND=1 ./ci.sh run_tests
+  cache:
+    paths:
+        - "build/"
