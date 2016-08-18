@@ -1,6 +1,10 @@
 mkdir -p build
 pushd build
-cmake -DCMAKE_CXX_COMPILER=g++-6 ..
+cmake ..
 make
 popd
-./bin/std_lib
+if [[ $VALGRIND ]]; then
+    valgrind ./bin/std_lib
+else
+    ./bin/std_lib
+fi

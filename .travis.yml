@@ -5,12 +5,14 @@ addons:
             - ubuntu-toolchain-r-test
         packages:
             - g++-6
+            - valgrind
 
 cache:
     - ccache
     - packages
 
 language: cpp
-compiler: g++-6
 script: ./ci.sh
-
+---
+language: cpp
+script: VALGRIND=1 ./ci.sh
