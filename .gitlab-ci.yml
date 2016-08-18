@@ -3,37 +3,38 @@ image: gcc:6.1
 
 test:
   stage: test
-  before_script: 
+  before_script:
     - apt update && apt -y install make cmake
     - git submodule update --init --recursive
   script:
-    - ./ci.sh build
-    - ./ci.sh run_tests
+    - ./ci.sh ut
   cache:
     paths:
         - "build/"
 
 test-valgrind:
   stage: test
-  before_script: 
+  before_script:
     - apt update && apt -y install make cmake valgrind
     - git submodule update --init --recursive
   script:
-    - ./ci.sh build
-    - VALGRIND=1 ./ci.sh run_tests
+    - VALGRIND=1 ./ci.sh ut
   cache:
     paths:
         - "build/"
-        
+
 test-coverage:
   stage: test
-  before_script: 
+  before_script:
     - apt update && apt -y install make cmake gcovr
     - git submodule update --init --recursive
   script:
-    - ./ci.sh build
-    - COVERAGE=1 ./ci.sh run_tests
+    - COVERAGE=1 ./ci.sh ut
   cache:
     paths:
-        - "build/"    
-    
+        - "build/"
+  artifacts:
+    name: "$CI_BUILD_NAME"
+    paths:
+        - build/*.coverage.*
+

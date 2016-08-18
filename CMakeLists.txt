@@ -12,8 +12,9 @@ set(COVERAGE_FLAGS "--coverage -fprofile-arcs -ftest-coverage")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g${DEBUG_LEVEL} -std=${CPP_STANDARD} ${WARNING_FLAGS} ${COVERAGE_FLAGS}")
 add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
 
-#include(Coverage)
-#setup_target_for_coverage(${PROJECT_NAME}_coverage ${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/coverage)
+if(COVERAGE)
+    add_definitions("-g -O0 --coverage -fprofile-arcs -ftest-coverage -lgcov")
+endif()
 
 include_directories(googletest/googletest/include)
 add_subdirectory(googletest/googletest)
@@ -25,3 +26,8 @@ set(SOURCE_FILES include/List.h include/Pointer.h include/Array.h tests/List.cpp
 include_directories(include)
 add_executable(std_lib ${SOURCE_FILES})
 target_link_libraries(std_lib gtest gtest_main pthread)
+if(COVERAGE)
+    ADD_CUSTOM_TARGET(coverage
+        COMMAND gcovr -o ut.coverage.raw -r ../include . && gcovr --html --html-details -o ut.coverage.html -r ../include .
+    )
+endif()
