@@ -12,7 +12,7 @@ cache:
     - packages
 
 language: cpp
-script: ./ci.sh
+script: ./ci.sh ut
 ---
 language: cpp
-script: VALGRIND=1 ./ci.sh
+script: VALGRIND=1 ./ci.sh ut
