@@ -1,13 +1,8 @@
-//
-// Created by maciek on 12.06.16.
-//
-
 #pragma once
 
 template <typename ElementType>
-class ArrayIterator
-{
-private:
+class ArrayIterator {
+
     ElementType *_ptr = nullptr;
 
 public:
@@ -67,9 +62,7 @@ public:
 };
 
 template <typename ElementType, unsigned int _size = 0>
-class Array
-{
-private:
+class Array {
 
     ElementType _array[_size];
 
