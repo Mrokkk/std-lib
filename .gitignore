@@ -1,3 +1,4 @@
-bin/*
+bin/
+build/
 coverage/*
 .idea/workspace.xml
