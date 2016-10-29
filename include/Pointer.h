@@ -1,17 +1,13 @@
-//
-// Created by maciek on 10.06.16.
-//
-
 #pragma once
 
 template <typename Type>
-class UniquePointer
-{
+class UniquePointer {
 
     using Reference = Type &;
     using Pointer = Type *;
 
 private:
+
     Pointer _ptr = nullptr;
 
 public:
@@ -27,54 +23,47 @@ public:
 
     UniquePointer(UniquePointer &) = delete;
 
-    inline UniquePointer(UniquePointer &&other)
-    {
+    inline UniquePointer(UniquePointer &&other) {
         _ptr = other._ptr;
         other._ptr = nullptr;
     }
 
-    inline ~UniquePointer()
-    {
+    inline ~UniquePointer() {
         delete _ptr;
     }
 
-    inline UniquePointer &operator =(UniquePointer &&other)
-    {
+    inline UniquePointer &operator =(UniquePointer &&other) {
         _ptr = other._ptr;
         other._ptr = nullptr;
         return *this;
     }
 
-    inline Pointer get() const
-    {
+    inline Pointer get() const {
         return _ptr;
     }
 
-    inline Reference operator *() const
-    {
+    inline Reference operator *() const {
         return *_ptr;
     }
 
-    inline Pointer operator ->() const
-    {
+    inline Pointer operator ->() const {
         return _ptr;
     }
 
-    inline operator Pointer() const
-    {
+    inline operator Pointer() const {
         return _ptr;
     }
 
 };
 
 template <typename Type>
-class SharedPointer
-{
+class SharedPointer {
 
     using Reference = Type &;
     using Pointer = Type *;
 
 private:
+
     Pointer _ptr = nullptr;
     unsigned *_refCount = nullptr;
 
@@ -87,41 +76,35 @@ public:
         : _ptr(ptr), _refCount(new unsigned(1))
     { }
 
-    inline SharedPointer(const SharedPointer &ptr)
-    {
+    inline SharedPointer(const SharedPointer &ptr) {
         _ptr = ptr._ptr;
         _refCount = ptr._refCount;
         ++*_refCount;
     }
 
-    inline SharedPointer(SharedPointer &&other)
-    {
+    inline SharedPointer(SharedPointer &&other) {
         _ptr = other._ptr;
         other._ptr = nullptr;
         _refCount = other._refCount;
         other._refCount = nullptr;
     }
 
-    inline ~SharedPointer()
-    {
+    inline ~SharedPointer() {
         if (_refCount == nullptr) return;
-        if (!--*_refCount)
-        {
+        if (!--*_refCount) {
             delete _ptr;
             delete _refCount;
         }
     }
 
-    inline SharedPointer &operator =(const SharedPointer &ptr)
-    {
+    inline SharedPointer &operator =(const SharedPointer &ptr) {
         _ptr = ptr._ptr;
         _refCount = ptr._refCount;
         ++*_refCount;
         return *this;
     }
 
-    inline SharedPointer &operator =(SharedPointer &&other)
-    {
+    inline SharedPointer &operator =(SharedPointer &&other) {
         _ptr = other._ptr;
         other._ptr = nullptr;
         _refCount = other._refCount;
@@ -129,28 +112,23 @@ public:
         return *this;
     }
 
-    inline Reference operator *() const
-    {
+    inline Reference operator *() const {
         return *_ptr;
     }
 
-    inline Pointer operator ->() const
-    {
+    inline Pointer operator ->() const {
         return _ptr;
     }
 
-    inline operator Pointer() const
-    {
+    inline operator Pointer() const {
         return _ptr;
     }
 
-    inline Pointer get() const
-    {
+    inline Pointer get() const {
         return _ptr;
     }
 
-    inline unsigned getRefCount() const
-    {
+    inline unsigned getRefCount() const {
         if (_refCount)
             return *_refCount;
         return 0;
@@ -159,13 +137,12 @@ public:
 };
 
 template <typename Type>
-inline SharedPointer<Type> makeShared(Type &&a)
-{
+inline SharedPointer<Type> makeShared(Type &&a) {
     return SharedPointer<Type>(new Type(a));
 }
 
 template <typename Type>
-inline UniquePointer<Type> makeUnique(Type &&a)
-{
+inline UniquePointer<Type> makeUnique(Type &&a) {
     return UniquePointer<Type>(new Type(a));
 }
+

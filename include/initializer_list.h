@@ -1,42 +1,36 @@
-//
-// Created by maciek on 14.06.16.
-//
-
 #pragma once
 
-namespace std
-{
-    template <typename Type>
-    class initializer_list
-    {
+namespace std {
 
-        const Type *_array;
-        unsigned int _size;
+template <typename Type>
+class initializer_list {
 
-        initializer_list(const Type *array, unsigned int length)
-            : _array(array), _size(length)
-        { }
+    const Type *_array;
+    unsigned int _size;
 
-    public:
+    initializer_list(const Type *array, unsigned int length)
+        : _array(array), _size(length)
+    { }
 
-        initializer_list()
-            : _array(0), _size(0)
-        { }
+public:
 
-        unsigned int size() const
-        {
-            return _size;
-        }
+    initializer_list()
+        : _array(0), _size(0)
+    { }
 
-        const Type *begin() const
-        {
-            return _array;
-        }
+    unsigned int size() const {
+        return _size;
+    }
 
-        const Type *end() const
-        {
-            return &_array[_size];
-        }
+    const Type *begin() const {
+        return _array;
+    }
 
-    };
-}
+    const Type *end() const {
+        return &_array[_size];
+    }
+
+};
+
+} // namespace std
+
