@@ -27,9 +27,7 @@ private:
 
 public:
 
-    inline ListIterator() = delete;
-
-    inline ListIterator(ListElement<ElementType> *node)
+    explicit inline ListIterator(ListElement<ElementType> *node)
         : _node(node)
     { }
 
@@ -79,8 +77,6 @@ public:
 
 template <typename ElementType>
 class List {
-
-private:
 
     ListElement<ElementType> _head;
     unsigned int _size = 0;

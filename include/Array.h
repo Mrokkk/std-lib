@@ -29,8 +29,7 @@ public:
         return *this;
     }
 
-    inline ArrayIterator operator --(int dummy) {
-        (void) dummy;
+    inline ArrayIterator operator --(int) {
         --_ptr;
         return *this;
     }

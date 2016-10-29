@@ -6,8 +6,6 @@ class UniquePointer {
     using Reference = Type &;
     using Pointer = Type *;
 
-private:
-
     Pointer _ptr = nullptr;
 
 public:
@@ -61,8 +59,6 @@ class SharedPointer {
 
     using Reference = Type &;
     using Pointer = Type *;
-
-private:
 
     Pointer _ptr = nullptr;
     unsigned *_refCount = nullptr;

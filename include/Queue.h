@@ -1,7 +1,3 @@
-//
-// Created by maciek on 15.06.16.
-//
-
 #pragma once
 
 #include <List.h>
