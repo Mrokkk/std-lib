@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(std_lib)
 
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
-
 set(CPP_STANDARD c++1y)
 set(DEBUG_LEVEL 3)
 set(WARNING_FLAGS "-Wall -Wextra")
@@ -31,3 +28,6 @@ if(COVERAGE)
         COMMAND gcovr -o ut.coverage.raw -r ../include . && gcovr --html --html-details -o ut.coverage.html -r ../include . && cat ut.coverage.raw
     )
 endif()
+
+add_custom_target(tests-run COMMAND ./${PROJECT_NAME})
+
