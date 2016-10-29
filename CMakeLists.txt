@@ -29,5 +29,5 @@ if(COVERAGE)
     )
 endif()
 
-add_custom_target(tests-run COMMAND ./${PROJECT_NAME})
+add_custom_target(tests-run DEPENDS ${PROJECT_NAME} COMMAND ./${PROJECT_NAME})
 
