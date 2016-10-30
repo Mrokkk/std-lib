@@ -1,3 +1,6 @@
+set -x
+set -e
+
 mkdir -p build
 cd build
 case $1 in
@@ -9,9 +12,9 @@ case $1 in
         fi
         make
         if [[ $VALGRIND ]]; then
-            valgrind ../bin/std_lib
+            valgrind ./std_lib
         else
-            ../bin/std_lib
+            ./std_lib
         fi
         if [[ $COVERAGE ]]; then
             make coverage

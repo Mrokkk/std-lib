@@ -1,4 +1,5 @@
-sudo: false
+sudo: required
+dist: trusty
 addons:
     apt:
         sources:
@@ -6,13 +7,15 @@ addons:
         packages:
             - g++-6
             - valgrind
+            
+compiler: g++-6
 
 cache:
     - ccache
     - packages
 
 language: cpp
-script: ./ci.sh ut
+script: CXX=g++-6 CC=gcc-6 ./ci.sh ut
 ---
 language: cpp
-script: VALGRIND=1 ./ci.sh ut
+script: CXX=g++-6 CC=gcc-6 VALGRIND=1 ./ci.sh ut
