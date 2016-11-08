@@ -1,14 +1,25 @@
 sudo: required
 dist: trusty
-addons:
-    apt:
-        sources:
-            - ubuntu-toolchain-r-test
-        packages:
-            - g++-6
-            - valgrind
-            
-compiler: g++-6
+
+before_install:
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo apt-get update -qq
+
+install:
+    - sudo apt-get install g++-6 valgrind clang-3.8
+    - sudo pip install codecov
+    - sudo pip install gcovr
+
+matrix:
+    include:
+        - env:
+            - COMPILER=g++-6
+            - COVERAGE=1
+        - env:
+            - COMPILER=clang++-3.8
+        - env:
+            - COMPILER=g++-6
+            - VALGRIND=1
 
 cache:
     - ccache
@@ -16,6 +27,4 @@ cache:
 
 language: cpp
 script: CXX=g++-6 CC=gcc-6 ./ci.sh ut
----
-language: cpp
-script: CXX=g++-6 CC=gcc-6 VALGRIND=1 ./ci.sh ut
+
