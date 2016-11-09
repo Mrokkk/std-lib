@@ -1,27 +1,20 @@
-//
-// Created by maciek on 14.06.16.
-//
-
 #include <gtest/gtest.h>
 #include <Stack.h>
 
-TEST(StackTests, canCreateEmptyStack)
-{
+TEST(StackTests, canCreateEmptyStack) {
     Stack<int> stack;
     unsigned long size = stack.size();
     EXPECT_EQ(size, 0);
 }
 
-TEST(StackTests, canPushTempElement)
-{
+TEST(StackTests, canPushTempElement) {
     Stack<int> stack;
     stack.push(439);
     EXPECT_EQ(stack.size(), 1);
     EXPECT_EQ(stack.front(), 439);
 }
 
-TEST(StackTests, canPushElement)
-{
+TEST(StackTests, canPushElement) {
     Stack<int> stack;
     auto element = 5423;
     stack.push(element);
@@ -29,8 +22,7 @@ TEST(StackTests, canPushElement)
     EXPECT_EQ(stack.front(), 5423);
 }
 
-TEST(StackTests, canPushMoreElements)
-{
+TEST(StackTests, canPushMoreElements) {
     Stack<int> stack;
     stack.push(33);
     EXPECT_EQ(stack.size(), 1);
@@ -46,16 +38,14 @@ TEST(StackTests, canPushMoreElements)
     EXPECT_EQ(stack.front(), 37);
 }
 
-TEST(StackTests, canPushAndPopElement)
-{
+TEST(StackTests, canPushAndPopElement) {
     Stack<int> stack;
     stack.push(439);
     stack.pop();
     EXPECT_EQ(stack.size(), 0);
 }
 
-TEST(StackTests, canPushAndPopMoreElements)
-{
+TEST(StackTests, canPushAndPopMoreElements) {
     Stack<int> stack;
     stack.push(439);
     stack.push(599);
@@ -80,8 +70,7 @@ TEST(StackTests, canPushAndPopMoreElements)
     EXPECT_EQ(stack.size(), 0);
 }
 
-TEST(StackTests, canPushAndPopByShiftOperators)
-{
+TEST(StackTests, canPushAndPopByShiftOperators) {
     Stack<int> stack;
     int temp = -4;
     stack << temp;

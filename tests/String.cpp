@@ -1,35 +1,27 @@
-//
-// Created by maciek on 14.06.16.
-//
-
 #include <gtest/gtest.h>
 #include <Move.h>
 #include <String.h>
 
-TEST(StringTests, canCreateEmptyString)
-{
+TEST(StringTests, canCreateEmptyString) {
     String string;
     EXPECT_EQ(string.isEmpty(), true);
     EXPECT_EQ(string.size(), 0);
 }
 
-TEST(StringTests, canCreateValidString)
-{
+TEST(StringTests, canCreateValidString) {
     String string("Example");
     EXPECT_EQ(string.size(), 7);
     EXPECT_EQ(string.isEmpty(), false);
 }
 
-TEST(StringTests, canAccessCharacters)
-{
+TEST(StringTests, canAccessCharacters) {
     String string("Example");
     EXPECT_EQ(string[0], 'E');
     EXPECT_EQ(string[3], 'm');
     EXPECT_EQ(string[6], 'e');
 }
 
-TEST(StringTests, canModifyCharacters)
-{
+TEST(StringTests, canModifyCharacters) {
     String string("Example");
     string[2] = 'r';
     string[3] = 'n';
@@ -39,8 +31,7 @@ TEST(StringTests, canModifyCharacters)
     EXPECT_EQ(string[6], 'e');
 }
 
-TEST(StringTests, canBeConstructedByCopy)
-{
+TEST(StringTests, canBeConstructedByCopy) {
     String string1("Example String");
     String string2(string1);
     EXPECT_EQ(string1.size(), 14);
@@ -48,8 +39,7 @@ TEST(StringTests, canBeConstructedByCopy)
     EXPECT_EQ(string1[0], string2[0]);
 }
 
-TEST(StringTests, canBeConstructedByTempValue)
-{
+TEST(StringTests, canBeConstructedByTempValue) {
     String string1(String("Example String"));
     EXPECT_EQ(string1.size(), 14);
     EXPECT_EQ(string1[0], 'E');
@@ -57,8 +47,7 @@ TEST(StringTests, canBeConstructedByTempValue)
     EXPECT_EQ(string1[13], 'g');
 }
 
-TEST(StringTests, canBeConstructedByMove)
-{
+TEST(StringTests, canBeConstructedByMove) {
     String string("Example String");
     String string1(move<String>(string));
     EXPECT_EQ(string1.size(), 14);
@@ -67,8 +56,7 @@ TEST(StringTests, canBeConstructedByMove)
     EXPECT_EQ(string1[13], 'g');
 }
 
-TEST(StringTests, canBeConstructedByString)
-{
+TEST(StringTests, canBeConstructedByString) {
     String string(String("Example"));
     EXPECT_EQ(string.size(), 7);
     EXPECT_EQ(string.isEmpty(), false);
@@ -77,8 +65,7 @@ TEST(StringTests, canBeConstructedByString)
     EXPECT_EQ(string[6], 'e');
 }
 
-TEST(StringTests, canBeCopied)
-{
+TEST(StringTests, canBeCopied) {
     String string1("Example 1");
     String string2("Example 2");
     string2 = string1;
@@ -89,15 +76,13 @@ TEST(StringTests, canBeCopied)
     EXPECT_EQ(string2[8], '1');
 }
 
-TEST(StringTests, canCastToCString)
-{
+TEST(StringTests, canCastToCString) {
     String string = "Example";
     char *c_string = string;
     EXPECT_EQ(c_string == string, true);
 }
 
-TEST(StringTests, canBeComparedWithString)
-{
+TEST(StringTests, canBeComparedWithString) {
     String string1 = "Example";
     String string2 = "Example";
     String string3 = "Exampl";
@@ -107,8 +92,7 @@ TEST(StringTests, canBeComparedWithString)
     EXPECT_EQ(string1 != string3, true);
 }
 
-TEST(StringTests, canBeComparedWithCString)
-{
+TEST(StringTests, canBeComparedWithCString) {
     String string1 = "Example";
     EXPECT_EQ(string1 == "Example", true);
     EXPECT_EQ(string1 == "Example1", false);
@@ -116,8 +100,7 @@ TEST(StringTests, canBeComparedWithCString)
     EXPECT_EQ(string1 != "Example1", true);
 }
 
-TEST(StringTests, canAppendCString)
-{
+TEST(StringTests, canAppendCString) {
     String string;
     string.append("Example 1");
     EXPECT_EQ(string[0], 'E');
@@ -139,8 +122,7 @@ TEST(StringTests, canAppendCString)
     EXPECT_EQ(string[26], 0);
 }
 
-TEST(StringTests, canAppendString)
-{
+TEST(StringTests, canAppendString) {
     String string;
     String example1("Example 1");
     String example3("Example3");
@@ -164,8 +146,7 @@ TEST(StringTests, canAppendString)
     EXPECT_EQ(string[26], 0);
 }
 
-TEST(StringTests, canAppendInt)
-{
+TEST(StringTests, canAppendInt) {
     String string("Example");
     string.append(-1);
     EXPECT_EQ(string.size(), 9);
@@ -176,8 +157,7 @@ TEST(StringTests, canAppendInt)
     EXPECT_EQ(string[9], '\0');
 }
 
-TEST(StringTests, canAppendUnsignedInt)
-{
+TEST(StringTests, canAppendUnsignedInt) {
     String string("Example");
     unsigned int number = 432;
     string.append(number);
@@ -190,8 +170,7 @@ TEST(StringTests, canAppendUnsignedInt)
     EXPECT_EQ(string[10], '\0');
 }
 
-TEST(StringTests, canAppendAddress)
-{
+TEST(StringTests, canAppendAddress) {
     String string;
     void *address = (void *) 0xff34;
     string.append(address);
@@ -202,8 +181,7 @@ TEST(StringTests, canAppendAddress)
     EXPECT_EQ(string[5], '4');
 }
 
-TEST(StringTests, canFormatCStrings)
-{
+TEST(StringTests, canFormatCStrings) {
     String string;
     string << "Example" << " 1";
     EXPECT_EQ(string.size(), 9);
@@ -214,8 +192,7 @@ TEST(StringTests, canFormatCStrings)
     EXPECT_EQ(string[9], '\0');
 }
 
-TEST(StringTests, canFormatStrings)
-{
+TEST(StringTests, canFormatStrings) {
     String string;
     String example1("Example 1"), example2("Example 2");
     string << example1 << example2;

@@ -1,39 +1,30 @@
-//
-// Created by maciek on 14.06.16.
-//
-
 #include <gtest/gtest.h>
 #include <Pointer.h>
 #include <Move.h>
 
-TEST(SharedPointerTests, canCreateEmptyPointer)
-{
+TEST(SharedPointerTests, canCreateEmptyPointer) {
     SharedPointer<int> ptr;
     EXPECT_EQ(ptr.get(), nullptr);
     EXPECT_EQ(ptr.getRefCount(), 0);
 }
 
-TEST(SharedPointerTests, canCreateValidPointer)
-{
+TEST(SharedPointerTests, canCreateValidPointer) {
     SharedPointer<int> ptr(new int(4));
     EXPECT_NE(ptr.get(), nullptr);
 }
 
-TEST(SharedPointerTests, canBeDerefereced)
-{
+TEST(SharedPointerTests, canBeDerefereced) {
     SharedPointer<int> ptr(new int(4));
     EXPECT_EQ(*ptr, 4);
 }
 
-TEST(SharedPointerTests, canBeAssigned)
-{
+TEST(SharedPointerTests, canBeAssigned) {
     SharedPointer<int> ptr;
     ptr = makeShared<int>(5);
     EXPECT_EQ(*ptr, 5);
 }
 
-TEST(SharedPointerTests, canBeCopied)
-{
+TEST(SharedPointerTests, canBeCopied) {
     auto ptr1 = makeShared<int>(10);
     SharedPointer<int> ptr2;
     ptr2 = ptr1;
@@ -44,8 +35,7 @@ TEST(SharedPointerTests, canBeCopied)
     EXPECT_EQ(ptr1.get(), ptr2.get());
 }
 
-TEST(SharedPointerTests, canBeMoved)
-{
+TEST(SharedPointerTests, canBeMoved) {
     auto ptr1 = makeShared<int>(10);
     SharedPointer<int> ptr2;
     ptr2 = move(ptr1);
@@ -56,8 +46,7 @@ TEST(SharedPointerTests, canBeMoved)
     EXPECT_NE(ptr1.get(), ptr2.get());
 }
 
-TEST(SharedPointerTests, canBeConstructedByCopy)
-{
+TEST(SharedPointerTests, canBeConstructedByCopy) {
     auto ptr1 = makeShared<int>(10);
     SharedPointer<int> ptr2(ptr1);
     EXPECT_EQ(*ptr1, 10);
@@ -67,8 +56,7 @@ TEST(SharedPointerTests, canBeConstructedByCopy)
     EXPECT_EQ(ptr1.get(), ptr2.get());
 }
 
-TEST(SharedPointerTests, canBeConstructedByMoving)
-{
+TEST(SharedPointerTests, canBeConstructedByMoving) {
     auto ptr1 = makeShared<int>(10);
     SharedPointer<int> ptr2 = move(ptr1);
     EXPECT_EQ(*ptr2, 10);
@@ -78,8 +66,7 @@ TEST(SharedPointerTests, canBeConstructedByMoving)
     EXPECT_NE(ptr1.get(), ptr2.get());
 }
 
-TEST(SharedPointerTests, canBeCastedToRawPointer)
-{
+TEST(SharedPointerTests, canBeCastedToRawPointer) {
     auto ptr = makeShared<int>(10);
     int *rawPtr = ptr;
     EXPECT_EQ(*ptr, 10);
@@ -87,8 +74,7 @@ TEST(SharedPointerTests, canBeCastedToRawPointer)
     EXPECT_EQ(ptr.get(), rawPtr);
 }
 
-TEST(SharedPointerTests, canHaveItsValueModified)
-{
+TEST(SharedPointerTests, canHaveItsValueModified) {
     auto ptr = makeShared(10);
     *ptr = 39;
     EXPECT_EQ(*ptr, 39);

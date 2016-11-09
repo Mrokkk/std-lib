@@ -1,27 +1,20 @@
-//
-// Created by maciek on 15.06.16.
-//
-
 #include <gtest/gtest.h>
 #include <Queue.h>
 
-TEST(QueueTests, canCreateEmptyQueue)
-{
+TEST(QueueTests, canCreateEmptyQueue) {
     Queue<int> queue;
     unsigned long size = queue.size();
     EXPECT_EQ(size, 0);
 }
 
-TEST(QueueTests, canPushTempElement)
-{
+TEST(QueueTests, canPushTempElement) {
     Queue<int> queue;
     queue.push(439);
     EXPECT_EQ(queue.size(), 1);
     EXPECT_EQ(queue.front(), 439);
 }
 
-TEST(QueueTests, canPushElement)
-{
+TEST(QueueTests, canPushElement) {
     Queue<int> queue;
     auto element = 5423;
     queue.push(element);
@@ -29,8 +22,7 @@ TEST(QueueTests, canPushElement)
     EXPECT_EQ(queue.front(), 5423);
 }
 
-TEST(QueueTests, canPushMoreElements)
-{
+TEST(QueueTests, canPushMoreElements) {
     Queue<int> queue;
     queue.push(33);
     EXPECT_EQ(queue.size(), 1);
@@ -46,16 +38,14 @@ TEST(QueueTests, canPushMoreElements)
     EXPECT_EQ(queue.front(), 33);
 }
 
-TEST(QueueTests, canPushAndPopElement)
-{
+TEST(QueueTests, canPushAndPopElement) {
     Queue<int> queue;
     queue.push(439);
     queue.pop();
     EXPECT_EQ(queue.size(), 0);
 }
 
-TEST(QueueTests, canPushAndPopMoreElements)
-{
+TEST(QueueTests, canPushAndPopMoreElements) {
     Queue<int> queue;
     queue.push(439);
     queue.push(599);
@@ -80,8 +70,7 @@ TEST(QueueTests, canPushAndPopMoreElements)
     EXPECT_EQ(queue.size(), 0);
 }
 
-TEST(QueueTests, canPushAndPopByShiftOperators)
-{
+TEST(QueueTests, canPushAndPopByShiftOperators) {
     Queue<int> queue;
     int temp = -4;
     queue << temp;
