@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Exception.h>
-
 template <typename ElementType>
 struct ListElement {
 

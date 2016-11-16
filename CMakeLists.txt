@@ -18,7 +18,7 @@ add_subdirectory(googletest/googletest)
 
 set(SOURCE_FILES include/List.h include/Pointer.h include/Array.h tests/List.cpp tests/Array.cpp
         tests/SharedPointer.cpp tests/UniquePointer.cpp include/Move.h tests/String.cpp include/String.h
-        include/initializer_list.h tests/Stack.cpp include/Stack.h include/Queue.h include/Exception.h tests/Queue.cpp
+        include/initializer_list.h tests/Stack.cpp include/Stack.h include/Queue.h tests/Queue.cpp
         tests/Mixed.cpp include/Algorithm.h)
 include_directories(include)
 add_executable(std_lib ${SOURCE_FILES})
