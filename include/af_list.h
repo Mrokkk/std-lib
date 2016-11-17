@@ -4,11 +4,11 @@
 
 namespace yacppl {
 
+namespace af_list {
+
 struct list_head {
     list_head *next = this, *prev = this;
 };
-
-namespace af_list {
 
 inline void list_init(list_head *list) {
     list->next = list->prev = list;
