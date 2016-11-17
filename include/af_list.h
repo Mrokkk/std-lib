@@ -8,6 +8,8 @@ struct list_head {
     list_head *next = this, *prev = this;
 };
 
+namespace af_list {
+
 inline void list_init(list_head *list) {
     list->next = list->prev = list;
 }
@@ -60,6 +62,8 @@ inline void list_move(list_head *list, list_head *head) {
     for (pos = list_entry((head)->next, typeof(*pos), member);          \
             &pos->member != (head);                                     \
             pos = list_entry(pos->member.next, typeof(*pos), member))
+
+} // namespace af_list
 
 } // namespace yacppl
 
