@@ -6,21 +6,22 @@ set(DEBUG_LEVEL 3)
 set(WARNING_FLAGS "-Wall -Wextra")
 set(COVERAGE_FLAGS "--coverage -fprofile-arcs -ftest-coverage")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g${DEBUG_LEVEL} -std=${CPP_STANDARD} ${WARNING_FLAGS} ${COVERAGE_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g${DEBUG_LEVEL} -std=${CPP_STANDARD} ${WARNING_FLAGS} ${COVERAGE_FLAGS} -fdiagnostics-color=always")
 add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
 
 if(COVERAGE)
     add_definitions("-g -O0 --coverage -fprofile-arcs -ftest-coverage -lgcov")
 endif()
 
+include_directories(include)
 include_directories(googletest/googletest/include)
 add_subdirectory(googletest/googletest)
 
 set(SOURCE_FILES include/list.h include/pointer.h include/array.h tests/list.cpp tests/array.cpp
         tests/shared_ptr.cpp tests/unique_ptr.cpp include/move.h
         include/initializer_list.h tests/stack.cpp include/stack.h include/queue.h tests/queue.cpp
-        tests/mixed.cpp include/algorithm.h)
-include_directories(include)
+        tests/mixed.cpp include/algorithm.h include/af_list.h tests/af_list.cpp)
+
 add_executable(std_lib ${SOURCE_FILES})
 target_link_libraries(std_lib gtest gtest_main pthread)
 if(COVERAGE)
@@ -29,5 +30,5 @@ if(COVERAGE)
     )
 endif()
 
-add_custom_target(tests-run DEPENDS ${PROJECT_NAME} COMMAND ./${PROJECT_NAME})
+add_custom_target(tests-run DEPENDS ${PROJECT_NAME} COMMAND ./${PROJECT_NAME} --gtest_color=yes)
 
