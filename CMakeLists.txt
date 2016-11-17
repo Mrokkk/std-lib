@@ -17,7 +17,7 @@ include_directories(googletest/googletest/include)
 add_subdirectory(googletest/googletest)
 
 set(SOURCE_FILES include/list.h include/pointer.h include/array.h tests/list.cpp tests/array.cpp
-        tests/shared_ptr.cpp tests/unique_ptr.cpp include/move.h tests/String.cpp include/String.h
+        tests/shared_ptr.cpp tests/unique_ptr.cpp include/move.h
         include/initializer_list.h tests/stack.cpp include/stack.h include/queue.h tests/queue.cpp
         tests/mixed.cpp include/algorithm.h)
 include_directories(include)

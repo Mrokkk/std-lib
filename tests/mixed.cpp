@@ -2,7 +2,7 @@
 #include <list.h>
 #include <pointer.h>
 #include <algorithm.h>
-#include <String.h>
+#include <string.h>
 
 using namespace yacppl;
 
@@ -17,17 +17,6 @@ TEST(MixedTests, canCreateSharedPointerList) {
     it++;
     EXPECT_EQ(**it, 5);
     EXPECT_EQ(it->get_ref_count(), 2);
-}
-
-TEST(MixedTests, canCreateStringList) {
-    list<String> list{"String 1", "String 2", "Third String", "4th String"};
-    EXPECT_EQ(list.size(), 4);
-    EXPECT_TRUE(list.front() == "String 1");
-    EXPECT_TRUE(list.back() == "4th String");
-    for (auto &s : list)
-        s = "Example";
-    EXPECT_TRUE(list.front() == "Example");
-    EXPECT_TRUE(list.back() == "Example");
 }
 
 TEST(MixedTests, canUseForEachOnList) {
