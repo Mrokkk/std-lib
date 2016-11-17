@@ -1,11 +1,13 @@
 #pragma once
 
-#include <List.h>
+#include <list.h>
 
-template <typename ElementType>
-class Queue {
+namespace yacppl {
 
-    List<ElementType> _list;
+template<typename ElementType>
+class queue {
+
+    list<ElementType> _list;
 
 public:
 
@@ -29,12 +31,12 @@ public:
         return _list.size();
     }
 
-    inline Queue &operator <<(const ElementType &element) {
+    inline queue &operator<<(const ElementType &element) {
         push(element);
         return *this;
     }
 
-    inline Queue &operator >>(ElementType &element) {
+    inline queue &operator>>(ElementType &element) {
         element = front();
         pop();
         return *this;
@@ -42,3 +44,4 @@ public:
 
 };
 
+} // namespace yacppl

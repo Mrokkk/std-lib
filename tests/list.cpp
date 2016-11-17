@@ -1,21 +1,23 @@
 #include <gtest/gtest.h>
-#include <List.h>
-#include <Move.h>
+#include <list.h>
+#include <move.h>
+
+using namespace yacppl;
 
 TEST(ListTests, canCreateEmptyList) {
-    List<int> list;
+    list<int> list;
     EXPECT_EQ(list.size(), 0);
 }
 
 TEST(ListTests, canAddFrontItem) {
-    List<int> list;
+    list<int> list;
     list.push_front(2);
     EXPECT_EQ(list.size(), 1);
     EXPECT_EQ(list.front(), 2);
 }
 
 TEST(ListTests, canAddTwoFrontItems) {
-    List<int> list;
+    list<int> list;
     list.push_front(2);
     list.push_front(1);
     EXPECT_EQ(list.size(), 2);
@@ -24,14 +26,14 @@ TEST(ListTests, canAddTwoFrontItems) {
 }
 
 TEST(ListTests, canAddBackItem) {
-    List<int> list;
+    list<int> list;
     list.push_back(4);
     EXPECT_EQ(list.size(), 1);
     EXPECT_EQ(list.back(), 4);
 }
 
 TEST(ListTests, canAddBackTwoItems) {
-    List<int> list;
+    list<int> list;
     list.push_back(8);
     list.push_back(3);
     EXPECT_EQ(list.size(), 2);
@@ -40,7 +42,7 @@ TEST(ListTests, canAddBackTwoItems) {
 }
 
 TEST(ListTests, canBeInitializedWithInitializerList) {
-    List<int> list{2, 5, 6, 88, 4};
+    list<int> list{2, 5, 6, 88, 4};
     EXPECT_EQ(list.size(), 5);
     EXPECT_EQ(list.front(), 2);
     EXPECT_EQ(list.back(), 4);
@@ -56,7 +58,7 @@ TEST(ListTests, canBeInitializedWithInitializerList) {
 }
 
 TEST(ListTests, canAccessElements) {
-    List<int> list;
+    list<int> list;
     list.push_back(3);
     list.push_front(2);
     list.push_front(1);
@@ -70,7 +72,7 @@ TEST(ListTests, canAccessElements) {
 }
 
 TEST(ListTests, canPopBack) {
-    List<int> list;
+    list<int> list;
     list.push_back(3);
     list.push_front(2);
     list.push_front(1);
@@ -82,7 +84,7 @@ TEST(ListTests, canPopBack) {
 }
 
 TEST(ListTests, canPopFront) {
-    List<int> list;
+    list<int> list;
     list.push_back(3);
     list.push_front(2);
     list.push_front(1);
@@ -95,7 +97,7 @@ TEST(ListTests, canPopFront) {
 }
 
 TEST(ListTests, canBeResized) {
-    List<int> list;
+    list<int> list;
     list.resize(20);
     EXPECT_EQ(list.size(), 20);
     for (auto &it : list)
@@ -109,7 +111,7 @@ TEST(ListTests, canBeResized) {
 }
 
 TEST(ListTests, canIncrementIterator) {
-    List<int> list;
+    list<int> list;
     list.push_back(3);
     list.push_front(2);
     list.push_front(1);
@@ -127,7 +129,7 @@ TEST(ListTests, canIncrementIterator) {
 }
 
 TEST(ListTests, canDecrementIterator) {
-    List<int> list;
+    list<int> list;
     list.push_back(3);
     list.push_front(2);
     list.push_front(1);
@@ -140,7 +142,7 @@ TEST(ListTests, canDecrementIterator) {
 }
 
 TEST(ListTests, canIncrementAndDecrementIterator) {
-    List<int> list;
+    list<int> list;
     list.push_back(3);
     list.push_front(2);
     list.push_front(1);
@@ -154,7 +156,7 @@ TEST(ListTests, canIncrementAndDecrementIterator) {
 }
 
 TEST(ListTests, canCompareIterators) {
-    List<int> list;
+    list<int> list;
     list.push_back(3);
     list.push_front(2);
     list.push_front(1);
@@ -167,24 +169,24 @@ TEST(ListTests, canCompareIterators) {
 }
 
 TEST(ListTests, canBeConstructedByCopy) {
-    List<int> list1;
+    list<int> list1;
     list1.push_back(3);
     list1.push_front(2);
     list1.push_front(1);
     list1.push_front(10);
-    List<int> list2(list1);
+    list<int> list2(list1);
     EXPECT_EQ(list1.front(), 10);
     EXPECT_EQ(list2.front(), 10);
     EXPECT_EQ(list2.back(), 3);
 }
 
 TEST(ListTests, canBeAssigned) {
-    List<int> list1;
+    list<int> list1;
     list1.push_back(3);
     list1.push_front(2);
     list1.push_front(1);
     list1.push_front(10);
-    List<int> list2;
+    list<int> list2;
     list2.push_back(99);
     list2.push_back(120);
     list2 = list1;
@@ -196,12 +198,12 @@ TEST(ListTests, canBeAssigned) {
 }
 
 TEST(ListTests, canBeConstructedByMove) {
-    List<int> list1;
+    list<int> list1;
     list1.push_back(3);
     list1.push_front(2);
     list1.push_front(1);
     list1.push_front(10);
-    List<int> list2(move(list1));
+    list<int> list2(move(list1));
     int result[4];
     int i = 0;
     for (const auto &it : list2)
@@ -217,12 +219,12 @@ TEST(ListTests, canBeConstructedByMove) {
 }
 
 TEST(ListTests, canBeMoved) {
-    List<int> list1;
+    list<int> list1;
     list1.push_back(3);
     list1.push_front(2);
     list1.push_front(1);
     list1.push_front(10);
-    List<int> list2;
+    list<int> list2;
     list2.push_back(4);
     list2.push_back(54);
     list2 = move(list1);
@@ -241,7 +243,7 @@ TEST(ListTests, canBeMoved) {
 }
 
 TEST(ListTests, canEraseSingleElement) {
-    List<int> list;
+    list<int> list;
     list.push_front(43);
     list.push_front(-59);
     list.push_back(23);
@@ -262,7 +264,7 @@ TEST(ListTests, canEraseSingleElement) {
 }
 
 TEST(ListTests, canEraseElements) {
-    List<int> list;
+    list<int> list;
     list.push_front(43);
     list.push_front(-59);
     list.push_back(23);

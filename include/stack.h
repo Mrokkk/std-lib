@@ -1,11 +1,13 @@
 #pragma once
 
-#include <List.h>
+#include <list.h>
 
-template <typename ElementType>
-class Stack {
+namespace yacppl {
 
-    List<ElementType> _list;
+template<typename ElementType>
+class stack {
+
+    list<ElementType> _list;
 
 public:
 
@@ -25,12 +27,12 @@ public:
         return _list.size();
     }
 
-    inline Stack &operator <<(const ElementType &element) {
+    inline stack &operator<<(const ElementType &element) {
         push(element);
         return *this;
     }
 
-    inline Stack &operator >>(ElementType &element) {
+    inline stack &operator>>(ElementType &element) {
         element = front();
         pop();
         return *this;
@@ -38,3 +40,4 @@ public:
 
 };
 
+} // namespace yacppl

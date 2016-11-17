@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
-#include <Move.h>
+#include <move.h>
 #include <String.h>
+
+using namespace yacppl;
 
 TEST(StringTests, canCreateEmptyString) {
     String string;

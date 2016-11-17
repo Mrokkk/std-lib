@@ -1,13 +1,13 @@
 #pragma once
 
 template <typename Type>
-class Optional {
+class optional {
 
     Type value;
 
 public:
 
-    explicit Optional(Type v) : value(v) {}
+    explicit optional(Type v) : value(v) {}
 
 };
 

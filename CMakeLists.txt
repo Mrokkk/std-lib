@@ -16,10 +16,10 @@ endif()
 include_directories(googletest/googletest/include)
 add_subdirectory(googletest/googletest)
 
-set(SOURCE_FILES include/List.h include/Pointer.h include/Array.h tests/List.cpp tests/Array.cpp
-        tests/SharedPointer.cpp tests/UniquePointer.cpp include/Move.h tests/String.cpp include/String.h
-        include/initializer_list.h tests/Stack.cpp include/Stack.h include/Queue.h tests/Queue.cpp
-        tests/Mixed.cpp include/Algorithm.h)
+set(SOURCE_FILES include/list.h include/pointer.h include/array.h tests/list.cpp tests/array.cpp
+        tests/shared_ptr.cpp tests/unique_ptr.cpp include/move.h tests/String.cpp include/String.h
+        include/initializer_list.h tests/stack.cpp include/stack.h include/queue.h tests/queue.cpp
+        tests/mixed.cpp include/algorithm.h)
 include_directories(include)
 add_executable(std_lib ${SOURCE_FILES})
 target_link_libraries(std_lib gtest gtest_main pthread)

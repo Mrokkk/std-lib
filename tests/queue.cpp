@@ -1,21 +1,23 @@
 #include <gtest/gtest.h>
-#include <Queue.h>
+#include <queue.h>
+
+using namespace yacppl;
 
 TEST(QueueTests, canCreateEmptyQueue) {
-    Queue<int> queue;
+    queue<int> queue;
     unsigned long size = queue.size();
     EXPECT_EQ(size, 0);
 }
 
 TEST(QueueTests, canPushTempElement) {
-    Queue<int> queue;
+    queue<int> queue;
     queue.push(439);
     EXPECT_EQ(queue.size(), 1);
     EXPECT_EQ(queue.front(), 439);
 }
 
 TEST(QueueTests, canPushElement) {
-    Queue<int> queue;
+    queue<int> queue;
     auto element = 5423;
     queue.push(element);
     EXPECT_EQ(queue.size(), 1);
@@ -23,7 +25,7 @@ TEST(QueueTests, canPushElement) {
 }
 
 TEST(QueueTests, canPushMoreElements) {
-    Queue<int> queue;
+    queue<int> queue;
     queue.push(33);
     EXPECT_EQ(queue.size(), 1);
     EXPECT_EQ(queue.front(), 33);
@@ -39,14 +41,14 @@ TEST(QueueTests, canPushMoreElements) {
 }
 
 TEST(QueueTests, canPushAndPopElement) {
-    Queue<int> queue;
+    queue<int> queue;
     queue.push(439);
     queue.pop();
     EXPECT_EQ(queue.size(), 0);
 }
 
 TEST(QueueTests, canPushAndPopMoreElements) {
-    Queue<int> queue;
+    queue<int> queue;
     queue.push(439);
     queue.push(599);
     queue.push(238);
@@ -71,7 +73,7 @@ TEST(QueueTests, canPushAndPopMoreElements) {
 }
 
 TEST(QueueTests, canPushAndPopByShiftOperators) {
-    Queue<int> queue;
+    queue<int> queue;
     int temp = -4;
     queue << temp;
     EXPECT_EQ(queue.size(), 1);

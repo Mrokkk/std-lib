@@ -1,24 +1,26 @@
 #include <gtest/gtest.h>
-#include <List.h>
-#include <Pointer.h>
-#include <Algorithm.h>
+#include <list.h>
+#include <pointer.h>
+#include <algorithm.h>
 #include <String.h>
 
+using namespace yacppl;
+
 TEST(MixedTests, canCreateSharedPointerList) {
-    List<SharedPointer<int>> list;
-    auto ptr1 = makeShared<int>(5);
+    list<shared_ptr<int>> list;
+    auto ptr1 = make_shared<int>(5);
     list.push_front(ptr1);
-    list.push_front(SharedPointer<int>(new int(6)));
+    list.push_front(shared_ptr<int>(new int(6)));
     auto it = list.begin();
     EXPECT_EQ(**it, 6);
-    EXPECT_EQ(it->getRefCount(), 1);
+    EXPECT_EQ(it->get_ref_count(), 1);
     it++;
     EXPECT_EQ(**it, 5);
-    EXPECT_EQ(it->getRefCount(), 2);
+    EXPECT_EQ(it->get_ref_count(), 2);
 }
 
 TEST(MixedTests, canCreateStringList) {
-    List<String> list{"String 1", "String 2", "Third String", "4th String"};
+    list<String> list{"String 1", "String 2", "Third String", "4th String"};
     EXPECT_EQ(list.size(), 4);
     EXPECT_TRUE(list.front() == "String 1");
     EXPECT_TRUE(list.back() == "4th String");
@@ -29,7 +31,7 @@ TEST(MixedTests, canCreateStringList) {
 }
 
 TEST(MixedTests, canUseForEachOnList) {
-    List<int> list;
+    list<int> list;
     int result[3];
     list.push_front(3);
     list.push_front(5);
@@ -49,7 +51,7 @@ TEST(MixedTests, canUseForEachOnList) {
 }
 
 TEST(MixedTests, canUseCountOnList) {
-    List<int> list{3, 7, 8, 6, 5, 3, 7, 9, 60, 55, 8, 6};
+    list<int> list{3, 7, 8, 6, 5, 3, 7, 9, 60, 55, 8, 6};
     EXPECT_EQ(count(list, 3), 2);
     EXPECT_EQ(count(list, 9), 1);
     EXPECT_EQ(count(list, 20), 0);
@@ -70,8 +72,8 @@ TEST(MixedTests, canUseCountOnList) {
 }
 
 TEST(MixedTests, canSwapSameSizeLists) {
-    List<int> list1{3, 7, 8, 6};
-    List<int> list2{9, 15, -3, 21};
+    list<int> list1{3, 7, 8, 6};
+    list<int> list2{9, 15, -3, 21};
     swap(list1, list2);
     EXPECT_EQ(list1.size(), 4);
     EXPECT_EQ(list1.front(), 9);
@@ -89,8 +91,8 @@ TEST(MixedTests, canSwapSameSizeLists) {
 }
 
 TEST(MixedTests, canSwapDifferentSizeLists) {
-    List<int> list1{3, 7, 8, 6, 8, 4};
-    List<int> list2{9, 15, -3, 21};
+    list<int> list1{3, 7, 8, 6, 8, 4};
+    list<int> list2{9, 15, -3, 21};
     swap(list1, list2);
     EXPECT_EQ(list1.size(), 4);
     EXPECT_EQ(list1.front(), 9);
@@ -108,7 +110,7 @@ TEST(MixedTests, canSwapDifferentSizeLists) {
 }
 
 TEST(MixedTests, canFillList) {
-    List<int> list;
+    list<int> list;
     list.resize(30);
     fill(list, 945);
     EXPECT_EQ(list.size(), 30);

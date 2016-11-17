@@ -1,21 +1,23 @@
 #include <gtest/gtest.h>
-#include <Array.h>
+#include <array.h>
+
+using namespace yacppl;
 
 TEST(ArrayTests, canCreateEmptyString) {
-    Array<int, 0> array;
+    array<int, 0> array;
     unsigned result = array.size();
     EXPECT_EQ(result, 0);
 }
 
 TEST(ArrayTests, canCreateInitializedArray) {
-    Array<int, 5> array{2, 3, 4, 5, 6};
+    array<int, 5> array{2, 3, 4, 5, 6};
     EXPECT_EQ(array[0], 2);
     EXPECT_EQ(array[4], 6);
     EXPECT_EQ(array.size(), 5);
 }
 
 TEST(ArrayTests, canReadElementsSequentially) {
-    Array<int, 5> array{2, 3, 4, 5, 6};
+    array<int, 5> array{2, 3, 4, 5, 6};
     int cArray[5] = {0, 0, 0, 0, 0};
     unsigned i = 0;
     for (const auto &elem : array)
@@ -26,7 +28,7 @@ TEST(ArrayTests, canReadElementsSequentially) {
 }
 
 TEST(ArrayTests, canModifyElementsSequentially) {
-    Array<int, 5> array{2, 3, 4, 5, 6};
+    array<int, 5> array{2, 3, 4, 5, 6};
     unsigned i = 10;
     for (auto &elem : array)
         elem = i++;
@@ -36,7 +38,7 @@ TEST(ArrayTests, canModifyElementsSequentially) {
 }
 
 TEST(ArrayTests, canModify) {
-    Array<int, 5> array{2, 3, 4, 5, 6};
+    array<int, 5> array{2, 3, 4, 5, 6};
     array[0] = 10;
     array[1] = 11;
     array[4] = 14;
@@ -46,7 +48,7 @@ TEST(ArrayTests, canModify) {
 }
 
 TEST(ArrayTests, canIncrementIterator) {
-    Array<int, 5> array{2, 3, 4, 5, 6};
+    array<int, 5> array{2, 3, 4, 5, 6};
     auto it = array.begin();
     EXPECT_EQ(*it, 2);
     it++;
@@ -56,7 +58,7 @@ TEST(ArrayTests, canIncrementIterator) {
 }
 
 TEST(ArrayTests, canDecrementIterator) {
-    Array<int, 5> array{2, 3, 4, 5, 6};
+    array<int, 5> array{2, 3, 4, 5, 6};
     auto it = array.end();
     it--;
     EXPECT_EQ(*it, 6);
@@ -65,7 +67,7 @@ TEST(ArrayTests, canDecrementIterator) {
 }
 
 TEST(ArrayTests, canIncrementAndDecrementIterator) {
-    Array<int, 5> array{2, 3, 4, 5, 6};
+    array<int, 5> array{2, 3, 4, 5, 6};
     auto it = array.begin();
     EXPECT_EQ(*it, 2);
     it++;
@@ -75,7 +77,7 @@ TEST(ArrayTests, canIncrementAndDecrementIterator) {
 }
 
 TEST(ArrayTests, canCompareIterators) {
-    Array<int, 5> array{2, 3, 4, 5, 6};
+    array<int, 5> array{2, 3, 4, 5, 6};
     auto it1 = array.begin();
     auto it2 = array.begin();
     EXPECT_EQ(it1 == it2, true);

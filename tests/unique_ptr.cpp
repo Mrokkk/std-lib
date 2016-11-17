@@ -1,40 +1,42 @@
 #include <gtest/gtest.h>
-#include <Pointer.h>
-#include <Move.h>
+#include <pointer.h>
+#include <move.h>
+
+using namespace yacppl;
 
 TEST(UniquePointerTests, canCreateEmptyPointer) {
-    UniquePointer<int> ptr;
+    unique_ptr<int> ptr;
     EXPECT_EQ(ptr.get(), (void *) NULL);
 }
 
 TEST(UniquePointerTests, canCreateValidPointer) {
-    SharedPointer<int> ptr(new int(4));
+    shared_ptr<int> ptr(new int(4));
     EXPECT_EQ(*ptr, 4);
 }
 
 TEST(UniquePointerTests, canBeAssigned) {
-    UniquePointer<int> ptr;
-    ptr = makeUnique<int>(5);
+    unique_ptr<int> ptr;
+    ptr = make_unique<int>(5);
     EXPECT_EQ(*ptr, 5);
 }
 
 TEST(UniquePointerTests, canBeMoved) {
-    auto ptr1 = makeUnique<int>(10);
-    UniquePointer<int> ptr2;
+    auto ptr1 = make_unique<int>(10);
+    unique_ptr<int> ptr2;
     ptr2 = move(ptr1);
     EXPECT_EQ(*ptr2, 10);
     EXPECT_EQ(ptr1.get(), (void *) NULL);
 }
 
 TEST(UniquePointerTests, canBeConstructedByMoving) {
-    auto ptr1 = makeUnique<int>(10);
-    UniquePointer<int> ptr2(move(ptr1));
+    auto ptr1 = make_unique<int>(10);
+    unique_ptr<int> ptr2(move(ptr1));
     EXPECT_EQ(*ptr2, 10);
     EXPECT_EQ(ptr1.get(), (void *) NULL);
 }
 
 TEST(UniquePointerTests, canBeCastedToRawPointer) {
-    auto ptr = makeUnique(10);
+    auto ptr = make_unique(10);
     int *rawPtr = ptr;
     EXPECT_EQ(*ptr, 10);
     EXPECT_EQ(*rawPtr, 10);
@@ -42,7 +44,7 @@ TEST(UniquePointerTests, canBeCastedToRawPointer) {
 }
 
 TEST(UniquePointerTests, canHaveItsValueModified) {
-    auto ptr = makeUnique(10);
+    auto ptr = make_unique(10);
     *ptr = 39;
     EXPECT_EQ(*ptr, 39);
 }

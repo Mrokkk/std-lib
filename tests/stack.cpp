@@ -1,21 +1,23 @@
 #include <gtest/gtest.h>
-#include <Stack.h>
+#include <stack.h>
+
+using namespace yacppl;
 
 TEST(StackTests, canCreateEmptyStack) {
-    Stack<int> stack;
+    stack<int> stack;
     unsigned long size = stack.size();
     EXPECT_EQ(size, 0);
 }
 
 TEST(StackTests, canPushTempElement) {
-    Stack<int> stack;
+    stack<int> stack;
     stack.push(439);
     EXPECT_EQ(stack.size(), 1);
     EXPECT_EQ(stack.front(), 439);
 }
 
 TEST(StackTests, canPushElement) {
-    Stack<int> stack;
+    stack<int> stack;
     auto element = 5423;
     stack.push(element);
     EXPECT_EQ(stack.size(), 1);
@@ -23,7 +25,7 @@ TEST(StackTests, canPushElement) {
 }
 
 TEST(StackTests, canPushMoreElements) {
-    Stack<int> stack;
+    stack<int> stack;
     stack.push(33);
     EXPECT_EQ(stack.size(), 1);
     EXPECT_EQ(stack.front(), 33);
@@ -39,14 +41,14 @@ TEST(StackTests, canPushMoreElements) {
 }
 
 TEST(StackTests, canPushAndPopElement) {
-    Stack<int> stack;
+    stack<int> stack;
     stack.push(439);
     stack.pop();
     EXPECT_EQ(stack.size(), 0);
 }
 
 TEST(StackTests, canPushAndPopMoreElements) {
-    Stack<int> stack;
+    stack<int> stack;
     stack.push(439);
     stack.push(599);
     stack.push(238);
@@ -71,7 +73,7 @@ TEST(StackTests, canPushAndPopMoreElements) {
 }
 
 TEST(StackTests, canPushAndPopByShiftOperators) {
-    Stack<int> stack;
+    stack<int> stack;
     int temp = -4;
     stack << temp;
     EXPECT_EQ(stack.size(), 1);
