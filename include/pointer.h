@@ -141,3 +141,4 @@ inline unique_ptr<Type> make_unique(Type &&a) {
 }
 
 } // namespace yacppl
+

@@ -48,8 +48,7 @@ public:
         return *this;
     }
 
-    inline list_iterator<ElementType> operator--(int dummy) {
-        (void) dummy;
+    inline list_iterator<ElementType> operator--(int) {
         _node = _node->prev;
         return *this;
     }
@@ -229,3 +228,4 @@ public:
 };
 
 } // namespace yacppl
+

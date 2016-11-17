@@ -8,3 +8,4 @@ inline Type &&move(Type &moved) {
 }
 
 } // namespace yacppl
+
