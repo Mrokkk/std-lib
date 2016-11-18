@@ -10,41 +10,41 @@ struct list_head {
     list_head *next = this, *prev = this;
 };
 
-inline void list_init(list_head *list) {
+void list_init(list_head *list) {
     list->next = list->prev = list;
 }
 
-inline void __list_add(list_head *new_element, list_head *prev, list_head *next) {
+void __list_add(list_head *new_element, list_head *prev, list_head *next) {
     next->prev = new_element;
     prev->next = new_element;
     new_element->next = next;
     new_element->prev = prev;
 }
 
-inline void __list_del(list_head *prev, list_head *next) {
+void __list_del(list_head *prev, list_head *next) {
     next->prev = prev;
     prev->next = next;
 }
 
-inline void list_add(list_head *new_element, list_head *head) {
+void list_add(list_head *new_element, list_head *head) {
     __list_add(new_element, head, head->next);
 }
 
-inline void list_add_tail(list_head *new_element, list_head *head) {
+void list_add_tail(list_head *new_element, list_head *head) {
     __list_add(new_element, head->prev, head);
 }
 
-inline int list_empty(list_head *entry) {
+int list_empty(list_head *entry) {
     return (entry->next == entry);
 }
 
-inline void list_del(list_head *entry) {
+void list_del(list_head *entry) {
     __list_del(entry->prev, entry->next);
     entry->next = entry;
     entry->prev = entry;
 }
 
-inline void list_move(list_head *list, list_head *head) {
+void list_move(list_head *list, list_head *head) {
     __list_del(list->prev, list->next);
     list_add_tail(list, head);
 }
