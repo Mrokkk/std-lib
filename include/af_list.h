@@ -8,9 +8,14 @@ namespace af_list {
 
 struct list_head {
     list_head *next = this, *prev = this;
+
+    bool empty() {
+        return (next == prev);
+    }
+
 };
 
-using af_list_element = list_head;
+using list_element = list_head;
 
 void list_init(list_head *list) {
     list->next = list->prev = list;
@@ -31,10 +36,6 @@ void __list_del(list_head *prev, list_head *next) {
 }
 
 } // namespace detail
-
-int list_empty(list_head *entry) {
-    return (entry->next == entry);
-}
 
 void list_del(list_head *entry) {
     detail::__list_del(entry->prev, entry->next);

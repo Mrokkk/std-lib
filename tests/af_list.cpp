@@ -15,6 +15,6 @@ struct helper {
 
 TEST(AFListTests, canCreateEmpty) {
     af_list::list_head list;
-    EXPECT_EQ(af_list::list_empty(&list), true);
+    EXPECT_EQ(list.empty(), true);
 }
 
