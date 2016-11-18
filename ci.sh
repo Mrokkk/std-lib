@@ -12,14 +12,15 @@ case $1 in
         else
             cmake ..
         fi
-        make
         if [[ $VALGRIND ]]; then
-            valgrind ./std_lib
+            make
+            valgrind ./yacppl
         else
-            ./std_lib
+            if [[ $COVERAGE ]]; then
+                make tests-cov
+            else
+                make tests-run
+            fi
         fi
-        if [[ $COVERAGE ]]; then
-            make coverage
-        fi ;;
 esac
 
