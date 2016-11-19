@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(yacppl)
 
-set(CPP_STANDARD gnu++1y)
+set(CPP_STANDARD c++1y)
 set(DEBUG_LEVEL 3)
 set(WARNING_FLAGS "-Wall -Wextra")
 set(COVERAGE_FLAGS "--coverage -fprofile-arcs -ftest-coverage")
