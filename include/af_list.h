@@ -28,26 +28,37 @@ class af_list {
         new_element->prev = prev;
     }
 
+    void __list_del(af_list *prev, af_list *next) {
+        next->prev = prev;
+        prev->next = next;
+    }
+
 public:
 
     af_list *next = this, *prev = this;
 
-    void list_add(af_list *new_element) {
+    void add(af_list *new_element) {
         __list_add(new_element, prev, this);
+    }
+
+    void del() {
+        __list_del(prev, next);
+        next = this;
+        prev = this;
     }
 
     bool empty() const {
         return (prev == this) && (next == this);
     }
 
-    auto list_entry(af_list *head, size_t Offset) {
+    auto entry(af_list *head, size_t Offset) {
         return reinterpret_cast<Type *>(reinterpret_cast<char *>(head) - reinterpret_cast<unsigned long>((reinterpret_cast<Type *>(Offset))));
     }
 
     template <typename Member, typename Func>
     void for_each_entry(Member Type::* m, Func lambda) {
         auto offset = offset_of(m);
-        for (auto it = list_entry(next, offset); &(it->*m) != this; it = list_entry(reinterpret_cast<af_list *>(reinterpret_cast<char *>(it) + offset)->next, offset)) {
+        for (auto it = entry(next, offset); &(it->*m) != this; it = entry(reinterpret_cast<af_list *>(reinterpret_cast<char *>(it) + offset)->next, offset)) {
             lambda(it);
         }
     }
