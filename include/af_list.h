@@ -59,9 +59,22 @@ inline void list_move(list_head *list, list_head *head) {
     list_add_tail(list, head);
 }
 
-template <class Type, size_t Offset>
-auto list_entry(list_head *head) {
+template <class Type>
+auto list_entry(list_head *head, size_t Offset) {
     return reinterpret_cast<Type *>(reinterpret_cast<char *>(head) - reinterpret_cast<unsigned long>((reinterpret_cast<Type *>(Offset))));
+}
+
+template<typename T, typename U>
+constexpr size_t offset_of(U T::*member) {
+    return (char*)&((T*)nullptr->*member) - (char*)nullptr;
+}
+
+template <class Type, class Member, typename Func>
+void list_for_each_entry(yacppl::af_list::list_head *head, Member Type::* m, Func lambda) {
+    auto offset = offset_of(m);
+    for (auto it = list_entry<Type>(head->next, offset); &(it->*m) != head; it = list_entry<Type>(reinterpret_cast<list_head *>(reinterpret_cast<char *>(it) + offset)->next, offset)) {
+        lambda(it);
+    }
 }
 
 #define list_next_entry(ptr, type, member) \
@@ -69,11 +82,6 @@ auto list_entry(list_head *head) {
 
 #define list_for_each(pos, head) \
     for (pos = (head)->next; pos != (head); pos = pos->next)
-
-#define list_for_each_entry(pos, head, member) \
-    for (pos = yacppl::af_list::list_entry<typeof(*pos), offsetof(typeof(*pos), member)>((head)->next); \
-            &pos->member != (head);                                     \
-            pos = yacppl::af_list::list_entry<typeof(*pos), offsetof(typeof(*pos), member)>(pos->member.next))
 
 } // namespace af_list
 
