@@ -39,6 +39,14 @@ TEST(AFListTests, canCreateEmpty) {
     EXPECT_EQ(list.empty(), true);
 }
 
+TEST(AFListTests, canAccesElement) {
+    for (auto i = 0; i < 1024; i++) {
+        helper e(i);
+        auto result = af_list::list_entry<helper>(&e.list, offsetof(helper, list));
+        EXPECT_EQ(result->a, i);
+    }
+}
+
 TEST(AFListTests, canAddElements) {
     af_list::list_head list;
     helper e1(2), e2(44), e3(26), e4(94);
