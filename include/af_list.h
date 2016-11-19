@@ -18,6 +18,42 @@ struct list_head {
 
 };
 
+template <class Type>
+class af_list {
+
+    void __list_add(af_list *new_element, af_list *prev, af_list *next) {
+        next->prev = new_element;
+        prev->next = new_element;
+        new_element->next = next;
+        new_element->prev = prev;
+    }
+
+public:
+
+    af_list *next = this, *prev = this;
+
+    void list_add(af_list *new_element) {
+        __list_add(new_element, prev, this);
+    }
+
+    bool empty() const {
+        return (prev == this) && (next == this);
+    }
+
+    auto list_entry(af_list *head, size_t Offset) {
+        return reinterpret_cast<Type *>(reinterpret_cast<char *>(head) - reinterpret_cast<unsigned long>((reinterpret_cast<Type *>(Offset))));
+    }
+
+    template <typename Member, typename Func>
+    void for_each_entry(Member Type::* m, Func lambda) {
+        auto offset = offset_of(m);
+        for (auto it = list_entry(next, offset); &(it->*m) != this; it = list_entry(reinterpret_cast<af_list *>(reinterpret_cast<char *>(it) + offset)->next, offset)) {
+            lambda(it);
+        }
+    }
+
+};
+
 using list_element = list_head;
 
 inline void list_init(list_head *list) {
