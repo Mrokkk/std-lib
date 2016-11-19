@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stddef.h>
+
 // Alloc-free double-linked list
 
 namespace yacppl {
@@ -10,8 +12,8 @@ struct list_head {
 
     list_head *next = this, *prev = this;
 
-    bool empty() {
-        return (next == prev);
+    bool empty() const {
+        return (prev == this) && (next == this);
     }
 
 };
@@ -51,24 +53,27 @@ inline void list_add(list_head *new_element, list_head *head) {
 inline void list_add_tail(list_head *new_element, list_head *head) {
     detail::__list_add(new_element, head->prev, head);
 }
+
 inline void list_move(list_head *list, list_head *head) {
     detail::__list_del(list->prev, list->next);
     list_add_tail(list, head);
 }
 
-#define list_entry(ptr, type, member) \
-    ((type *)((char *)(ptr)-(unsigned long)(&((type *)0)->member)))
+template <class Type, size_t Offset>
+auto list_entry(list_head *head) {
+    return reinterpret_cast<Type *>(reinterpret_cast<char *>(head) - reinterpret_cast<unsigned long>((reinterpret_cast<Type *>(Offset))));
+}
 
 #define list_next_entry(ptr, type, member) \
-    ((type *)((char *)((ptr)->next)-(unsigned long)(&((type *)0)->member)))
+    (reinterpret_cast<type *>(reinterpret_cast<char *>((ptr)->next)-reinterpret_cast<unsigned long>(&(reinterpret_cast<type *>(0))->member)))
 
 #define list_for_each(pos, head) \
     for (pos = (head)->next; pos != (head); pos = pos->next)
 
 #define list_for_each_entry(pos, head, member) \
-    for (pos = list_entry((head)->next, typeof(*pos), member);          \
+    for (pos = yacppl::af_list::list_entry<typeof(*pos), offsetof(typeof(*pos), member)>((head)->next); \
             &pos->member != (head);                                     \
-            pos = list_entry(pos->member.next, typeof(*pos), member))
+            pos = yacppl::af_list::list_entry<typeof(*pos), offsetof(typeof(*pos), member)>(pos->member.next))
 
 } // namespace af_list
 
