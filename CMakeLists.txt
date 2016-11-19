@@ -3,7 +3,7 @@ project(yacppl)
 
 set(CPP_STANDARD c++1y)
 set(DEBUG_LEVEL 3)
-set(WARNING_FLAGS "-Wall -Wextra")
+set(WARNING_FLAGS "-Wall -Wextra -Werror")
 set(COVERAGE_FLAGS "--coverage -fprofile-arcs -ftest-coverage")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g${DEBUG_LEVEL} -std=${CPP_STANDARD} ${WARNING_FLAGS} -fdiagnostics-color=always -D_GLIBCXX_USE_CXX11_ABI=0")

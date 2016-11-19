@@ -7,7 +7,7 @@ using namespace yacppl;
 TEST(SharedPointerTests, canCreateEmptyPointer) {
     shared_ptr<int> ptr;
     EXPECT_EQ(ptr.get(), nullptr);
-    EXPECT_EQ(ptr.get_ref_count(), 0);
+    EXPECT_TRUE(ptr.get_ref_count() == 0);
 }
 
 TEST(SharedPointerTests, canCreateValidPointer) {
@@ -32,8 +32,8 @@ TEST(SharedPointerTests, canBeCopied) {
     ptr2 = ptr1;
     EXPECT_EQ(*ptr1, 10);
     EXPECT_EQ(*ptr2, 10);
-    EXPECT_EQ(ptr1.get_ref_count(), 2);
-    EXPECT_EQ(ptr2.get_ref_count(), 2);
+    EXPECT_TRUE(ptr1.get_ref_count() == 2);
+    EXPECT_TRUE(ptr2.get_ref_count() == 2);
     EXPECT_EQ(ptr1.get(), ptr2.get());
 }
 
@@ -43,8 +43,8 @@ TEST(SharedPointerTests, canBeMoved) {
     ptr2 = move(ptr1);
     EXPECT_EQ(*ptr2, 10);
     EXPECT_EQ(ptr1.get(), nullptr);
-    EXPECT_EQ(ptr1.get_ref_count(), 0);
-    EXPECT_EQ(ptr2.get_ref_count(), 1);
+    EXPECT_TRUE(ptr1.get_ref_count() == 0);
+    EXPECT_TRUE(ptr2.get_ref_count() == 1);
     EXPECT_NE(ptr1.get(), ptr2.get());
 }
 
@@ -53,8 +53,8 @@ TEST(SharedPointerTests, canBeConstructedByCopy) {
     shared_ptr<int> ptr2(ptr1);
     EXPECT_EQ(*ptr1, 10);
     EXPECT_EQ(*ptr2, 10);
-    EXPECT_EQ(ptr1.get_ref_count(), 2);
-    EXPECT_EQ(ptr2.get_ref_count(), 2);
+    EXPECT_TRUE(ptr1.get_ref_count() == 2);
+    EXPECT_TRUE(ptr2.get_ref_count() == 2);
     EXPECT_EQ(ptr1.get(), ptr2.get());
 }
 
@@ -63,8 +63,8 @@ TEST(SharedPointerTests, canBeConstructedByMoving) {
     shared_ptr<int> ptr2 = move(ptr1);
     EXPECT_EQ(*ptr2, 10);
     EXPECT_EQ(ptr1.get(), nullptr);
-    EXPECT_EQ(ptr1.get_ref_count(), 0);
-    EXPECT_EQ(ptr2.get_ref_count(), 1);
+    EXPECT_TRUE(ptr1.get_ref_count() == 0);
+    EXPECT_TRUE(ptr2.get_ref_count() == 1);
     EXPECT_NE(ptr1.get(), ptr2.get());
 }
 
@@ -80,5 +80,5 @@ TEST(SharedPointerTests, canHaveItsValueModified) {
     auto ptr = make_shared(10);
     *ptr = 39;
     EXPECT_EQ(*ptr, 39);
-    EXPECT_EQ(ptr.get_ref_count(), 1);
+    EXPECT_TRUE(ptr.get_ref_count() == 1);
 }

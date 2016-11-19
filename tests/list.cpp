@@ -6,13 +6,13 @@ using namespace yacppl;
 
 TEST(ListTests, canCreateEmptyList) {
     list<int> list;
-    EXPECT_EQ(list.size(), 0);
+    EXPECT_TRUE(list.size() == 0);
 }
 
 TEST(ListTests, canAddFrontItem) {
     list<int> list;
     list.push_front(2);
-    EXPECT_EQ(list.size(), 1);
+    EXPECT_TRUE(list.size() == 1);
     EXPECT_EQ(list.front(), 2);
 }
 
@@ -20,7 +20,7 @@ TEST(ListTests, canAddTwoFrontItems) {
     list<int> list;
     list.push_front(2);
     list.push_front(1);
-    EXPECT_EQ(list.size(), 2);
+    EXPECT_TRUE(list.size() == 2);
     EXPECT_EQ(list.front(), 1);
     EXPECT_EQ(list.back(), 2);
 }
@@ -28,7 +28,7 @@ TEST(ListTests, canAddTwoFrontItems) {
 TEST(ListTests, canAddBackItem) {
     list<int> list;
     list.push_back(4);
-    EXPECT_EQ(list.size(), 1);
+    EXPECT_TRUE(list.size() == 1);
     EXPECT_EQ(list.back(), 4);
 }
 
@@ -36,14 +36,14 @@ TEST(ListTests, canAddBackTwoItems) {
     list<int> list;
     list.push_back(8);
     list.push_back(3);
-    EXPECT_EQ(list.size(), 2);
+    EXPECT_TRUE(list.size() == 2);
     EXPECT_EQ(list.front(), 8);
     EXPECT_EQ(list.back(), 3);
 }
 
 TEST(ListTests, canBeInitializedWithInitializerList) {
     list<int> list{2, 5, 6, 88, 4};
-    EXPECT_EQ(list.size(), 5);
+    EXPECT_TRUE(list.size() == 5);
     EXPECT_EQ(list.front(), 2);
     EXPECT_EQ(list.back(), 4);
     int result[5];
@@ -78,7 +78,7 @@ TEST(ListTests, canPopBack) {
     list.push_front(1);
     EXPECT_EQ(list.front(), 1);
     list.pop_back();
-    EXPECT_EQ(list.size(), 2);
+    EXPECT_TRUE(list.size() == 2);
     EXPECT_EQ(list.back(), 2);
     EXPECT_EQ(list.front(), 1);
 }
@@ -91,7 +91,7 @@ TEST(ListTests, canPopFront) {
     list.push_front(10);
     EXPECT_EQ(list.front(), 10);
     list.pop_front();
-    EXPECT_EQ(list.size(), 3);
+    EXPECT_TRUE(list.size() == 3);
     EXPECT_EQ(list.back(), 3);
     EXPECT_EQ(list.front(), 1);
 }
@@ -99,7 +99,7 @@ TEST(ListTests, canPopFront) {
 TEST(ListTests, canBeResized) {
     list<int> list;
     list.resize(20);
-    EXPECT_EQ(list.size(), 20);
+    EXPECT_TRUE(list.size() == 20);
     for (auto &it : list)
         it = 38;
     EXPECT_EQ(list.front(), 38);
@@ -107,7 +107,7 @@ TEST(ListTests, canBeResized) {
     list.resize(2);
     EXPECT_EQ(list.front(), 38);
     EXPECT_EQ(list.back(), 38);
-    EXPECT_EQ(list.size(), 2);
+    EXPECT_TRUE(list.size() == 2);
 }
 
 TEST(ListTests, canIncrementIterator) {
@@ -190,8 +190,8 @@ TEST(ListTests, canBeAssigned) {
     list2.push_back(99);
     list2.push_back(120);
     list2 = list1;
-    EXPECT_EQ(list1.size(), 4);
-    EXPECT_EQ(list2.size(), 4);
+    EXPECT_TRUE(list1.size() == 4);
+    EXPECT_TRUE(list2.size() == 4);
     EXPECT_EQ(list1.front(), 10);
     EXPECT_EQ(list2.front(), 10);
     EXPECT_EQ(list2.back(), 3);
@@ -208,8 +208,8 @@ TEST(ListTests, canBeConstructedByMove) {
     int i = 0;
     for (const auto &it : list2)
         result[i++] = it;
-    EXPECT_EQ(list1.size(), 0);
-    EXPECT_EQ(list2.size(), 4);
+    EXPECT_TRUE(list1.size() == 0);
+    EXPECT_TRUE(list2.size() == 4);
     EXPECT_EQ(list2.front(), 10);
     EXPECT_EQ(list2.back(), 3);
     EXPECT_EQ(result[0], 10);
@@ -232,8 +232,8 @@ TEST(ListTests, canBeMoved) {
     int i = 0;
     for (const auto &it : list2)
         result[i++] = it;
-    EXPECT_EQ(list1.size(), 0);
-    EXPECT_EQ(list2.size(), 4);
+    EXPECT_TRUE(list1.size() == 0);
+    EXPECT_TRUE(list2.size() == 4);
     EXPECT_EQ(list2.front(), 10);
     EXPECT_EQ(list2.back(), 3);
     EXPECT_EQ(result[0], 10);
@@ -252,15 +252,15 @@ TEST(ListTests, canEraseSingleElement) {
     EXPECT_EQ(list.front(), -59);
     EXPECT_EQ(list.back(), 23);
     list.erase(it);
-    EXPECT_EQ(list.size(), 2);
+    EXPECT_TRUE(list.size() == 2);
     EXPECT_EQ(list.front(), -59);
     EXPECT_EQ(list.back(), 23);
     list.erase(list.begin());
-    EXPECT_EQ(list.size(), 1);
+    EXPECT_TRUE(list.size() == 1);
     EXPECT_EQ(list.front(), 23);
     EXPECT_EQ(list.back(), 23);
     list.erase(list.end()--);
-    EXPECT_EQ(list.size(), 0);
+    EXPECT_TRUE(list.size() == 0);
 }
 
 TEST(ListTests, canEraseElements) {
@@ -270,9 +270,9 @@ TEST(ListTests, canEraseElements) {
     list.push_back(23);
     list.push_back(13);
     list.erase(++list.begin(), list.end());
-    EXPECT_EQ(list.size(), 1);
+    EXPECT_TRUE(list.size() == 1);
     EXPECT_EQ(list.front(), -59);
     EXPECT_EQ(list.back(), -59);
     list.erase(list.begin(), list.end());
-    EXPECT_EQ(list.size(), 0);
+    EXPECT_TRUE(list.size() == 0);
 }

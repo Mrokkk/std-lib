@@ -6,14 +6,14 @@ using namespace yacppl;
 TEST(ArrayTests, canCreateEmptyString) {
     array<int, 0> array;
     unsigned result = array.size();
-    EXPECT_EQ(result, 0);
+    EXPECT_TRUE(result == 0);
 }
 
 TEST(ArrayTests, canCreateInitializedArray) {
     array<int, 5> array{2, 3, 4, 5, 6};
     EXPECT_EQ(array[0], 2);
     EXPECT_EQ(array[4], 6);
-    EXPECT_EQ(array.size(), 5);
+    EXPECT_TRUE(array.size() == 5);
 }
 
 TEST(ArrayTests, canReadElementsSequentially) {
