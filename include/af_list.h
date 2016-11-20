@@ -51,14 +51,14 @@ public:
         return (prev == this) && (next == this);
     }
 
-    auto entry(af_list *head, size_t Offset) {
-        return reinterpret_cast<Type *>(reinterpret_cast<char *>(head) - reinterpret_cast<unsigned long>((reinterpret_cast<Type *>(Offset))));
+    auto entry(size_t Offset) {
+        return reinterpret_cast<Type *>(reinterpret_cast<char *>(this) - reinterpret_cast<unsigned long>((reinterpret_cast<Type *>(Offset))));
     }
 
     template <typename Member, typename Func>
     void for_each_entry(Member Type::* m, Func lambda) {
         auto offset = offset_of(m);
-        for (auto it = entry(next, offset); &(it->*m) != this; it = entry(reinterpret_cast<af_list *>(reinterpret_cast<char *>(it) + offset)->next, offset)) {
+        for (auto it = next->entry(offset); &(it->*m) != this; it = reinterpret_cast<af_list *>(reinterpret_cast<char *>(it) + offset)->next->entry(offset)) {
             lambda(it);
         }
     }

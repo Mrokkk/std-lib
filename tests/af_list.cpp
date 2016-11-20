@@ -78,7 +78,7 @@ TEST(AFListTests, canAccesElement) {
 TEST(AFListTests2, canAccesElement) {
     for (auto i = 0; i < 1024; i++) {
         helper2 e(i);
-        auto result = e.list.entry(&e.list, offsetof(helper, list));
+        auto result = e.list.entry(offsetof(helper, list));
         EXPECT_EQ(result->a, i);
     }
 }
