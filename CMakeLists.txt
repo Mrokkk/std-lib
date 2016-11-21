@@ -1,10 +1,9 @@
-cmake_minimum_required(VERSION 2.8)
 project(yacppl)
+cmake_minimum_required(VERSION 3.0)
 
 set(CPP_STANDARD c++1y)
 set(DEBUG_LEVEL 3)
 set(WARNING_FLAGS "-Wall -Wextra -Werror")
-set(COVERAGE_FLAGS "--coverage -fprofile-arcs -ftest-coverage")
 
 if(COVERAGE)
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -13,6 +12,11 @@ if(COVERAGE)
     else()
         set(COVERAGE_FLAGS "-O0 -fprofile-arcs -ftest-coverage")
     endif()
+endif()
+
+if(SANITIZERS)
+    set(SANITIZERS_FLAGS "-fsanitize=address,undefined")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${SANITIZERS_FLAGS}")
 endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g${DEBUG_LEVEL} -std=${CPP_STANDARD} ${WARNING_FLAGS} ${COVERAGE_FLAGS} -fdiagnostics-color=always -D_GLIBCXX_USE_CXX11_ABI=0")

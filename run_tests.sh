@@ -18,6 +18,9 @@ case "$JOB" in
     "coverage")
         cmake -DCOVERAGE=ON ..
         make tests-cov -j$cores ;;
+    "sanitizers")
+        cmake -DSANITIZERS=ON ..
+        make tests-run -j$cores ;;
     *)
         cmake ..
         make tests-run -j$cores ;;
