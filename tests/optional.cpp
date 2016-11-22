@@ -1,21 +1,21 @@
 #include <optional.h>
 #include <gtest/gtest.h>
 
-TEST(optional, canHaveOptionalValue) {
-    optional<int> opt1;
-    auto result = opt1.has_value();
-    EXPECT_FALSE(result);
-    EXPECT_FALSE(opt1);
-    optional<int> opt2(2);
-    result = opt2.has_value();
-    EXPECT_TRUE(result);
-    EXPECT_TRUE(opt2);
-    EXPECT_EQ(opt2.value(), 2);
-    EXPECT_EQ(opt2.value_or(3), 2);
-    int temp = 4;
-    EXPECT_EQ(opt2.value_or(temp), 2);
-    EXPECT_TRUE(opt2.value() == 2);
+namespace {
+
+template <typename T>
+void test_no_value() {
+    optional<T> opt;
+    EXPECT_FALSE(opt);
+    EXPECT_FALSE(opt.has_value());
 }
 
+} // namespace anon
 
+TEST(optional, can_have_no_value) {
+    test_no_value<int>();
+    test_no_value<char>();
+    test_no_value<float>();
+    test_no_value<double>();
+}
 

@@ -10,7 +10,7 @@ public:
 
     optional() = default;
 
-    explicit optional(Type v)
+    optional(Type v)
             : _value(v), _has_value(true) {}
 
     bool has_value() const {
