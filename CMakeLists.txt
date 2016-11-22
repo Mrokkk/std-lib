@@ -34,6 +34,7 @@ set(SOURCE_FILES
     tests/queue.cpp
     tests/mixed.cpp
     tests/af_list.cpp
+    tests/optional.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

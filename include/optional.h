@@ -3,11 +3,19 @@
 template <typename Type>
 class optional {
 
-    Type value;
+    Type _value;
+    bool _has_value = false;
 
 public:
 
-    explicit optional(Type v) : value(v) {}
+    optional() = default;
+
+    explicit optional(Type v)
+            : _value(v), _has_value(true) {}
+
+    bool has_value() const {
+        return _has_value;
+    }
 
 };
 
