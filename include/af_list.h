@@ -34,7 +34,7 @@ public:
     af_list() {}
 
     template <typename U>
-    af_list(U Type::*member) {
+    explicit af_list(U Type::*member) {
         offset = offset_of(member);
     }
 
@@ -56,23 +56,21 @@ public:
         return (prev == this) && (next == this);
     }
 
-    auto entry(size_t Offset) {
-        return reinterpret_cast<Type *>(reinterpret_cast<char *>(this) - reinterpret_cast<unsigned long>((reinterpret_cast<Type *>(Offset))));
-    }
-
     auto entry() {
         return reinterpret_cast<Type *>(reinterpret_cast<char *>(this) - reinterpret_cast<unsigned long>((reinterpret_cast<Type *>(offset))));
     }
 
-    template <typename Member, typename Func>
-    void for_each_entry(Member Type::* m, Func lambda) {
-        auto offset = offset_of(m);
-        for (auto it = next->entry(offset); &(it->*m) != this; it = reinterpret_cast<af_list *>(reinterpret_cast<char *>(it) + offset)->next->entry(offset)) {
+    template <typename Func>
+    void for_each_entry(Func lambda) {
+        for (auto it = next->entry(); reinterpret_cast<af_list *>(reinterpret_cast<char *>(it) + offset) != this; it = reinterpret_cast<af_list *>(reinterpret_cast<char *>(it) + offset)->next->entry()) {
             lambda(it);
         }
     }
 
 };
+
+template <typename T>
+using af_list_element = af_list<T>;
 
 #if 0
 inline void list_move(list_head *list, list_head *head) {

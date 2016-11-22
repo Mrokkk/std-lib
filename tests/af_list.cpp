@@ -14,7 +14,7 @@ struct helper {
 void testAdding(af_list<helper> &head, helper &e, std::vector<int> &comp, int s) {
     auto size = 0;
     head.add(&e.list);
-    head.for_each_entry(&helper::list, [&] (helper *h) {
+    head.for_each_entry([&] (helper *h) {
         EXPECT_EQ(comp[size], h->a);
         size++;
     });
@@ -25,7 +25,7 @@ void testAdding(af_list<helper> &head, helper &e, std::vector<int> &comp, int s)
 void testAddingFront(af_list<helper> &head, helper &e, std::vector<int> &comp, int s) {
     auto size = 0;
     head.add_front(&e.list);
-    head.for_each_entry(&helper::list, [&] (helper *h) {
+    head.for_each_entry([&] (helper *h) {
         EXPECT_EQ(comp[size], h->a);
         size++;
     });
@@ -36,7 +36,7 @@ void testAddingFront(af_list<helper> &head, helper &e, std::vector<int> &comp, i
 void testDeleting(af_list<helper> &head, helper &e, std::vector<int> &comp) {
     e.list.del();
     size_t size = 0;
-    head.for_each_entry(&helper::list, [&] (helper *h) {
+    head.for_each_entry([&] (helper *h) {
         EXPECT_EQ(comp[size], h->a);
         size++;
     });
@@ -47,7 +47,7 @@ void testDeleting(af_list<helper> &head, helper &e, std::vector<int> &comp) {
 } // namespace anon
 
 TEST(AFListTests, canCreateEmpty) {
-    af_list<helper> list;
+    af_list<helper> list(&helper::list);
     EXPECT_EQ(list.empty(), true);
 }
 
@@ -60,7 +60,7 @@ TEST(AFListTests, canAccesElement) {
 }
 
 TEST(AFListTests, canAddElements) {
-    af_list<helper> list;
+    af_list<helper> list(&helper::list);
     helper e1(2), e2(44), e3(26), e4(94), e5(24);
     std::vector<int> v{2, 44, 26, 94};
     testAdding(list, e1, v, 1);
