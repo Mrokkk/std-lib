@@ -12,26 +12,19 @@ class af_list {
     af_list *next = this, *prev = this;
     size_t offset;
 
-    void __list_add(af_list *new_element, af_list *prev, af_list *next) {
+    void add_element(af_list *new_element, af_list *prev, af_list *next) {
         next->prev = new_element;
         prev->next = new_element;
         new_element->next = next;
         new_element->prev = prev;
     }
 
-    void __list_del(af_list *prev, af_list *next) {
-        next->prev = prev;
-        prev->next = next;
-    }
-
     template <typename T, typename U>
-    constexpr size_t offset_of(U T::*member) {
+    constexpr size_t offset_of(U T::*member) const {
         return (char *)&((T *)nullptr->*member) - (char *)nullptr;
     }
 
 public:
-
-    af_list() {}
 
     template <typename U>
     explicit af_list(U Type::*member) {
@@ -39,15 +32,16 @@ public:
     }
 
     void add(af_list *new_element) {
-        __list_add(new_element, prev, this);
+        add_element(new_element, prev, this);
     }
 
     void add_front(af_list *new_element) {
-        __list_add(new_element, this, next);
+        add_element(new_element, this, next);
     }
 
-    void del() {
-        __list_del(prev, next);
+    void remove() {
+        next->prev = prev;
+        prev->next = next;
         next = this;
         prev = this;
     }

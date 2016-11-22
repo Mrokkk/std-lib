@@ -34,7 +34,7 @@ void testAddingFront(af_list<helper> &head, helper &e, std::vector<int> &comp, i
 }
 
 void testDeleting(af_list<helper> &head, helper &e, std::vector<int> &comp) {
-    e.list.del();
+    e.list.remove();
     size_t size = 0;
     head.for_each_entry([&] (helper *h) {
         EXPECT_EQ(comp[size], h->a);
