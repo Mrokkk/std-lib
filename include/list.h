@@ -21,19 +21,19 @@ class list {
     list_element _head;
     unsigned int _size = 0;
 
-    list_element *backElement() const {
+    list_element *back_element() const {
         return _head.prev;
     }
 
-    list_element *frontElement() const {
+    list_element *front_element() const {
         return _head.next;
     }
 
-    void add(list_element *newElement, list_element *prev, list_element *next) {
-        next->prev = newElement;
-        prev->next = newElement;
-        newElement->next = next;
-        newElement->prev = prev;
+    void add(list_element *new_elem, list_element *prev, list_element *next) {
+        next->prev = new_elem;
+        prev->next = new_elem;
+        new_elem->next = next;
+        new_elem->prev = prev;
         ++_size;
     }
 
@@ -45,12 +45,12 @@ class list {
         delete temp;
     }
 
-    void add_front_element(list_element *newElement) {
-        add(newElement, &_head, _head.next);
+    void add_front_element(list_element *new_elem) {
+        add(new_elem, &_head, _head.next);
     }
 
-    void add_back_element(list_element *newElement) {
-        add(newElement, _head.prev, &_head);
+    void add_back_element(list_element *new_elem) {
+        add(new_elem, _head.prev, &_head);
     }
 
     void delete_element(list_element *element) {
@@ -70,11 +70,11 @@ class list {
         }
     }
 
-    void erase_elements(list_element *firstElement, const list_element *lastElement) {
-        while (firstElement != lastElement) {
-            auto temp = firstElement->prev;
-            delete_element(firstElement);
-            firstElement = temp->next;
+    void erase_elements(list_element *first_elem, const list_element *last_elem) {
+        while (first_elem != last_elem) {
+            auto temp = first_elem->prev;
+            delete_element(first_elem);
+            first_elem = temp->next;
         }
     }
 
@@ -164,31 +164,31 @@ public:
     }
 
     const ElementType &front() const {
-        return frontElement()->data;
+        return front_element()->data;
     }
 
     const ElementType &back() const {
-        return backElement()->data;
+        return back_element()->data;
     }
 
     iterator begin() const {
-        return iterator(frontElement());
+        return iterator(front_element());
     }
 
     iterator end() const {
-        return iterator(backElement()->next);
+        return iterator(back_element()->next);
     }
 
     void pop_back() {
-        erase_elements(backElement(), backElement()->next);
+        erase_elements(back_element(), back_element()->next);
     }
 
     void pop_front() {
-        erase_elements(frontElement(), frontElement()->next);
+        erase_elements(front_element(), front_element()->next);
     }
 
     void clear() {
-        erase_elements(frontElement(), backElement()->next);
+        erase_elements(front_element(), back_element()->next);
     }
 
     void resize(unsigned long count, ElementType val = ElementType()) {
