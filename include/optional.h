@@ -17,5 +17,21 @@ public:
         return _has_value;
     }
 
+    Type &value() {
+        return _value;
+    }
+
+    Type value_or(Type a) {
+        return _has_value ? _value : a;
+    }
+
+    operator Type() const {
+        return _value;
+    }
+
+    operator bool() const {
+        return _has_value;
+    }
+
 };
 
