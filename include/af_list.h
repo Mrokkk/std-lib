@@ -26,6 +26,52 @@ class af_list {
 
 public:
 
+    class iterator {
+
+        af_list *ptr = nullptr;
+
+    public:
+
+        iterator(af_list *p)
+            : ptr(p) {}
+
+        iterator &operator++() {
+            ptr = ptr->next;
+            return *this;
+        }
+
+        iterator operator++(int) {
+            ptr = ptr->next;
+            return *this;
+        }
+
+        iterator &operator--() {
+            ptr = ptr->prev;
+            return *this;
+        }
+
+        iterator operator--(int) {
+            ptr = ptr->prev;
+            return *this;
+        }
+
+        Type &operator *() {
+            return ptr->entry();
+        }
+
+        Type *operator->() {
+            return ptr->entry();
+        }
+
+        bool operator==(const iterator &i) const {
+            return i.ptr == ptr;
+        }
+
+        bool operator!=(const iterator &i) const {
+            return i.ptr != ptr;
+        }
+    };
+
     template <typename U>
     explicit af_list(U Type::*member) {
         offset = offset_of(member);
@@ -52,6 +98,14 @@ public:
 
     auto entry() {
         return reinterpret_cast<Type *>(reinterpret_cast<char *>(this) - reinterpret_cast<unsigned long>((reinterpret_cast<Type *>(offset))));
+    }
+
+    auto begin() {
+        return iterator(next);
+    }
+
+    auto end() {
+        return iterator(this);
     }
 
     template <typename Func>
