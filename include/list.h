@@ -3,90 +3,33 @@
 namespace yacppl {
 
 template<typename ElementType>
-struct list_element {
-
-    ElementType data;
-    list_element *prev = nullptr, *next = nullptr;
-
-    list_element()
-            : prev(this), next(this) {}
-
-    list_element(const ElementType &e)
-            : data(e), prev(this), next(this) {}
-
-};
-
-template<typename ElementType>
-class list_iterator {
-
-private:
-
-    list_element<ElementType> *_node = nullptr;
-
-public:
-
-    explicit list_iterator(list_element<ElementType> *node)
-            : _node(node) {}
-
-    list_element<ElementType> *node() const {
-        return _node;
-    }
-
-    list_iterator<ElementType> &operator++() {
-        _node = _node->next;
-        return *this;
-    }
-
-    list_iterator<ElementType> operator++(int dummy) {
-        (void) dummy;
-        _node = _node->next;
-        return *this;
-    }
-
-    list_iterator<ElementType> &operator--() {
-        _node = _node->prev;
-        return *this;
-    }
-
-    list_iterator<ElementType> operator--(int) {
-        _node = _node->prev;
-        return *this;
-    }
-
-    ElementType &operator*() const {
-        return _node->data;
-    }
-
-    ElementType *operator->() const {
-        return &_node->data;
-    }
-
-    bool operator!=(const list_iterator<ElementType> &element) const {
-        return element._node != _node;
-    }
-
-    bool operator==(const list_iterator<ElementType> &element) const {
-        return element._node == _node;
-    }
-
-};
-
-template<typename ElementType>
 class list {
 
-    list_element<ElementType> _head;
+    struct list_element {
+
+        ElementType data;
+        list_element *prev = nullptr, *next = nullptr;
+
+        list_element()
+                : prev(this), next(this) {}
+
+        list_element(const ElementType &e)
+                : data(e), prev(this), next(this) {}
+
+    };
+
+    list_element _head;
     unsigned int _size = 0;
 
-    list_element<ElementType> *backElement() const {
+    list_element *backElement() const {
         return _head.prev;
     }
 
-    list_element<ElementType> *frontElement() const {
+    list_element *frontElement() const {
         return _head.next;
     }
 
-    void add(list_element<ElementType> *newElement, list_element<ElementType> *prev,
-                    list_element<ElementType> *next) {
+    void add(list_element *newElement, list_element *prev, list_element *next) {
         next->prev = newElement;
         prev->next = newElement;
         newElement->next = next;
@@ -94,7 +37,7 @@ class list {
         ++_size;
     }
 
-    void del(list_element<ElementType> *prev, list_element<ElementType> *next) {
+    void del(list_element *prev, list_element *next) {
         auto temp = prev->next;
         next->prev = prev;
         prev->next = next;
@@ -102,15 +45,15 @@ class list {
         delete temp;
     }
 
-    void add_front_element(list_element<ElementType> *newElement) {
+    void add_front_element(list_element *newElement) {
         add(newElement, &_head, _head.next);
     }
 
-    void add_back_element(list_element<ElementType> *newElement) {
+    void add_back_element(list_element *newElement) {
         add(newElement, _head.prev, &_head);
     }
 
-    void delete_element(list_element<ElementType> *element) {
+    void delete_element(list_element *element) {
         del(element->prev, element->next);
     }
 
@@ -127,7 +70,7 @@ class list {
         }
     }
 
-    void erase_elements(list_element<ElementType> *firstElement, const list_element<ElementType> *lastElement) {
+    void erase_elements(list_element *firstElement, const list_element *lastElement) {
         while (firstElement != lastElement) {
             auto temp = firstElement->prev;
             delete_element(firstElement);
@@ -137,7 +80,60 @@ class list {
 
 public:
 
-    list() {}
+    class iterator {
+
+    private:
+
+        list_element *_node = nullptr;
+
+    public:
+
+        explicit iterator(list_element *node)
+                : _node(node) {}
+
+        list_element *node() const {
+            return _node;
+        }
+
+        iterator &operator++() {
+            _node = _node->next;
+            return *this;
+        }
+
+        iterator operator++(int) {
+            _node = _node->next;
+            return *this;
+        }
+
+        iterator &operator--() {
+            _node = _node->prev;
+            return *this;
+        }
+
+        iterator operator--(int) {
+            _node = _node->prev;
+            return *this;
+        }
+
+        ElementType &operator*() const {
+            return _node->data;
+        }
+
+        ElementType *operator->() const {
+            return &_node->data;
+        }
+
+        bool operator!=(const iterator &element) const {
+            return element._node != _node;
+        }
+
+        bool operator==(const iterator &element) const {
+            return element._node == _node;
+        }
+
+    };
+
+    list() = default;
 
     list(const std::initializer_list<ElementType> &list) {
         copy_elements_from(list);
@@ -160,11 +156,11 @@ public:
     }
 
     void push_front(const ElementType &element) {
-        add_front_element(new list_element<ElementType>(element));
+        add_front_element(new list_element(element));
     }
 
     void push_back(const ElementType &element) {
-        add_back_element(new list_element<ElementType>(element));
+        add_back_element(new list_element(element));
     }
 
     const ElementType &front() const {
@@ -175,12 +171,12 @@ public:
         return backElement()->data;
     }
 
-    list_iterator<ElementType> begin() const {
-        return list_iterator<ElementType>(frontElement());
+    iterator begin() const {
+        return iterator(frontElement());
     }
 
-    list_iterator<ElementType> end() const {
-        return list_iterator<ElementType>(backElement()->next);
+    iterator end() const {
+        return iterator(backElement()->next);
     }
 
     void pop_back() {
@@ -205,11 +201,11 @@ public:
         }
     }
 
-    void erase(list_iterator<ElementType> position) {
+    void erase(iterator position) {
         erase_elements(position.node(), position.node()->next);
     }
 
-    void erase(const list_iterator<ElementType> &first, const list_iterator<ElementType> &last) {
+    void erase(const iterator &first, const iterator &last) {
         erase_elements(first.node(), last.node());
     }
 
