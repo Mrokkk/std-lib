@@ -6,43 +6,88 @@
 
 namespace yacppl {
 
-namespace af_list {
-
-struct list_head {
-
-    list_head *next = this, *prev = this;
-
-    bool empty() const {
-        return (prev == this) && (next == this);
-    }
-
-};
-
 template <class Type>
 class af_list {
 
-    void __list_add(af_list *new_element, af_list *prev, af_list *next) {
+    af_list *next = this, *prev = this;
+    size_t offset;
+
+    void add_element(af_list *new_element, af_list *prev, af_list *next) {
         next->prev = new_element;
         prev->next = new_element;
         new_element->next = next;
         new_element->prev = prev;
     }
 
-    void __list_del(af_list *prev, af_list *next) {
-        next->prev = prev;
-        prev->next = next;
+    template <typename T, typename U>
+    constexpr size_t offset_of(U T::*member) const {
+        return (char *)&((T *)nullptr->*member) - (char *)nullptr;
     }
 
 public:
 
-    af_list *next = this, *prev = this;
+    class iterator {
 
-    void add(af_list *new_element) {
-        __list_add(new_element, prev, this);
+        af_list *ptr = nullptr;
+
+    public:
+
+        iterator(af_list *p)
+            : ptr(p) {}
+
+        iterator &operator++() {
+            ptr = ptr->next;
+            return *this;
+        }
+
+        iterator operator++(int) {
+            ptr = ptr->next;
+            return *this;
+        }
+
+        iterator &operator--() {
+            ptr = ptr->prev;
+            return *this;
+        }
+
+        iterator operator--(int) {
+            ptr = ptr->prev;
+            return *this;
+        }
+
+        Type &operator *() {
+            return ptr->entry();
+        }
+
+        Type *operator->() {
+            return ptr->entry();
+        }
+
+        bool operator==(const iterator &i) const {
+            return i.ptr == ptr;
+        }
+
+        bool operator!=(const iterator &i) const {
+            return i.ptr != ptr;
+        }
+    };
+
+    template <typename U>
+    explicit af_list(U Type::*member) {
+        offset = offset_of(member);
     }
 
-    void del() {
-        __list_del(prev, next);
+    void add(af_list *new_element) {
+        add_element(new_element, prev, this);
+    }
+
+    void add_front(af_list *new_element) {
+        add_element(new_element, this, next);
+    }
+
+    void remove() {
+        next->prev = prev;
+        prev->next = next;
         next = this;
         prev = this;
     }
@@ -51,86 +96,39 @@ public:
         return (prev == this) && (next == this);
     }
 
-    auto entry(size_t Offset) {
-        return reinterpret_cast<Type *>(reinterpret_cast<char *>(this) - reinterpret_cast<unsigned long>((reinterpret_cast<Type *>(Offset))));
+    auto entry() {
+        return reinterpret_cast<Type *>(reinterpret_cast<char *>(this) - reinterpret_cast<unsigned long>((reinterpret_cast<Type *>(offset))));
     }
 
-    template <typename Member, typename Func>
-    void for_each_entry(Member Type::* m, Func lambda) {
-        auto offset = offset_of(m);
-        for (auto it = next->entry(offset); &(it->*m) != this; it = reinterpret_cast<af_list *>(reinterpret_cast<char *>(it) + offset)->next->entry(offset)) {
+    auto begin() {
+        return iterator(next);
+    }
+
+    auto end() {
+        return iterator(this);
+    }
+
+    template <typename Func>
+    void for_each_entry(Func lambda) {
+        for (auto it = next->entry(); reinterpret_cast<af_list *>(reinterpret_cast<char *>(it) + offset) != this; it = reinterpret_cast<af_list *>(reinterpret_cast<char *>(it) + offset)->next->entry()) {
             lambda(it);
         }
     }
 
 };
 
-using list_element = list_head;
+template <typename T>
+using af_list_element = af_list<T>;
 
-inline void list_init(list_head *list) {
-    list->next = list->prev = list;
-}
-
-namespace detail {
-
-inline void __list_add(list_head *new_element, list_head *prev, list_head *next) {
-    next->prev = new_element;
-    prev->next = new_element;
-    new_element->next = next;
-    new_element->prev = prev;
-}
-
-inline void __list_del(list_head *prev, list_head *next) {
-    next->prev = prev;
-    prev->next = next;
-}
-
-} // namespace detail
-
-inline void list_del(list_head *entry) {
-    detail::__list_del(entry->prev, entry->next);
-    entry->next = entry;
-    entry->prev = entry;
-}
-
-inline void list_add(list_head *new_element, list_head *head) {
-    detail::__list_add(new_element, head, head->next);
-}
-
-inline void list_add_tail(list_head *new_element, list_head *head) {
-    detail::__list_add(new_element, head->prev, head);
-}
-
+#if 0
 inline void list_move(list_head *list, list_head *head) {
     detail::__list_del(list->prev, list->next);
     list_add_tail(list, head);
 }
 
-template <class Type>
-auto list_entry(list_head *head, size_t Offset) {
-    return reinterpret_cast<Type *>(reinterpret_cast<char *>(head) - reinterpret_cast<unsigned long>((reinterpret_cast<Type *>(Offset))));
-}
-
-template<typename T, typename U>
-constexpr size_t offset_of(U T::*member) {
-    return (char*)&((T*)nullptr->*member) - (char*)nullptr;
-}
-
-template <class Type, class Member, typename Func>
-void list_for_each_entry(yacppl::af_list::list_head *head, Member Type::* m, Func lambda) {
-    auto offset = offset_of(m);
-    for (auto it = list_entry<Type>(head->next, offset); &(it->*m) != head; it = list_entry<Type>(reinterpret_cast<list_head *>(reinterpret_cast<char *>(it) + offset)->next, offset)) {
-        lambda(it);
-    }
-}
-
 #define list_next_entry(ptr, type, member) \
     (reinterpret_cast<type *>(reinterpret_cast<char *>((ptr)->next)-reinterpret_cast<unsigned long>(&(reinterpret_cast<type *>(0))->member)))
-
-#define list_for_each(pos, head) \
-    for (pos = (head)->next; pos != (head); pos = pos->next)
-
-} // namespace af_list
+#endif
 
 } // namespace yacppl
 

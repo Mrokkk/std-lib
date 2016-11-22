@@ -2,63 +2,59 @@
 
 namespace yacppl {
 
-template<typename ElementType>
-class array_iterator {
-
-    ElementType *_ptr = nullptr;
-
-public:
-
-    array_iterator() = delete;
-
-    array_iterator(ElementType *ptr)
-            : _ptr(ptr) {}
-
-    array_iterator &operator++() {
-        ++_ptr;
-        return *this;
-    }
-
-    array_iterator operator++(int dummy) {
-        (void) dummy;
-        ++_ptr;
-        return *this;
-    }
-
-    array_iterator &operator--() {
-        --_ptr;
-        return *this;
-    }
-
-    array_iterator operator--(int) {
-        --_ptr;
-        return *this;
-    }
-
-    ElementType &operator*() {
-        return *_ptr;
-    }
-
-    ElementType *operator->() {
-        return _ptr;
-    }
-
-    bool operator==(array_iterator<ElementType> &element) const {
-        return element._ptr == _ptr;
-    }
-
-    bool operator!=(array_iterator<ElementType> &element) const {
-        return element._ptr != _ptr;
-    }
-
-};
-
 template<typename ElementType, unsigned int _size = 0>
 class array {
 
     ElementType _array[_size];
 
 public:
+
+    class iterator {
+
+        ElementType *_ptr = nullptr;
+
+    public:
+
+        explicit iterator(ElementType *ptr)
+            : _ptr(ptr) {}
+
+        iterator &operator++() {
+            ++_ptr;
+            return *this;
+        }
+
+        iterator operator++(int) {
+            ++_ptr;
+            return *this;
+        }
+
+        iterator &operator--() {
+            --_ptr;
+            return *this;
+        }
+
+        iterator operator--(int) {
+            --_ptr;
+            return *this;
+        }
+
+        ElementType &operator*() {
+            return *_ptr;
+        }
+
+        ElementType *operator->() {
+            return _ptr;
+        }
+
+        bool operator==(iterator &element) const {
+            return element._ptr == _ptr;
+        }
+
+        bool operator!=(iterator &element) const {
+            return element._ptr != _ptr;
+        }
+
+    };
 
     array() {}
 
@@ -76,14 +72,12 @@ public:
         return _array[index];
     }
 
-    array_iterator<ElementType> begin() {
-        array_iterator<ElementType> it(_array);
-        return it;
+    iterator begin() {
+        return iterator(_array);
     }
 
-    array_iterator<ElementType> end() {
-        array_iterator<ElementType> it(_array + _size);
-        return it;
+    iterator end() {
+        return iterator(_array + _size);
     }
 
 };
