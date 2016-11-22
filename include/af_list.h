@@ -56,7 +56,7 @@ public:
         }
 
         Type &operator *() {
-            return ptr->entry();
+            return *ptr->entry();
         }
 
         Type *operator->() {
@@ -70,6 +70,7 @@ public:
         bool operator!=(const iterator &i) const {
             return i.ptr != ptr;
         }
+
     };
 
     template <typename U>
@@ -106,13 +107,6 @@ public:
 
     auto end() {
         return iterator(this);
-    }
-
-    template <typename Func>
-    void for_each_entry(Func lambda) {
-        for (auto it = next->entry(); reinterpret_cast<af_list *>(reinterpret_cast<char *>(it) + offset) != this; it = reinterpret_cast<af_list *>(reinterpret_cast<char *>(it) + offset)->next->entry()) {
-            lambda(it);
-        }
     }
 
 };

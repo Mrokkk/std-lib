@@ -14,10 +14,10 @@ struct helper {
 void testAdding(af_list<helper> &head, helper &e, std::vector<int> &comp, int s) {
     auto size = 0;
     head.add(&e.list);
-    head.for_each_entry([&] (helper *h) {
-        EXPECT_EQ(comp[size], h->a);
+    for (const auto &h : head) {
+        EXPECT_EQ(comp[size], h.a);
         size++;
-    });
+    };
     EXPECT_EQ(size, s);
     EXPECT_EQ(head.empty(), false);
 }
@@ -25,10 +25,10 @@ void testAdding(af_list<helper> &head, helper &e, std::vector<int> &comp, int s)
 void testAddingFront(af_list<helper> &head, helper &e, std::vector<int> &comp, int s) {
     auto size = 0;
     head.add_front(&e.list);
-    head.for_each_entry([&] (helper *h) {
-        EXPECT_EQ(comp[size], h->a);
+    for (const auto &h : head) {
+        EXPECT_EQ(comp[size], h.a);
         size++;
-    });
+    };
     EXPECT_EQ(size, s);
     EXPECT_EQ(head.empty(), false);
 }
@@ -36,10 +36,10 @@ void testAddingFront(af_list<helper> &head, helper &e, std::vector<int> &comp, i
 void testDeleting(af_list<helper> &head, helper &e, std::vector<int> &comp) {
     e.list.remove();
     size_t size = 0;
-    head.for_each_entry([&] (helper *h) {
-        EXPECT_EQ(comp[size], h->a);
+    for (const auto &h : head) {
+        EXPECT_EQ(comp[size], h.a);
         size++;
-    });
+    };
     EXPECT_EQ(size, comp.size());
     EXPECT_EQ(head.empty(), false);
 }
