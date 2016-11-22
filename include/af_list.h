@@ -9,6 +9,9 @@ namespace yacppl {
 template <class Type>
 class af_list {
 
+    af_list *next = this, *prev = this;
+    size_t offset;
+
     void __list_add(af_list *new_element, af_list *prev, af_list *next) {
         next->prev = new_element;
         prev->next = new_element;
@@ -21,14 +24,19 @@ class af_list {
         prev->next = next;
     }
 
-    template<typename T, typename U>
+    template <typename T, typename U>
     constexpr size_t offset_of(U T::*member) {
-        return (char*)&((T*)nullptr->*member) - (char*)nullptr;
+        return (char *)&((T *)nullptr->*member) - (char *)nullptr;
     }
 
 public:
 
-    af_list *next = this, *prev = this;
+    af_list() {}
+
+    template <typename U>
+    af_list(U Type::*member) {
+        offset = offset_of(member);
+    }
 
     void add(af_list *new_element) {
         __list_add(new_element, prev, this);
@@ -50,6 +58,10 @@ public:
 
     auto entry(size_t Offset) {
         return reinterpret_cast<Type *>(reinterpret_cast<char *>(this) - reinterpret_cast<unsigned long>((reinterpret_cast<Type *>(Offset))));
+    }
+
+    auto entry() {
+        return reinterpret_cast<Type *>(reinterpret_cast<char *>(this) - reinterpret_cast<unsigned long>((reinterpret_cast<Type *>(offset))));
     }
 
     template <typename Member, typename Func>
