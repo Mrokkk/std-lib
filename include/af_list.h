@@ -101,6 +101,10 @@ public:
         return reinterpret_cast<Type *>(reinterpret_cast<char *>(this) - reinterpret_cast<unsigned long>((reinterpret_cast<Type *>(offset))));
     }
 
+    auto next_entry() {
+        return next->entry();
+    }
+
     auto begin() {
         return iterator(next);
     }
