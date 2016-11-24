@@ -102,7 +102,7 @@ public:
     }
 
     auto next_entry() {
-        return next->entry();
+        return next == this ? nullptr : next->entry();
     }
 
     auto begin() {
