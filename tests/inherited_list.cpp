@@ -1,6 +1,8 @@
 #include <inherited_list.h>
 #include <gtest/gtest.h>
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 
 namespace {
 
@@ -9,15 +11,29 @@ struct helper : inherited_list<helper> {
     helper(int x) : a(x) {}
 };
 
-void testAdding(inherited_list<helper> &head, helper &e, std::vector<int> &comp, int s) {
-    auto size = 0;
-    head.add(&e);
-    for (const auto &h : head) {
-        EXPECT_EQ(comp[size], h.a);
-        size++;
-    };
-    EXPECT_EQ(size, s);
-    EXPECT_EQ(head.empty(), false);
+void testAdding(inherited_list<helper> &head, int s) {
+    std::srand(std::time(0));
+    std::vector<int> v;
+    for (auto i = 0; i < s; i++) {
+        v.push_back(std::rand());
+    }
+    std::vector<helper> helper_vec;
+    for (auto e : v) {
+        helper_vec.push_back(helper{e});
+    }
+    ASSERT_TRUE(head.empty());
+    auto expected_size = 1;
+    for (auto &h : helper_vec) {
+        auto size = 0;
+        head.add(&h);
+        for (const auto &h : head) {
+            EXPECT_EQ(v[size], h.a);
+            size++;
+        };
+        EXPECT_EQ(head.empty(), false);
+        EXPECT_EQ(size, expected_size);
+        expected_size++;
+    }
 }
 
 } // namespace anon
@@ -32,11 +48,6 @@ TEST(inherited_list, can_create_empty) {
 
 TEST(inherited_list, can_add_elements) {
     inherited_list<helper> head;
-    helper h1(2), h2(34), h3(29);
-    std::vector<helper> c{helper{2}, helper{3}};
-    std::vector<int> comp{2, 34, 29};
-    testAdding(head, h1, comp, 1);
-    testAdding(head, h2, comp, 2);
-    testAdding(head, h3, comp, 3);
+    testAdding(head, 1024);
 }
 
