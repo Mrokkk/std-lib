@@ -35,6 +35,7 @@ set(SOURCE_FILES
     tests/mixed.cpp
     tests/kernel_list.cpp
     tests/optional.cpp
+    tests/inherited_list.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
