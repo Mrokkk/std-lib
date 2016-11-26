@@ -11,16 +11,20 @@ struct helper : inherited_list<helper> {
     helper(int x) : a(x) {}
 };
 
-void test_adding(inherited_list<helper> &head, int s) {
+void init_vectors(std::vector<int> &int_vec, std::vector<helper> &helper_vec, int size) {
     std::srand(std::time(0));
-    std::vector<int> v;
-    for (auto i = 0; i < s; i++) {
-        v.push_back(std::rand());
+    for (auto i = 0; i < size; i++) {
+        int_vec.push_back(std::rand());
     }
-    std::vector<helper> helper_vec;
-    for (auto e : v) {
+    for (auto e : int_vec) {
         helper_vec.push_back(helper{e});
     }
+}
+
+void test_adding(inherited_list<helper> &head, int s) {
+    std::vector<int> v;
+    std::vector<helper> helper_vec;
+    init_vectors(v, helper_vec, s);
     ASSERT_TRUE(head.empty());
     auto expected_size = 1;
     for (auto &h : helper_vec) {
@@ -37,15 +41,9 @@ void test_adding(inherited_list<helper> &head, int s) {
 }
 
 void test_adding_front(inherited_list<helper> &head, int s) {
-    std::srand(std::time(0));
     std::vector<int> v;
-    for (auto i = 0; i < s; i++) {
-        v.push_back(std::rand());
-    }
     std::vector<helper> helper_vec;
-    for (auto e : v) {
-        helper_vec.push_back(helper{e});
-    }
+    init_vectors(v, helper_vec, s);
     ASSERT_TRUE(head.empty());
     auto expected_size = 1;
     for (auto &h : helper_vec) {
