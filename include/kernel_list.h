@@ -2,17 +2,17 @@
 
 #include <stddef.h>
 
-// Alloc-free double-linked list
+// Alloc-free double-linked list based on the Linux kernel list implementation
 
 namespace yacppl {
 
 template <class Type>
-class af_list {
+class kernel_list {
 
-    af_list *next = this, *prev = this;
+    kernel_list *next = this, *prev = this;
     size_t offset;
 
-    void add_element(af_list *new_element, af_list *prev, af_list *next) {
+    void add_element(kernel_list *new_element, kernel_list *prev, kernel_list *next) {
         next->prev = new_element;
         prev->next = new_element;
         new_element->next = next;
@@ -28,11 +28,11 @@ public:
 
     class iterator {
 
-        af_list *ptr = nullptr;
+        kernel_list *ptr = nullptr;
 
     public:
 
-        iterator(af_list *p)
+        iterator(kernel_list *p)
             : ptr(p) {}
 
         iterator &operator++() {
@@ -74,15 +74,15 @@ public:
     };
 
     template <typename U>
-    explicit af_list(U Type::*member) {
+    explicit kernel_list(U Type::*member) {
         offset = offset_of(member);
     }
 
-    void add(af_list *new_element) {
+    void add(kernel_list *new_element) {
         add_element(new_element, prev, this);
     }
 
-    void add_front(af_list *new_element) {
+    void add_front(kernel_list *new_element) {
         add_element(new_element, this, next);
     }
 
@@ -114,19 +114,6 @@ public:
     }
 
 };
-
-template <typename T>
-using af_list_element = af_list<T>;
-
-#if 0
-inline void list_move(list_head *list, list_head *head) {
-    detail::__list_del(list->prev, list->next);
-    list_add_tail(list, head);
-}
-
-#define list_next_entry(ptr, type, member) \
-    (reinterpret_cast<type *>(reinterpret_cast<char *>((ptr)->next)-reinterpret_cast<unsigned long>(&(reinterpret_cast<type *>(0))->member)))
-#endif
 
 } // namespace yacppl
 

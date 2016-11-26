@@ -33,7 +33,7 @@ set(SOURCE_FILES
     tests/stack.cpp
     tests/queue.cpp
     tests/mixed.cpp
-    tests/af_list.cpp
+    tests/kernel_list.cpp
     tests/optional.cpp
 )
 
