@@ -1,5 +1,7 @@
 #pragma once
 
+namespace yacppl {
+
 template <typename Type>
 class inherited_list {
 
@@ -73,19 +75,19 @@ public:
     }
 
     Type &remove() {
-        _next->prev = _prev;
-        _prev->next = _next;
+        _next->_prev = _prev;
+        _prev->_next = _next;
         _next = reinterpret_cast<Type *>(this);
         _prev = reinterpret_cast<Type *>(this);
         return *reinterpret_cast<Type *>(this);
     }
 
     Type *next() {
-        return _next;
+        return _next == reinterpret_cast<Type *>(this) ? nullptr : _next;
     }
 
     Type *prev() {
-        return _prev;
+        return _prev == reinterpret_cast<Type *>(this) ? nullptr : _prev;
     }
 
     bool empty() {
@@ -101,4 +103,6 @@ public:
     }
 
 };
+
+} // namespace yacppl
 

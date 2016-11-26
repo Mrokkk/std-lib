@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <ctime>
 
+using namespace yacppl;
+
 namespace {
 
 struct helper : inherited_list<helper> {
@@ -63,8 +65,8 @@ void test_adding_front(inherited_list<helper> &head, int s) {
 
 TEST(inherited_list, can_create_empty) {
     helper h(2);
-    ASSERT_EQ(&h, h.prev());
-    ASSERT_EQ(&h, h.next());
+    ASSERT_EQ(h.prev(), nullptr);
+    ASSERT_EQ(h.next(), nullptr);
     ASSERT_EQ(h.a, 2);
     ASSERT_TRUE(h.empty());
 }
