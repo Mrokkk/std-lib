@@ -67,6 +67,11 @@ public:
         return *reinterpret_cast<Type *>(this);
     }
 
+    Type &add_front(Type *new_element) {
+        add_element(new_element, reinterpret_cast<Type *>(this), _next);
+        return *reinterpret_cast<Type *>(this);
+    }
+
     Type &remove() {
         _next->prev = _prev;
         _prev->next = _next;

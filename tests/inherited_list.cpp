@@ -11,7 +11,7 @@ struct helper : inherited_list<helper> {
     helper(int x) : a(x) {}
 };
 
-void testAdding(inherited_list<helper> &head, int s) {
+void test_adding(inherited_list<helper> &head, int s) {
     std::srand(std::time(0));
     std::vector<int> v;
     for (auto i = 0; i < s; i++) {
@@ -36,6 +36,31 @@ void testAdding(inherited_list<helper> &head, int s) {
     }
 }
 
+void test_adding_front(inherited_list<helper> &head, int s) {
+    std::srand(std::time(0));
+    std::vector<int> v;
+    for (auto i = 0; i < s; i++) {
+        v.push_back(std::rand());
+    }
+    std::vector<helper> helper_vec;
+    for (auto e : v) {
+        helper_vec.push_back(helper{e});
+    }
+    ASSERT_TRUE(head.empty());
+    auto expected_size = 1;
+    for (auto &h : helper_vec) {
+        auto size = 0;
+        head.add_front(&h);
+        for (const auto &h : head) {
+            EXPECT_EQ(v[expected_size - 1 - size], h.a);
+            size++;
+        };
+        EXPECT_EQ(head.empty(), false);
+        EXPECT_EQ(size, expected_size);
+        expected_size++;
+    }
+}
+
 } // namespace anon
 
 TEST(inherited_list, can_create_empty) {
@@ -48,6 +73,11 @@ TEST(inherited_list, can_create_empty) {
 
 TEST(inherited_list, can_add_elements) {
     inherited_list<helper> head;
-    testAdding(head, 1024);
+    test_adding(head, 1024);
+}
+
+TEST(inherited_list, can_add_elements_front) {
+    inherited_list<helper> head;
+    test_adding_front(head, 1024);
 }
 
