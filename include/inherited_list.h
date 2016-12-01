@@ -7,11 +7,11 @@ class inherited_list {
 
     Type *_prev, *_next;
 
-    void add_element(Type *new_element, Type *prev, Type *next) {
-        next->_prev = new_element;
-        prev->_next = new_element;
-        new_element->_next = next;
-        new_element->_prev = prev;
+    void add_element(Type &new_element, Type &prev, Type &next) {
+        next._prev = &new_element;
+        prev._next = &new_element;
+        new_element._next = &next;
+        new_element._prev = &prev;
     }
 
 public:
@@ -60,38 +60,40 @@ public:
     };
 
     inherited_list() {
-        _prev = reinterpret_cast<Type *>(this);
-        _next = reinterpret_cast<Type *>(this);
+        _next = _prev = reinterpret_cast<Type *>(this);
+    }
+
+    operator Type &() {
+        return *reinterpret_cast<Type *>(this);
     }
 
     Type &add(Type *new_element) {
-        add_element(new_element, _prev, reinterpret_cast<Type *>(this));
-        return *reinterpret_cast<Type *>(this);
+        add_element(*new_element, *_prev, *this);
+        return *this;
     }
 
     Type &add_front(Type *new_element) {
-        add_element(new_element, reinterpret_cast<Type *>(this), _next);
-        return *reinterpret_cast<Type *>(this);
+        add_element(*new_element, *this, *_next);
+        return *this;
     }
 
     Type &remove() {
         _next->_prev = _prev;
         _prev->_next = _next;
-        _next = reinterpret_cast<Type *>(this);
-        _prev = reinterpret_cast<Type *>(this);
-        return *reinterpret_cast<Type *>(this);
+        _prev = _next = reinterpret_cast<Type *>(this);
+        return *_prev;
     }
 
     Type *next() {
-        return _next == reinterpret_cast<Type *>(this) ? nullptr : _next;
+        return _next == this ? nullptr : _next;
     }
 
     Type *prev() {
-        return _prev == reinterpret_cast<Type *>(this) ? nullptr : _prev;
+        return _prev == this ? nullptr : _prev;
     }
 
-    bool empty() {
-        return _next == reinterpret_cast<Type *>(this) && _next == reinterpret_cast<Type *>(this);
+    bool empty() const {
+        return _next == this && _next == this;
     }
 
     auto begin() {

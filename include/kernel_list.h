@@ -9,20 +9,25 @@ namespace yacppl {
 template <class Type>
 class kernel_list {
 
-    kernel_list *next = this, *prev = this;
-    size_t offset;
+    kernel_list *_next = this, *_prev = this;
+    size_t _offset;
 
     void add_element(kernel_list *new_element, kernel_list *prev, kernel_list *next) {
-        next->prev = new_element;
-        prev->next = new_element;
-        new_element->next = next;
-        new_element->prev = prev;
+        next->_prev = new_element;
+        prev->_next = new_element;
+        new_element->_next = next;
+        new_element->_prev = prev;
     }
 
     template <typename T, typename U>
     constexpr size_t offset_of(U T::*member) const {
-        return (char *)&((T *)nullptr->*member) - (char *)nullptr;
+        return reinterpret_cast<char *>(&(static_cast<T *>(nullptr)->*member)) - static_cast<char *>(nullptr);
     }
+
+    auto this_offset(int offset) {
+        return reinterpret_cast<Type *>(reinterpret_cast<char *>(this) + offset);
+    }
+
 
 public:
 
@@ -36,22 +41,22 @@ public:
             : ptr(p) {}
 
         iterator &operator++() {
-            ptr = ptr->next;
+            ptr = ptr->_next;
             return *this;
         }
 
         iterator operator++(int) {
-            ptr = ptr->next;
+            ptr = ptr->_next;
             return *this;
         }
 
         iterator &operator--() {
-            ptr = ptr->prev;
+            ptr = ptr->_prev;
             return *this;
         }
 
         iterator operator--(int) {
-            ptr = ptr->prev;
+            ptr = ptr->_prev;
             return *this;
         }
 
@@ -75,38 +80,37 @@ public:
 
     template <typename U>
     explicit kernel_list(U Type::*member) {
-        offset = offset_of(member);
+        _offset = offset_of(member);
     }
 
     void add(kernel_list *new_element) {
-        add_element(new_element, prev, this);
+        add_element(new_element, _prev, this);
     }
 
     void add_front(kernel_list *new_element) {
-        add_element(new_element, this, next);
+        add_element(new_element, this, _next);
     }
 
     void remove() {
-        next->prev = prev;
-        prev->next = next;
-        next = this;
-        prev = this;
+        _next->_prev = _prev;
+        _prev->_next = _next;
+        _prev = _next = this;
     }
 
     bool empty() const {
-        return (prev == this) && (next == this);
+        return (_prev == this) && (_next == this);
     }
 
     auto entry() {
-        return reinterpret_cast<Type *>(reinterpret_cast<char *>(this) - reinterpret_cast<unsigned long>((reinterpret_cast<Type *>(offset))));
+        return this_offset(-_offset);
     }
 
     auto next_entry() {
-        return next == this ? nullptr : next->entry();
+        return _next == this ? nullptr : _next->entry();
     }
 
     auto begin() {
-        return iterator(next);
+        return iterator(_next);
     }
 
     auto end() {
