@@ -27,7 +27,8 @@ public:
     }
 
     ~unique_ptr() {
-        delete _ptr;
+        if (_ptr)
+            delete _ptr;
     }
 
     unique_ptr &operator=(unique_ptr &&other) {

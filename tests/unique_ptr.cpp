@@ -10,7 +10,7 @@ TEST(UniquePointerTests, canCreateEmptyPointer) {
 }
 
 TEST(UniquePointerTests, canCreateValidPointer) {
-    shared_ptr<int> ptr(new int(4));
+    unique_ptr<int> ptr(new int(4));
     EXPECT_EQ(*ptr, 4);
 }
 
