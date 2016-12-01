@@ -131,8 +131,18 @@ public:
 };
 
 template<typename Type>
+inline shared_ptr<Type> make_shared() {
+    return shared_ptr<Type>(new Type);
+}
+
+template<typename Type>
 inline shared_ptr<Type> make_shared(Type &&a) {
     return shared_ptr<Type>(new Type(a));
+}
+
+template<typename Type>
+inline unique_ptr<Type> make_unique() {
+    return unique_ptr<Type>(new Type);
 }
 
 template<typename Type>
