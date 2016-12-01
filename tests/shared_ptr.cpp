@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <pointer.h>
+#include <shared_ptr.h>
 #include <move.h>
 
 using namespace yacppl;

@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <list.h>
-#include <pointer.h>
+#include <unique_ptr.h>
+#include <shared_ptr.h>
 #include <algorithm.h>
 #include <string.h>
 
