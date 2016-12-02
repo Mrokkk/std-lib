@@ -14,6 +14,10 @@ class inherited_list {
         new_element._prev = &prev;
     }
 
+    operator Type &() {
+        return *reinterpret_cast<Type *>(this);
+    }
+
 public:
 
     class iterator {
@@ -61,10 +65,6 @@ public:
 
     inherited_list() {
         _next = _prev = reinterpret_cast<Type *>(this);
-    }
-
-    operator Type &() {
-        return *reinterpret_cast<Type *>(this);
     }
 
     Type &add(Type *new_element) {
