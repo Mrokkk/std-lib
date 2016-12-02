@@ -7,7 +7,7 @@ test:
     - apt update && apt -y install make cmake
     - git submodule update --init --recursive
   script:
-    - ./ci.sh ut
+    - ./ci/ci.sh ut
   cache:
     paths:
         - "build/"
@@ -18,7 +18,7 @@ test-valgrind:
     - apt update && apt -y install make cmake valgrind
     - git submodule update --init --recursive
   script:
-    - VALGRIND=1 ./ci.sh ut
+    - VALGRIND=1 ./ci/ci.sh ut
   cache:
     paths:
         - "build/"
@@ -29,7 +29,7 @@ test-coverage:
     - apt update && apt -y install make cmake gcovr
     - git submodule update --init --recursive
   script:
-    - COVERAGE=1 ./ci.sh ut
+    - COVERAGE=1 ./ci/ci.sh ut
   cache:
     paths:
         - "build/"
