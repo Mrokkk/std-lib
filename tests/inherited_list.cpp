@@ -99,3 +99,28 @@ TEST(inherited_list, can_remove) {
     ASSERT_EQ(size, 2);
 }
 
+TEST(inherited_list, can_use_iterator) {
+    inherited_list<helper> head;
+    std::vector<helper> helper_vec{0, 2, 4, 9, 30, 109, 938, -231, 3, -29};
+    for (auto &v : helper_vec) {
+        head.add(&v);
+    }
+    auto it = head.begin();
+    EXPECT_EQ(it->a, 0);
+    ++it;
+    EXPECT_EQ(it->a, 2);
+    ++it;
+    EXPECT_EQ(it->a, 4);
+    --it;
+    EXPECT_EQ(it->a, 2);
+    it++;
+    EXPECT_EQ(it->a, 4);
+    it++;
+    EXPECT_EQ(it->a, 9);
+    ++it;
+    EXPECT_EQ(it->a, 30);
+    it++;
+    auto h = *it;
+    EXPECT_EQ(h.a, 109);
+}
+
