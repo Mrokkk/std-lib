@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stddef.h>
+
 namespace yacppl {
 
 template<typename ElementType, unsigned int _size = 0>
@@ -44,6 +46,10 @@ public:
 
         ElementType *operator->() {
             return _ptr;
+        }
+
+        size_t operator-(const iterator &rhs) {
+            return _ptr - rhs._ptr;
         }
 
         bool operator==(iterator &element) const {
