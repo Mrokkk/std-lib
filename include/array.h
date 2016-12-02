@@ -48,7 +48,7 @@ public:
             return _ptr;
         }
 
-        size_t operator-(const iterator &rhs) {
+        size_t operator-(const iterator &rhs) const {
             return _ptr - rhs._ptr;
         }
 

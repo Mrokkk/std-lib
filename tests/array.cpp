@@ -7,6 +7,7 @@ TEST(ArrayTests, canCreateEmptyString) {
     array<int, 0> array;
     unsigned result = array.size();
     EXPECT_TRUE(result == 0);
+    EXPECT_TRUE(array.end() - array.begin() == 0);
 }
 
 TEST(ArrayTests, canCreateInitializedArray) {
@@ -14,6 +15,7 @@ TEST(ArrayTests, canCreateInitializedArray) {
     EXPECT_EQ(array[0], 2);
     EXPECT_EQ(array[4], 6);
     EXPECT_TRUE(array.size() == 5);
+    EXPECT_TRUE(array.end() - array.begin() == 5);
 }
 
 TEST(ArrayTests, canReadElementsSequentially) {
@@ -83,5 +85,17 @@ TEST(ArrayTests, canCompareIterators) {
     EXPECT_EQ(it1 == it2, true);
     it1++;
     EXPECT_EQ(it1 != it2, true);
+}
+
+TEST(ArrayTests, canBeCopied) {
+    array<int, 5> array{2, 3, 4, 5, 6};
+    auto array2 = array;
+    EXPECT_EQ(2, array2[0]);
+    auto it = array2.begin();
+    EXPECT_TRUE(array2.end() - it == 5);
+    ++it;
+    EXPECT_TRUE(array2.end() - it == 4);
+    it++;
+    EXPECT_TRUE(array2.end() - it == 3);
 }
 
