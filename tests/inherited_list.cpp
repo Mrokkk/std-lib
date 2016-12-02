@@ -81,3 +81,21 @@ TEST(inherited_list, can_add_elements_front) {
     test_adding_front(head, 1024);
 }
 
+TEST(inherited_list, can_remove) {
+    inherited_list<helper> head;
+    std::vector<helper> helper_vec{0, 2, 4};
+    for (auto &v : helper_vec) {
+        head.add(&v);
+    }
+    helper_vec[0].remove();
+    std::vector<int> test_vector;
+    int size = 0;;
+    for (auto &e : head) {
+        test_vector.push_back(e.a);
+        size++;
+    }
+    ASSERT_EQ(test_vector[0], 2);
+    ASSERT_EQ(test_vector[1], 4);
+    ASSERT_EQ(size, 2);
+}
+
