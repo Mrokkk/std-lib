@@ -22,8 +22,6 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g${DEBUG_LEVEL} -std=${CPP_STANDARD} ${WARNING_FLAGS} ${COVERAGE_FLAGS} -fdiagnostics-color=always")
 
 include_directories(include)
-include_directories(googletest/googletest/include)
-add_subdirectory(googletest/googletest)
 
 set(SOURCE_FILES
     tests/main.cpp
@@ -31,11 +29,10 @@ set(SOURCE_FILES
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} gtest gtest_main pthread)
 
 add_custom_target(tests-run
     DEPENDS ${PROJECT_NAME}
-    COMMAND ./${PROJECT_NAME} --gtest_color=yes
+    COMMAND ./${PROJECT_NAME}
     COMMENT "Running tests")
 
 if(COVERAGE)
@@ -47,7 +44,7 @@ if(COVERAGE)
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         add_custom_target(tests-cov
             DEPENDS tests-run
-            COMMAND LLVM_PROFILE_FILE=tests.profdata ./${PROJECT_NAME} --gtest_color=yes
+            COMMAND LLVM_PROFILE_FILE=tests.profdata ./${PROJECT_NAME}
             COMMAND llvm-profdata merge -instr tests.profdata -o merged.profdata
             COMMAND llvm-cov report ./${PROJECT_NAME} -instr-profile=merged.profdata
             COMMENT "Running LLVM coverage generating")
