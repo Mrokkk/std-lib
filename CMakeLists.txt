@@ -7,10 +7,10 @@ set(WARNING_FLAGS "-Wall -Wextra -Werror")
 
 if(COVERAGE)
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        set(COVERAGE_FLAGS "-O0 -fprofile-instr-generate -fcoverage-mapping")
+        set(COVERAGE_FLAGS "-O0 -fprofile-instr-generate -fcoverage-mapping -fno-inline")
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lgcov")
     else()
-        set(COVERAGE_FLAGS "-O0 -fprofile-arcs -ftest-coverage")
+        set(COVERAGE_FLAGS "-O0 -fprofile-arcs -ftest-coverage -fno-inline -fno-inline-small-functions -fno-default-inline")
     endif()
 endif()
 
@@ -22,29 +22,25 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g${DEBUG_LEVEL} -std=${CPP_STANDARD} ${WARNING_FLAGS} ${COVERAGE_FLAGS} -fdiagnostics-color=always")
 
 include_directories(include)
-include_directories(googletest/googletest/include)
-add_subdirectory(googletest/googletest)
 
-set(SOURCE_FILES
-    tests/list.cpp
+add_executable(${PROJECT_NAME}
+    tests/main.cpp
     tests/array.cpp
-    tests/shared_ptr.cpp
-    tests/unique_ptr.cpp
-    tests/stack.cpp
-    tests/queue.cpp
-    tests/mixed.cpp
-    tests/kernel_list.cpp
-    tests/optional.cpp
     tests/inherited_list.cpp
+    tests/kernel_list.cpp
+    tests/list.cpp
+    tests/mixed.cpp
+    tests/optional.cpp
+    tests/queue.cpp
+    tests/shared_ptr.cpp
+    tests/stack.cpp
     tests/static_string.cpp
+    tests/unique_ptr.cpp
 )
-
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} gtest gtest_main pthread)
 
 add_custom_target(tests-run
     DEPENDS ${PROJECT_NAME}
-    COMMAND ./${PROJECT_NAME} --gtest_color=yes
+    COMMAND ./${PROJECT_NAME}
     COMMENT "Running tests")
 
 if(COVERAGE)
@@ -55,8 +51,8 @@ if(COVERAGE)
     add_dependencies(tests-run clean-coverage)
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         add_custom_target(tests-cov
-            DEPENDS tests-run
-            COMMAND LLVM_PROFILE_FILE=tests.profdata ./${PROJECT_NAME} --gtest_color=yes
+            DEPENDS ${PROJECT_NAME}
+            COMMAND LLVM_PROFILE_FILE=tests.profdata ./${PROJECT_NAME}
             COMMAND llvm-profdata merge -instr tests.profdata -o merged.profdata
             COMMAND llvm-cov report ./${PROJECT_NAME} -instr-profile=merged.profdata
             COMMENT "Running LLVM coverage generating")

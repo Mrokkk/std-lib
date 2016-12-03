@@ -1,99 +1,99 @@
-#include <gtest/gtest.h>
 #include <queue.h>
+#include "yatf/include/yatf.h"
 
 using namespace yacppl;
 
-TEST(QueueTests, canCreateEmptyQueue) {
+TEST(queue, can_create_empty_queue) {
     queue<int> queue;
     auto size = queue.size();
-    EXPECT_TRUE(size == 0);
+    REQUIRE(size == 0);
 }
 
-TEST(QueueTests, canPushTempElement) {
+TEST(queue, can_push_temp_element) {
     queue<int> queue;
     queue.push(439);
-    EXPECT_TRUE(queue.size() == 1);
-    EXPECT_EQ(queue.front(), 439);
+    REQUIRE(queue.size() == 1);
+    REQUIRE(queue.front() ==  439);
 }
 
-TEST(QueueTests, canPushElement) {
+TEST(queue, can_push_element) {
     queue<int> queue;
     auto element = 5423;
     queue.push(element);
-    EXPECT_TRUE(queue.size() == 1);
-    EXPECT_EQ(queue.front(), 5423);
+    REQUIRE(queue.size() == 1);
+    REQUIRE(queue.front() ==  5423);
 }
 
-TEST(QueueTests, canPushMoreElements) {
+TEST(queue, can_push_more_elements) {
     queue<int> queue;
     queue.push(33);
-    EXPECT_TRUE(queue.size() == 1);
-    EXPECT_EQ(queue.front(), 33);
+    REQUIRE(queue.size() == 1);
+    REQUIRE(queue.front() ==  33);
     queue.push(21);
-    EXPECT_TRUE(queue.size() == 2);
-    EXPECT_EQ(queue.front(), 33);
+    REQUIRE(queue.size() == 2);
+    REQUIRE(queue.front() ==  33);
     queue.push(594);
-    EXPECT_TRUE(queue.size() == 3);
-    EXPECT_EQ(queue.front(), 33);
+    REQUIRE(queue.size() == 3);
+    REQUIRE(queue.front() ==  33);
     queue.push(37);
-    EXPECT_TRUE(queue.size() == 4);
-    EXPECT_EQ(queue.front(), 33);
+    REQUIRE(queue.size() == 4);
+    REQUIRE(queue.front() ==  33);
 }
 
-TEST(QueueTests, canPushAndPopElement) {
+TEST(queue, can_push_and_pop_element) {
     queue<int> queue;
     queue.push(439);
     queue.pop();
-    EXPECT_TRUE(queue.size() == 0);
+    REQUIRE(queue.size() == 0);
 }
 
-TEST(QueueTests, canPushAndPopMoreElements) {
+TEST(queue, can_push_and_pop_more_elements) {
     queue<int> queue;
     queue.push(439);
     queue.push(599);
     queue.push(238);
     queue.push(70);
     queue.push(43);
-    EXPECT_TRUE(queue.size() == 5);
-    EXPECT_EQ(queue.front(), 439);
+    REQUIRE(queue.size() == 5);
+    REQUIRE(queue.front() ==  439);
     queue.pop();
-    EXPECT_TRUE(queue.size() == 4);
-    EXPECT_EQ(queue.front(), 599);
+    REQUIRE(queue.size() == 4);
+    REQUIRE(queue.front() ==  599);
     queue.pop();
-    EXPECT_TRUE(queue.size() == 3);
-    EXPECT_EQ(queue.front(), 238);
+    REQUIRE(queue.size() == 3);
+    REQUIRE(queue.front() ==  238);
     queue.pop();
-    EXPECT_TRUE(queue.size() == 2);
-    EXPECT_EQ(queue.front(), 70);
+    REQUIRE(queue.size() == 2);
+    REQUIRE(queue.front() ==  70);
     queue.pop();
-    EXPECT_TRUE(queue.size() == 1);
-    EXPECT_EQ(queue.front(), 43);
+    REQUIRE(queue.size() == 1);
+    REQUIRE(queue.front() ==  43);
     queue.pop();
-    EXPECT_TRUE(queue.size() == 0);
+    REQUIRE(queue.size() == 0);
 }
 
-TEST(QueueTests, canPushAndPopByShiftOperators) {
+TEST(queue, can_push_and_pop_by_shift_operators) {
     queue<int> queue;
     int temp = -4;
     queue << temp;
-    EXPECT_TRUE(queue.size() == 1);
-    EXPECT_EQ(queue.front(), -4);
+    REQUIRE(queue.size() == 1);
+    REQUIRE(queue.front() ==  -4);
     queue << 93 << 24;
-    EXPECT_TRUE(queue.size() == 3);
-    EXPECT_EQ(queue.front(), -4);
+    REQUIRE(queue.size() == 3);
+    REQUIRE(queue.front() ==  -4);
     queue << 325 << 0 << 3267;
-    EXPECT_TRUE(queue.size() == 6);
-    EXPECT_EQ(queue.front(), -4);
+    REQUIRE(queue.size() == 6);
+    REQUIRE(queue.front() ==  -4);
     int result[6];
     queue >> result[0];
-    EXPECT_TRUE(queue.size() == 5);
-    EXPECT_EQ(queue.front(), 93);
+    REQUIRE(queue.size() == 5);
+    REQUIRE(queue.front() ==  93);
     queue >> result[1] >> result[2] >> result[3] >> result[4] >> result[5];
-    EXPECT_TRUE(queue.size() == 0);
-    EXPECT_EQ(result[0], -4);
-    EXPECT_EQ(result[1], 93);
-    EXPECT_EQ(result[2], 24);
-    EXPECT_EQ(result[3], 325);
-    EXPECT_EQ(result[4], 0);
-    EXPECT_EQ(result[5], 3267);
+    REQUIRE(queue.size() == 0);
+    REQUIRE(result[0] ==  -4);
+    REQUIRE(result[1] ==  93);
+    REQUIRE(result[2] ==  24);
+    REQUIRE(result[3] ==  325);
+    REQUIRE(result[4] ==  0);
+    REQUIRE(result[5] ==  3267);
 }

@@ -1,14 +1,16 @@
 #pragma once
 
+#include <stddef.h>
+
 namespace std {
 
 template <typename Type>
 class initializer_list {
 
     const Type *_array;
-    unsigned int _size;
+    size_t _size;
 
-    initializer_list(const Type *array, unsigned int length)
+    initializer_list(const Type *array, size_t length)
         : _array(array), _size(length)
     { }
 
@@ -18,7 +20,7 @@ public:
         : _array(0), _size(0)
     { }
 
-    unsigned int size() const {
+    auto size() const {
         return _size;
     }
 

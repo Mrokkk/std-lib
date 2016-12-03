@@ -1,13 +1,13 @@
 #include <optional.h>
-#include <gtest/gtest.h>
+#include "yatf/include/yatf.h"
 
 namespace {
 
 template <typename T>
 void test_no_value() {
     optional<T> opt;
-    EXPECT_FALSE(opt);
-    EXPECT_FALSE(opt.has_value());
+    REQUIRE_FALSE(opt);
+    REQUIRE_FALSE(opt.has_value());
 }
 
 } // namespace anon
