@@ -1,84 +1,84 @@
-#include <gtest/gtest.h>
 #include <shared_ptr.h>
 #include <move.h>
+#include "yatf/include/yatf.h"
 
 using namespace yacppl;
 
-TEST(SharedPointerTests, canCreateEmptyPointer) {
+TEST(shared_ptr, can_create_empty_pointer) {
     shared_ptr<int> ptr;
-    EXPECT_EQ(ptr.get(), nullptr);
-    EXPECT_TRUE(ptr.get_ref_count() == 0);
+    REQUIRE(ptr.get() ==  nullptr);
+    REQUIRE(ptr.get_ref_count() == 0);
 }
 
-TEST(SharedPointerTests, canCreateValidPointer) {
+TEST(shared_ptr, can_create_valid_pointer) {
     shared_ptr<int> ptr(new int(4));
-    EXPECT_NE(ptr.get(), nullptr);
+    REQUIRE_FALSE(ptr.get() ==  nullptr);
 }
 
-TEST(SharedPointerTests, canBeDerefereced) {
+TEST(shared_ptr, can_be_derefereced) {
     shared_ptr<int> ptr(new int(4));
-    EXPECT_EQ(*ptr, 4);
+    REQUIRE(*ptr ==  4);
 }
 
-TEST(SharedPointerTests, canBeAssigned) {
+TEST(shared_ptr, can_be_assigned) {
     shared_ptr<int> ptr;
     ptr = make_shared<int>(5);
-    EXPECT_EQ(*ptr, 5);
+    REQUIRE(*ptr ==  5);
 }
 
-TEST(SharedPointerTests, canBeCopied) {
+TEST(shared_ptr, can_be_copied) {
     auto ptr1 = make_shared<int>(10);
     shared_ptr<int> ptr2;
     ptr2 = ptr1;
-    EXPECT_EQ(*ptr1, 10);
-    EXPECT_EQ(*ptr2, 10);
-    EXPECT_TRUE(ptr1.get_ref_count() == 2);
-    EXPECT_TRUE(ptr2.get_ref_count() == 2);
-    EXPECT_EQ(ptr1.get(), ptr2.get());
+    REQUIRE(*ptr1 ==  10);
+    REQUIRE(*ptr2 ==  10);
+    REQUIRE(ptr1.get_ref_count() == 2);
+    REQUIRE(ptr2.get_ref_count() == 2);
+    REQUIRE(ptr1.get() ==  ptr2.get());
 }
 
-TEST(SharedPointerTests, canBeMoved) {
+TEST(shared_ptr, can_be_moved) {
     auto ptr1 = make_shared<int>(10);
     shared_ptr<int> ptr2;
     ptr2 = move(ptr1);
-    EXPECT_EQ(*ptr2, 10);
-    EXPECT_EQ(ptr1.get(), nullptr);
-    EXPECT_TRUE(ptr1.get_ref_count() == 0);
-    EXPECT_TRUE(ptr2.get_ref_count() == 1);
-    EXPECT_NE(ptr1.get(), ptr2.get());
+    REQUIRE(*ptr2 ==  10);
+    REQUIRE(ptr1.get() ==  nullptr);
+    REQUIRE(ptr1.get_ref_count() == 0);
+    REQUIRE(ptr2.get_ref_count() == 1);
+    REQUIRE_FALSE(ptr1.get() ==  ptr2.get());
 }
 
-TEST(SharedPointerTests, canBeConstructedByCopy) {
+TEST(shared_ptr, can_be_constructed_by_copy) {
     auto ptr1 = make_shared<int>(10);
     shared_ptr<int> ptr2(ptr1);
-    EXPECT_EQ(*ptr1, 10);
-    EXPECT_EQ(*ptr2, 10);
-    EXPECT_TRUE(ptr1.get_ref_count() == 2);
-    EXPECT_TRUE(ptr2.get_ref_count() == 2);
-    EXPECT_EQ(ptr1.get(), ptr2.get());
+    REQUIRE(*ptr1 ==  10);
+    REQUIRE(*ptr2 ==  10);
+    REQUIRE(ptr1.get_ref_count() == 2);
+    REQUIRE(ptr2.get_ref_count() == 2);
+    REQUIRE(ptr1.get() ==  ptr2.get());
 }
 
-TEST(SharedPointerTests, canBeConstructedByMoving) {
+TEST(shared_ptr, can_be_constructed_by_moving) {
     auto ptr1 = make_shared<int>(10);
     shared_ptr<int> ptr2 = move(ptr1);
-    EXPECT_EQ(*ptr2, 10);
-    EXPECT_EQ(ptr1.get(), nullptr);
-    EXPECT_TRUE(ptr1.get_ref_count() == 0);
-    EXPECT_TRUE(ptr2.get_ref_count() == 1);
-    EXPECT_NE(ptr1.get(), ptr2.get());
+    REQUIRE(*ptr2 ==  10);
+    REQUIRE(ptr1.get() ==  nullptr);
+    REQUIRE(ptr1.get_ref_count() == 0);
+    REQUIRE(ptr2.get_ref_count() == 1);
+    REQUIRE_FALSE(ptr1.get() ==  ptr2.get());
 }
 
-TEST(SharedPointerTests, canBeCastedToRawPointer) {
+TEST(shared_ptr, can_be_casted_to_raw_pointer) {
     auto ptr = make_shared<int>(10);
-    int *rawPtr = ptr;
-    EXPECT_EQ(*ptr, 10);
-    EXPECT_EQ(*rawPtr, 10);
-    EXPECT_EQ(ptr.get(), rawPtr);
+    int *raw_ptr = ptr;
+    REQUIRE(*ptr ==  10);
+    REQUIRE(*raw_ptr ==  10);
+    REQUIRE(ptr.get() ==  raw_ptr);
 }
 
-TEST(SharedPointerTests, canHaveItsValueModified) {
+TEST(shared_ptr, can_have_its_value_modified) {
     auto ptr = make_shared(10);
     *ptr = 39;
-    EXPECT_EQ(*ptr, 39);
-    EXPECT_TRUE(ptr.get_ref_count() == 1);
+    REQUIRE(*ptr ==  39);
+    REQUIRE(ptr.get_ref_count() == 1);
 }

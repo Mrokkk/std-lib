@@ -1,99 +1,100 @@
-#include <gtest/gtest.h>
 #include <stack.h>
+#include "yatf/include/yatf.h"
 
 using namespace yacppl;
 
-TEST(StackTests, canCreateEmptyStack) {
+TEST(stack, can_create_empty_stack) {
     stack<int> stack;
     unsigned long size = stack.size();
-    EXPECT_TRUE(size == 0);
+    REQUIRE(size == 0);
 }
 
-TEST(StackTests, canPushTempElement) {
+TEST(stack, can_push_temp_element) {
     stack<int> stack;
     stack.push(439);
-    EXPECT_TRUE(stack.size() == 1);
-    EXPECT_EQ(stack.front(), 439);
+    REQUIRE(stack.size() == 1);
+    REQUIRE(stack.front() ==  439);
 }
 
-TEST(StackTests, canPushElement) {
+TEST(stack, can_push_element) {
     stack<int> stack;
     auto element = 5423;
     stack.push(element);
-    EXPECT_TRUE(stack.size() == 1);
-    EXPECT_EQ(stack.front(), 5423);
+    REQUIRE(stack.size() == 1);
+    REQUIRE(stack.front() ==  5423);
 }
 
-TEST(StackTests, canPushMoreElements) {
+TEST(stack, can_push_more_elements) {
     stack<int> stack;
     stack.push(33);
-    EXPECT_TRUE(stack.size() == 1);
-    EXPECT_EQ(stack.front(), 33);
+    REQUIRE(stack.size() == 1);
+    REQUIRE(stack.front() ==  33);
     stack.push(21);
-    EXPECT_TRUE(stack.size() == 2);
-    EXPECT_EQ(stack.front(), 21);
+    REQUIRE(stack.size() == 2);
+    REQUIRE(stack.front() ==  21);
     stack.push(594);
-    EXPECT_TRUE(stack.size() == 3);
-    EXPECT_EQ(stack.front(), 594);
+    REQUIRE(stack.size() == 3);
+    REQUIRE(stack.front() ==  594);
     stack.push(37);
-    EXPECT_TRUE(stack.size() == 4);
-    EXPECT_EQ(stack.front(), 37);
+    REQUIRE(stack.size() == 4);
+    REQUIRE(stack.front() ==  37);
 }
 
-TEST(StackTests, canPushAndPopElement) {
+TEST(stack, can_push_and_pop_element) {
     stack<int> stack;
     stack.push(439);
     stack.pop();
-    EXPECT_TRUE(stack.size() == 0);
+    REQUIRE(stack.size() == 0);
 }
 
-TEST(StackTests, canPushAndPopMoreElements) {
+TEST(stack, can_push_and_pop_more_elements) {
     stack<int> stack;
     stack.push(439);
     stack.push(599);
     stack.push(238);
     stack.push(70);
     stack.push(43);
-    EXPECT_TRUE(stack.size() == 5);
-    EXPECT_EQ(stack.front(), 43);
+    REQUIRE(stack.size() == 5);
+    REQUIRE(stack.front() ==  43);
     stack.pop();
-    EXPECT_TRUE(stack.size() == 4);
-    EXPECT_EQ(stack.front(), 70);
+    REQUIRE(stack.size() == 4);
+    REQUIRE(stack.front() ==  70);
     stack.pop();
-    EXPECT_TRUE(stack.size() == 3);
-    EXPECT_EQ(stack.front(), 238);
+    REQUIRE(stack.size() == 3);
+    REQUIRE(stack.front() ==  238);
     stack.pop();
-    EXPECT_TRUE(stack.size() == 2);
-    EXPECT_EQ(stack.front(), 599);
+    REQUIRE(stack.size() == 2);
+    REQUIRE(stack.front() ==  599);
     stack.pop();
-    EXPECT_TRUE(stack.size() == 1);
-    EXPECT_EQ(stack.front(), 439);
+    REQUIRE(stack.size() == 1);
+    REQUIRE(stack.front() ==  439);
     stack.pop();
-    EXPECT_TRUE(stack.size() == 0);
+    REQUIRE(stack.size() == 0);
 }
 
-TEST(StackTests, canPushAndPopByShiftOperators) {
+TEST(stack, can_push_and_pop_by_shift_operators) {
     stack<int> stack;
     int temp = -4;
     stack << temp;
-    EXPECT_TRUE(stack.size() == 1);
-    EXPECT_EQ(stack.front(), -4);
+    REQUIRE(stack.size() == 1);
+    REQUIRE(stack.front() ==  -4);
     stack << 93 << 24;
-    EXPECT_TRUE(stack.size() == 3);
-    EXPECT_EQ(stack.front(), 24);
+    REQUIRE(stack.size() == 3);
+    REQUIRE(stack.front() ==  24);
     stack << 325 << 0 << 3267;
-    EXPECT_TRUE(stack.size() == 6);
-    EXPECT_EQ(stack.front(), 3267);
+    REQUIRE(stack.size() == 6);
+    REQUIRE(stack.front() ==  3267);
     int result[6];
     stack >> result[0];
-    EXPECT_TRUE(stack.size() == 5);
-    EXPECT_EQ(stack.front(), 0);
+    REQUIRE(stack.size() == 5);
+    REQUIRE(stack.front() ==  0);
     stack >> result[1] >> result[2] >> result[3] >> result[4] >> result[5];
-    EXPECT_TRUE(stack.size() == 0);
-    EXPECT_EQ(result[0], 3267);
-    EXPECT_EQ(result[1], 0);
-    EXPECT_EQ(result[2], 325);
-    EXPECT_EQ(result[3], 24);
-    EXPECT_EQ(result[4], 93);
-    EXPECT_EQ(result[5], -4);
+    REQUIRE(stack.size() == 0);
+    REQUIRE(result[0] ==  3267);
+    REQUIRE(result[1] ==  0);
+    REQUIRE(result[2] ==  325);
+    REQUIRE(result[3] ==  24);
+    REQUIRE(result[4] ==  93);
+    REQUIRE(result[5] ==  -4);
 }
+

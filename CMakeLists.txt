@@ -33,6 +33,12 @@ add_executable(${PROJECT_NAME}
     tests/kernel_list.cpp
     tests/list.cpp
     tests/mixed.cpp
+    tests/optional.cpp
+    tests/queue.cpp
+    tests/shared_ptr.cpp
+    tests/stack.cpp
+    tests/static_string.cpp
+    tests/unique_ptr.cpp
 )
 
 add_custom_target(tests-run
