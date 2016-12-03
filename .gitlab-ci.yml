@@ -3,7 +3,8 @@ image: mrokkk/devel
 test:
   stage: test
   script:
-    - ./ci/ci.sh ut
+    - git submodule update --init --recursive
+    - ./ci/run_tests.sh
   cache:
     paths:
         - "build/"
@@ -11,7 +12,8 @@ test:
 test-valgrind:
   stage: test
   script:
-    - VALGRIND=1 ./ci/ci.sh ut
+    - git submodule update --init --recursive
+    - JOB=valgrind ./ci/run_tests.sh
   cache:
     paths:
         - "build/"
@@ -19,7 +21,8 @@ test-valgrind:
 test-coverage:
   stage: test
   script:
-    - COVERAGE=1 ./ci/ci.sh ut
+    - git submodule update --init --recursive
+    - JOB=coverage ./ci/run_tests.sh
   cache:
     paths:
         - "build/"
