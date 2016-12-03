@@ -32,6 +32,7 @@ add_executable(${PROJECT_NAME}
     tests/inherited_list.cpp
     tests/kernel_list.cpp
     tests/list.cpp
+    tests/mixed.cpp
 )
 
 add_custom_target(tests-run
