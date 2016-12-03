@@ -26,17 +26,8 @@ include_directories(googletest/googletest/include)
 add_subdirectory(googletest/googletest)
 
 set(SOURCE_FILES
-    tests/list.cpp
+    tests/main.cpp
     tests/array.cpp
-    tests/shared_ptr.cpp
-    tests/unique_ptr.cpp
-    tests/stack.cpp
-    tests/queue.cpp
-    tests/mixed.cpp
-    tests/kernel_list.cpp
-    tests/optional.cpp
-    tests/inherited_list.cpp
-    tests/static_string.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

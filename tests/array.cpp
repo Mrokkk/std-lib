@@ -1,23 +1,24 @@
-#include <gtest/gtest.h>
 #include <array.h>
+#include "yatf/include/yatf.h"
 
 using namespace yacppl;
 
 TEST(ArrayTests, canCreateEmptyString) {
     array<int, 0> array;
     unsigned result = array.size();
-    EXPECT_TRUE(result == 0);
-    EXPECT_TRUE(array.end() - array.begin() == 0);
+    REQUIRE(result == 0);
+    REQUIRE(array.end() - array.begin() == 0);
 }
 
 TEST(ArrayTests, canCreateInitializedArray) {
     array<int, 5> array{2, 3, 4, 5, 6};
-    EXPECT_EQ(array[0], 2);
-    EXPECT_EQ(array[4], 6);
-    EXPECT_TRUE(array.size() == 5);
-    EXPECT_TRUE(array.end() - array.begin() == 5);
+    REQUIRE(array[0] == 2);
+    REQUIRE(array[4] == 6);
+    REQUIRE(array.size() == 5);
+    REQUIRE(array.end() - array.begin() == 5);
 }
 
+#if 0
 TEST(ArrayTests, canReadElementsSequentially) {
     array<int, 5> array{2, 3, 4, 5, 6};
     int cArray[5] = {0, 0, 0, 0, 0};
@@ -98,4 +99,4 @@ TEST(ArrayTests, canBeCopied) {
     it++;
     EXPECT_TRUE(array2.end() - it == 3);
 }
-
+#endif
