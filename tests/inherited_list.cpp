@@ -1,8 +1,8 @@
 #include <inherited_list.h>
-#include <gtest/gtest.h>
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include "yatf/include/yatf.h"
 
 using namespace yacppl;
 
@@ -27,17 +27,17 @@ void test_adding(inherited_list<helper> &head, int s) {
     std::vector<int> v;
     std::vector<helper> helper_vec;
     init_vectors(v, helper_vec, s);
-    ASSERT_TRUE(head.empty());
+    REQUIRE(head.empty());
     auto expected_size = 1;
     for (auto &h : helper_vec) {
         auto size = 0;
         head.add(&h);
         for (const auto &h : head) {
-            EXPECT_EQ(v[size], h.a);
+            REQUIRE(v[size] == h.a);
             size++;
         };
-        EXPECT_EQ(head.empty(), false);
-        EXPECT_EQ(size, expected_size);
+        REQUIRE_FALSE(head.empty());
+        REQUIRE(size == expected_size);
         expected_size++;
     }
 }
@@ -46,17 +46,17 @@ void test_adding_front(inherited_list<helper> &head, int s) {
     std::vector<int> v;
     std::vector<helper> helper_vec;
     init_vectors(v, helper_vec, s);
-    ASSERT_TRUE(head.empty());
+    REQUIRE(head.empty());
     auto expected_size = 1;
     for (auto &h : helper_vec) {
         auto size = 0;
         head.add_front(&h);
         for (const auto &h : head) {
-            EXPECT_EQ(v[expected_size - 1 - size], h.a);
+            REQUIRE(v[expected_size - 1 - size] == h.a);
             size++;
         };
-        EXPECT_EQ(head.empty(), false);
-        EXPECT_EQ(size, expected_size);
+        REQUIRE_FALSE(head.empty());
+        REQUIRE(size == expected_size);
         expected_size++;
     }
 }
@@ -65,10 +65,10 @@ void test_adding_front(inherited_list<helper> &head, int s) {
 
 TEST(inherited_list, can_create_empty) {
     helper h(2);
-    ASSERT_EQ(h.prev(), nullptr);
-    ASSERT_EQ(h.next(), nullptr);
-    ASSERT_EQ(h.a, 2);
-    ASSERT_TRUE(h.empty());
+    REQUIRE(h.prev() == nullptr);
+    REQUIRE(h.next() == nullptr);
+    REQUIRE(h.a == 2);
+    REQUIRE(h.empty());
 }
 
 TEST(inherited_list, can_add_elements) {
@@ -94,9 +94,9 @@ TEST(inherited_list, can_remove) {
         test_vector.push_back(e.a);
         size++;
     }
-    ASSERT_EQ(test_vector[0], 2);
-    ASSERT_EQ(test_vector[1], 4);
-    ASSERT_EQ(size, 2);
+    REQUIRE(test_vector[0] == 2);
+    REQUIRE(test_vector[1] == 4);
+    REQUIRE(size == 2);
 }
 
 TEST(inherited_list, can_use_iterator) {
@@ -106,21 +106,21 @@ TEST(inherited_list, can_use_iterator) {
         head.add(&v);
     }
     auto it = head.begin();
-    EXPECT_EQ(it->a, 0);
+    REQUIRE(it->a == 0);
     ++it;
-    EXPECT_EQ(it->a, 2);
+    REQUIRE(it->a == 2);
     ++it;
-    EXPECT_EQ(it->a, 4);
+    REQUIRE(it->a == 4);
     --it;
-    EXPECT_EQ(it->a, 2);
+    REQUIRE(it->a == 2);
     it++;
-    EXPECT_EQ(it->a, 4);
+    REQUIRE(it->a == 4);
     it++;
-    EXPECT_EQ(it->a, 9);
+    REQUIRE(it->a == 9);
     ++it;
-    EXPECT_EQ(it->a, 30);
+    REQUIRE(it->a == 30);
     it++;
     auto h = *it;
-    EXPECT_EQ(h.a, 109);
+    REQUIRE(h.a == 109);
 }
 

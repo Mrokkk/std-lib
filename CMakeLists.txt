@@ -26,6 +26,7 @@ include_directories(include)
 set(SOURCE_FILES
     tests/main.cpp
     tests/array.cpp
+    tests/inherited_list.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
