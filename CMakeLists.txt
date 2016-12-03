@@ -7,10 +7,10 @@ set(WARNING_FLAGS "-Wall -Wextra -Werror")
 
 if(COVERAGE)
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        set(COVERAGE_FLAGS "-O0 -fprofile-instr-generate -fcoverage-mapping")
+        set(COVERAGE_FLAGS "-O0 -fprofile-instr-generate -fcoverage-mapping -fno-inline")
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lgcov")
     else()
-        set(COVERAGE_FLAGS "-O0 -fprofile-arcs -ftest-coverage")
+        set(COVERAGE_FLAGS "-O0 -fprofile-arcs -ftest-coverage -fno-inline -fno-inline-small-functions -fno-default-inline")
     endif()
 endif()
 
@@ -31,6 +31,7 @@ add_executable(${PROJECT_NAME}
     tests/array.cpp
     tests/inherited_list.cpp
     tests/kernel_list.cpp
+    tests/list.cpp
 )
 
 add_custom_target(tests-run

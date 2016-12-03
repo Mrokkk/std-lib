@@ -1,5 +1,7 @@
 #pragma once
 
+#include "initializer_list.h"
+
 namespace yacppl {
 
 template<typename ElementType>
