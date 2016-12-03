@@ -24,12 +24,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g${DEBUG_LEVEL} -std=${CPP_STANDARD} ${
 include_directories(include)
 
 set(SOURCE_FILES
+)
+
+add_executable(${PROJECT_NAME}
     tests/main.cpp
     tests/array.cpp
     tests/inherited_list.cpp
+    tests/kernel_list.cpp
 )
-
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 add_custom_target(tests-run
     DEPENDS ${PROJECT_NAME}

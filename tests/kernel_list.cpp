@@ -1,5 +1,6 @@
 #include <kernel_list.h>
-#include <gtest/gtest.h>
+#include <vector>
+#include "yatf/include/yatf.h"
 
 using namespace yacppl;
 
@@ -11,77 +12,77 @@ struct helper {
     helper(int x) : a(x), list(&helper::list) {}
 };
 
-void testAdding(kernel_list<helper> &head, helper &e, std::vector<int> &comp, int s) {
+void test_adding(kernel_list<helper> &head, helper &e, std::vector<int> &comp, int s) {
     auto size = 0;
     head.add(&e.list);
     for (const auto &h : head) {
-        EXPECT_EQ(comp[size], h.a);
+        REQUIRE(comp[size] == h.a);
         size++;
     };
-    EXPECT_EQ(size, s);
-    EXPECT_EQ(head.empty(), false);
+    REQUIRE(size == s);
+    REQUIRE_FALSE(head.empty());
 }
 
-void testAddingFront(kernel_list<helper> &head, helper &e, std::vector<int> &comp, int s) {
+void test_adding_front(kernel_list<helper> &head, helper &e, std::vector<int> &comp, int s) {
     auto size = 0;
     head.add_front(&e.list);
     for (const auto &h : head) {
-        EXPECT_EQ(comp[size], h.a);
+        REQUIRE(comp[size] == h.a);
         size++;
     };
-    EXPECT_EQ(size, s);
-    EXPECT_EQ(head.empty(), false);
+    REQUIRE(size == s);
+    REQUIRE_FALSE(head.empty());
 }
 
-void testDeleting(kernel_list<helper> &head, helper &e, std::vector<int> &comp) {
+void test_removing(kernel_list<helper> &head, helper &e, std::vector<int> &comp) {
     e.list.remove();
     size_t size = 0;
     for (const auto &h : head) {
-        EXPECT_EQ(comp[size], h.a);
+        REQUIRE(comp[size] == h.a);
         size++;
     };
-    EXPECT_EQ(size, comp.size());
-    EXPECT_EQ(head.empty(), false);
+    REQUIRE(size == comp.size());
+    REQUIRE_FALSE(head.empty());
 }
 
 } // namespace anon
 
-TEST(AFListTests, canCreateEmpty) {
+TEST(kernel_list, can_create_empty) {
     kernel_list<helper> list(&helper::list);
-    EXPECT_EQ(list.empty(), true);
+    REQUIRE(list.empty());
 }
 
-TEST(AFListTests, canAccesElement) {
+TEST(kernel_list, can_acces_element) {
     for (auto i = 0; i < 1024; i++) {
         helper e(i);
         auto result = e.list.entry();
-        EXPECT_EQ(result->a, i);
+        REQUIRE(result->a == i);
     }
 }
 
-TEST(AFListTests, canAddElements) {
+TEST(kernel_list, can_add_elements) {
     kernel_list<helper> list(&helper::list);
     helper e1(2), e2(44), e3(26), e4(94), e5(24);
     std::vector<int> v{2, 44, 26, 94};
-    testAdding(list, e1, v, 1);
-    testAdding(list, e2, v, 2);
-    testAdding(list, e3, v, 3);
-    testAdding(list, e4, v, 4);
+    test_adding(list, e1, v, 1);
+    test_adding(list, e2, v, 2);
+    test_adding(list, e3, v, 3);
+    test_adding(list, e4, v, 4);
     std::vector<int> v2{24, 2, 44, 26, 94};
-    testAddingFront(list, e5, v2, 5);
+    test_adding_front(list, e5, v2, 5);
 }
 
-TEST(AFListTests, canDeleteElements) {
+TEST(kernel_list, can_delete_elements) {
     kernel_list<helper> list(&helper::list);
     helper e1(2), e2(44), e3(26), e4(94);
     std::vector<int> v{2, 44, 26, 94};
-    testAdding(list, e1, v, 1);
-    testAdding(list, e2, v, 2);
-    testAdding(list, e3, v, 3);
-    testAdding(list, e4, v, 4);
+    test_adding(list, e1, v, 1);
+    test_adding(list, e2, v, 2);
+    test_adding(list, e3, v, 3);
+    test_adding(list, e4, v, 4);
     std::vector<int> v2{2, 44, 94};
-    testDeleting(list, e3, v2);
+    test_removing(list, e3, v2);
     std::vector<int> v3{44, 94};
-    testDeleting(list, e1, v3);
+    test_removing(list, e1, v3);
 }
 
