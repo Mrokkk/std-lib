@@ -1,11 +1,7 @@
-# see https://hub.docker.com/_/gcc/
-image: gcc:6.1
+image: mrokkk/devel
 
 test:
   stage: test
-  before_script:
-    - apt update && apt -y install make cmake
-    - git submodule update --init --recursive
   script:
     - ./ci/ci.sh ut
   cache:
@@ -14,9 +10,6 @@ test:
 
 test-valgrind:
   stage: test
-  before_script:
-    - apt update && apt -y install make cmake valgrind
-    - git submodule update --init --recursive
   script:
     - VALGRIND=1 ./ci/ci.sh ut
   cache:
@@ -25,16 +18,9 @@ test-valgrind:
 
 test-coverage:
   stage: test
-  before_script:
-    - apt update && apt -y install make cmake gcovr
-    - git submodule update --init --recursive
   script:
     - COVERAGE=1 ./ci/ci.sh ut
   cache:
     paths:
         - "build/"
-  artifacts:
-    name: "$CI_BUILD_NAME"
-    paths:
-        - build/*.coverage.*
 
