@@ -95,5 +95,5 @@ TEST(queue, can_push_and_pop_by_shift_operators) {
     REQUIRE(result[2] ==  24);
     REQUIRE(result[3] ==  325);
     REQUIRE(result[4] ==  0);
-    (result[5] ==  3267);
+    REQUIRE(result[5] ==  3267);
 }
