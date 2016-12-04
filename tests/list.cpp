@@ -13,7 +13,7 @@ TEST(list, can_add_front_item) {
     list<int> list;
     list.push_front(2);
     REQUIRE(list.size() == 1);
-    REQUIRE(list.front() == 2);
+    REQUIRE_EQ(list.front(), 2);
 }
 
 TEST(list, can_add_two_front_items) {
@@ -21,15 +21,15 @@ TEST(list, can_add_two_front_items) {
     list.push_front(2);
     list.push_front(1);
     REQUIRE(list.size() == 2);
-    REQUIRE(list.front() == 1);
-    REQUIRE(list.back() == 2);
+    REQUIRE_EQ(list.front(), 1);
+    REQUIRE_EQ(list.back(), 2);
 }
 
 TEST(list, can_add_back_item) {
     list<int> list;
     list.push_back(4);
     REQUIRE(list.size() == 1);
-    REQUIRE(list.back() == 4);
+    REQUIRE_EQ(list.back(), 4);
 }
 
 TEST(list, can_add_back_two_items) {
@@ -37,24 +37,24 @@ TEST(list, can_add_back_two_items) {
     list.push_back(8);
     list.push_back(3);
     REQUIRE(list.size() == 2);
-    REQUIRE(list.front() == 8);
-    REQUIRE(list.back() == 3);
+    REQUIRE_EQ(list.front(), 8);
+    REQUIRE_EQ(list.back(), 3);
 }
 
 TEST(list, can_be_initialized_with_initializer_list) {
     list<int> list{2, 5, 6, 88, 4};
     REQUIRE(list.size() == 5);
-    REQUIRE(list.front() == 2);
-    REQUIRE(list.back() == 4);
+    REQUIRE_EQ(list.front(), 2);
+    REQUIRE_EQ(list.back(), 4);
     int result[5];
     int i = 0;
     for (auto &it : list)
         result[i++] = it;
-    REQUIRE(result[0] == 2);
-    REQUIRE(result[1] == 5);
-    REQUIRE(result[2] == 6);
-    REQUIRE(result[3] == 88);
-    REQUIRE(result[4] == 4);
+    REQUIRE_EQ(result[0], 2);
+    REQUIRE_EQ(result[1], 5);
+    REQUIRE_EQ(result[2], 6);
+    REQUIRE_EQ(result[3], 88);
+    REQUIRE_EQ(result[4], 4);
 }
 
 TEST(list, can_access_elements) {
@@ -66,9 +66,9 @@ TEST(list, can_access_elements) {
     int i = 0;
     for (const auto &it : list)
         result[i++] = it;
-    REQUIRE(result[0] == 1);
-    REQUIRE(result[1] == 2);
-    REQUIRE(result[2] == 3);
+    REQUIRE_EQ(result[0], 1);
+    REQUIRE_EQ(result[1], 2);
+    REQUIRE_EQ(result[2], 3);
 }
 
 TEST(list, can_pop_back) {
@@ -76,11 +76,11 @@ TEST(list, can_pop_back) {
     list.push_back(3);
     list.push_front(2);
     list.push_front(1);
-    REQUIRE(list.front() == 1);
+    REQUIRE_EQ(list.front(), 1);
     list.pop_back();
     REQUIRE(list.size() == 2);
-    REQUIRE(list.back() == 2);
-    REQUIRE(list.front() == 1);
+    REQUIRE_EQ(list.back(), 2);
+    REQUIRE_EQ(list.front(), 1);
 }
 
 TEST(list, can_pop_front) {
@@ -89,11 +89,11 @@ TEST(list, can_pop_front) {
     list.push_front(2);
     list.push_front(1);
     list.push_front(10);
-    REQUIRE(list.front() == 10);
+    REQUIRE_EQ(list.front(), 10);
     list.pop_front();
     REQUIRE(list.size() == 3);
-    REQUIRE(list.back() == 3);
-    REQUIRE(list.front() == 1);
+    REQUIRE_EQ(list.back(), 3);
+    REQUIRE_EQ(list.front(), 1);
 }
 
 TEST(list, can_be_resized) {
@@ -102,11 +102,11 @@ TEST(list, can_be_resized) {
     REQUIRE(list.size() == 20);
     for (auto &it : list)
         it = 38;
-    REQUIRE(list.front() == 38);
-    REQUIRE(list.back() == 38);
+    REQUIRE_EQ(list.front(), 38);
+    REQUIRE_EQ(list.back(), 38);
     list.resize(2);
-    REQUIRE(list.front() == 38);
-    REQUIRE(list.back() == 38);
+    REQUIRE_EQ(list.front(), 38);
+    REQUIRE_EQ(list.back(), 38);
     REQUIRE(list.size() == 2);
 }
 
@@ -117,15 +117,15 @@ TEST(list, can_increment_iterator) {
     list.push_front(1);
     list.push_front(10);
     auto it = list.begin();
-    REQUIRE(*it == 10);
+    REQUIRE_EQ(*it, 10);
     it++;
-    REQUIRE(*it == 1);
+    REQUIRE_EQ(*it, 1);
     ++it;
-    REQUIRE(*it == 2);
+    REQUIRE_EQ(*it, 2);
     it = list.begin();
     *it = 34;
-    REQUIRE(*it == 34);
-    REQUIRE(list.front() == 34);
+    REQUIRE_EQ(*it, 34);
+    REQUIRE_EQ(list.front(), 34);
 }
 
 TEST(list, can_decrement_iterator) {
@@ -136,9 +136,9 @@ TEST(list, can_decrement_iterator) {
     list.push_front(10);
     auto it = list.end();
     it--;
-    REQUIRE(*it == 3);
+    REQUIRE_EQ(*it, 3);
     --it;
-    REQUIRE(*it == 2);
+    REQUIRE_EQ(*it, 2);
 }
 
 TEST(list, can_increment_and_decrement_iterator) {
@@ -148,11 +148,11 @@ TEST(list, can_increment_and_decrement_iterator) {
     list.push_front(1);
     list.push_front(10);
     auto it = list.begin();
-    REQUIRE(*it == 10);
+    REQUIRE_EQ(*it, 10);
     it++;
-    REQUIRE(*it == 1);
+    REQUIRE_EQ(*it, 1);
     it--;
-    REQUIRE(*it == 10);
+    REQUIRE_EQ(*it, 10);
 }
 
 TEST(list, can_compare_iterators) {
@@ -163,9 +163,9 @@ TEST(list, can_compare_iterators) {
     list.push_front(10);
     auto it1 = list.begin();
     auto it2 = it1;
-    REQUIRE(it1 == it2);
+    REQUIRE_EQ(it1 == it2, true);
     it2++;
-    REQUIRE(it1 != it2);
+    REQUIRE_EQ(it1 != it2, true);
 }
 
 TEST(list, can_be_constructed_by_copy) {
@@ -175,9 +175,9 @@ TEST(list, can_be_constructed_by_copy) {
     list1.push_front(1);
     list1.push_front(10);
     list<int> list2(list1);
-    REQUIRE(list1.front() == 10);
-    REQUIRE(list2.front() == 10);
-    REQUIRE(list2.back() == 3);
+    REQUIRE_EQ(list1.front(), 10);
+    REQUIRE_EQ(list2.front(), 10);
+    REQUIRE_EQ(list2.back(), 3);
 }
 
 TEST(list, can_be_assigned) {
@@ -192,9 +192,9 @@ TEST(list, can_be_assigned) {
     list2 = list1;
     REQUIRE(list1.size() == 4);
     REQUIRE(list2.size() == 4);
-    REQUIRE(list1.front() == 10);
-    REQUIRE(list2.front() == 10);
-    REQUIRE(list2.back() == 3);
+    REQUIRE_EQ(list1.front(), 10);
+    REQUIRE_EQ(list2.front(), 10);
+    REQUIRE_EQ(list2.back(), 3);
 }
 
 TEST(list, can_be_constructed_by_move) {
@@ -210,12 +210,12 @@ TEST(list, can_be_constructed_by_move) {
         result[i++] = it;
     REQUIRE(list1.size() == 0);
     REQUIRE(list2.size() == 4);
-    REQUIRE(list2.front() == 10);
-    REQUIRE(list2.back() == 3);
-    REQUIRE(result[0] == 10);
-    REQUIRE(result[1] == 1);
-    REQUIRE(result[2] == 2);
-    REQUIRE(result[3] == 3);
+    REQUIRE_EQ(list2.front(), 10);
+    REQUIRE_EQ(list2.back(), 3);
+    REQUIRE_EQ(result[0], 10);
+    REQUIRE_EQ(result[1], 1);
+    REQUIRE_EQ(result[2], 2);
+    REQUIRE_EQ(result[3], 3);
 }
 
 TEST(list, can_be_moved) {
@@ -234,12 +234,12 @@ TEST(list, can_be_moved) {
         result[i++] = it;
     REQUIRE(list1.size() == 0);
     REQUIRE(list2.size() == 4);
-    REQUIRE(list2.front() == 10);
-    REQUIRE(list2.back() == 3);
-    REQUIRE(result[0] == 10);
-    REQUIRE(result[1] == 1);
-    REQUIRE(result[2] == 2);
-    REQUIRE(result[3] == 3);
+    REQUIRE_EQ(list2.front(), 10);
+    REQUIRE_EQ(list2.back(), 3);
+    REQUIRE_EQ(result[0], 10);
+    REQUIRE_EQ(result[1], 1);
+    REQUIRE_EQ(result[2], 2);
+    REQUIRE_EQ(result[3], 3);
 }
 
 TEST(list, can_erase_single_element) {
@@ -249,16 +249,16 @@ TEST(list, can_erase_single_element) {
     list.push_back(23);
     auto it = list.begin();
     ++it;
-    REQUIRE(list.front() == -59);
-    REQUIRE(list.back() == 23);
+    REQUIRE_EQ(list.front(), -59);
+    REQUIRE_EQ(list.back(), 23);
     list.erase(it);
     REQUIRE(list.size() == 2);
-    REQUIRE(list.front() == -59);
-    REQUIRE(list.back() == 23);
+    REQUIRE_EQ(list.front(), -59);
+    REQUIRE_EQ(list.back(), 23);
     list.erase(list.begin());
     REQUIRE(list.size() == 1);
-    REQUIRE(list.front() == 23);
-    REQUIRE(list.back() == 23);
+    REQUIRE_EQ(list.front(), 23);
+    REQUIRE_EQ(list.back(), 23);
     list.erase(list.end()--);
     REQUIRE(list.size() == 0);
 }
@@ -271,8 +271,8 @@ TEST(list, can_erase_elements) {
     list.push_back(13);
     list.erase(++list.begin(), list.end());
     REQUIRE(list.size() == 1);
-    REQUIRE(list.front() == -59);
-    REQUIRE(list.back() == -59);
+    REQUIRE_EQ(list.front(), -59);
+    REQUIRE_EQ(list.back(), -59);
     list.erase(list.begin(), list.end());
     REQUIRE(list.size() == 0);
 }
