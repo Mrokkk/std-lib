@@ -12,7 +12,7 @@ TEST(shared_ptr, can_create_empty_pointer) {
 
 TEST(shared_ptr, can_create_valid_pointer) {
     shared_ptr<int> ptr(new int(4));
-    REQUIRE_FALSE(ptr.get() ==  nullptr);
+    REQUIRE(ptr.get() !=  nullptr);
 }
 
 TEST(shared_ptr, can_be_derefereced) {
@@ -32,6 +32,20 @@ TEST(shared_ptr, can_be_copied) {
     ptr2 = ptr1;
     REQUIRE(*ptr1 ==  10);
     REQUIRE(*ptr2 ==  10);
+    REQUIRE(ptr1.get_ref_count() == 2);
+    REQUIRE(ptr2.get_ref_count() == 2);
+    REQUIRE(ptr1.get() ==  ptr2.get());
+    {
+        shared_ptr<int> ptr3;
+        ptr3 = ptr2;
+        REQUIRE(*ptr1 ==  10);
+        REQUIRE(*ptr2 ==  10);
+        REQUIRE(*ptr3 ==  10);
+        REQUIRE(ptr1.get_ref_count() == 3);
+        REQUIRE(ptr2.get_ref_count() == 3);
+        REQUIRE(ptr2.get_ref_count() == 3);
+        REQUIRE(ptr1.get() ==  ptr3.get());
+    }
     REQUIRE(ptr1.get_ref_count() == 2);
     REQUIRE(ptr2.get_ref_count() == 2);
     REQUIRE(ptr1.get() ==  ptr2.get());
@@ -65,7 +79,7 @@ TEST(shared_ptr, can_be_constructed_by_moving) {
     REQUIRE(ptr1.get() ==  nullptr);
     REQUIRE(ptr1.get_ref_count() == 0);
     REQUIRE(ptr2.get_ref_count() == 1);
-    REQUIRE_FALSE(ptr1.get() ==  ptr2.get());
+    REQUIRE(ptr1.get() !=  ptr2.get());
 }
 
 TEST(shared_ptr, can_be_casted_to_raw_pointer) {
@@ -82,3 +96,4 @@ TEST(shared_ptr, can_have_its_value_modified) {
     REQUIRE(*ptr ==  39);
     REQUIRE(ptr.get_ref_count() == 1);
 }
+
