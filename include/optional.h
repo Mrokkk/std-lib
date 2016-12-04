@@ -10,7 +10,7 @@ public:
 
     optional() = default;
 
-    optional(Type v)
+    explicit optional(Type v)
             : _value(v), _has_value(true) {}
 
     bool has_value() const {
@@ -25,12 +25,48 @@ public:
         return _has_value ? _value : a;
     }
 
-    operator Type() const {
-        return _value;
-    }
-
     operator bool() const {
         return _has_value;
+    }
+
+    optional &operator =(Type v) {
+        _value = v;
+        _has_value = true;
+        return *this;
+    }
+
+    template <typename T>
+    bool operator==(const T &rhs) const {
+        return _has_value && rhs == _value;
+    }
+
+    bool operator==(const optional &rhs) const {
+        return _has_value && rhs._has_value && rhs._value == _value;
+    }
+
+    template <typename T>
+    bool operator!=(const T &rhs) const {
+        return !_has_value || rhs != _value;
+    }
+
+    template <typename T>
+    bool operator>(const T &rhs) const {
+        return _has_value && _value > rhs;
+    }
+
+    template <typename T>
+    bool operator>=(const T &rhs) const {
+        return _has_value && _value >= rhs;
+    }
+
+    template <typename T>
+    bool operator<(const T &rhs) const {
+        return _has_value && _value < rhs;
+    }
+
+    template <typename T>
+    bool operator<=(const T &rhs) const {
+        return _has_value && _value <= rhs;
     }
 
 };
