@@ -8,6 +8,6 @@ TEST(static_string, can_create_empty) {
     REQUIRE(string.length() == 0);
     REQUIRE(string.size() == 16);
     for (int i = 0; i < 16; i++)
-        REQUIRE(string[i] == 0);
+        REQUIRE_EQ(string[i], 0);
 }
 
