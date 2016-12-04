@@ -16,10 +16,10 @@ void test_adding(kernel_list<helper> &head, helper &e, std::vector<int> &comp, i
     auto size = 0;
     head.add(&e.list);
     for (const auto &h : head) {
-        REQUIRE(comp[size] == h.a);
+        REQUIRE_EQ(comp[size], h.a);
         size++;
     };
-    REQUIRE(size == s);
+    REQUIRE_EQ(size, s);
     REQUIRE_FALSE(head.empty());
 }
 
@@ -27,10 +27,10 @@ void test_adding_front(kernel_list<helper> &head, helper &e, std::vector<int> &c
     auto size = 0;
     head.add_front(&e.list);
     for (const auto &h : head) {
-        REQUIRE(comp[size] == h.a);
+        REQUIRE_EQ(comp[size], h.a);
         size++;
     };
-    REQUIRE(size == s);
+    REQUIRE_EQ(size, s);
     REQUIRE_FALSE(head.empty());
 }
 
@@ -38,10 +38,10 @@ void test_removing(kernel_list<helper> &head, helper &e, std::vector<int> &comp)
     e.list.remove();
     size_t size = 0;
     for (const auto &h : head) {
-        REQUIRE(comp[size] == h.a);
+        REQUIRE_EQ(comp[size], h.a);
         size++;
     };
-    REQUIRE(size == comp.size());
+    REQUIRE_EQ(size, comp.size());
     REQUIRE_FALSE(head.empty());
 }
 
@@ -56,7 +56,7 @@ TEST(kernel_list, can_acces_element) {
     for (auto i = 0; i < 1024; i++) {
         helper e(i);
         auto result = e.list.entry();
-        REQUIRE(result->a == i);
+        REQUIRE_EQ(result->a, i);
     }
 }
 
