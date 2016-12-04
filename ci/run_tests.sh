@@ -14,7 +14,7 @@ case "$JOB" in
     "valgrind")
         cmake ..
         make -j$cores
-        valgrind ./yacppl ;;
+        valgrind ./tests/yacppl ;;
     "coverage")
         cmake -DCOVERAGE=ON ..
         make tests-cov -j$cores ;;
