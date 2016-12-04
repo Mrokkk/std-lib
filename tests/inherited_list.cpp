@@ -33,11 +33,11 @@ void test_adding(inherited_list<helper> &head, int s) {
         auto size = 0;
         head.add(&h);
         for (const auto &h : head) {
-            REQUIRE(v[size] == h.a);
+            REQUIRE_EQ(v[size], h.a);
             size++;
         };
         REQUIRE_FALSE(head.empty());
-        REQUIRE(size == expected_size);
+        REQUIRE_EQ(size, expected_size);
         expected_size++;
     }
 }
@@ -52,11 +52,11 @@ void test_adding_front(inherited_list<helper> &head, int s) {
         auto size = 0;
         head.add_front(&h);
         for (const auto &h : head) {
-            REQUIRE(v[expected_size - 1 - size] == h.a);
+            REQUIRE_EQ(v[expected_size - 1 - size], h.a);
             size++;
         };
         REQUIRE_FALSE(head.empty());
-        REQUIRE(size == expected_size);
+        REQUIRE_EQ(size, expected_size);
         expected_size++;
     }
 }
@@ -65,9 +65,9 @@ void test_adding_front(inherited_list<helper> &head, int s) {
 
 TEST(inherited_list, can_create_empty) {
     helper h(2);
-    REQUIRE(h.prev() == nullptr);
-    REQUIRE(h.next() == nullptr);
-    REQUIRE(h.a == 2);
+    REQUIRE_EQ(h.prev(), nullptr);
+    REQUIRE_EQ(h.next(), nullptr);
+    REQUIRE_EQ(h.a, 2);
     REQUIRE(h.empty());
 }
 
@@ -94,9 +94,9 @@ TEST(inherited_list, can_remove) {
         test_vector.push_back(e.a);
         size++;
     }
-    REQUIRE(test_vector[0] == 2);
-    REQUIRE(test_vector[1] == 4);
-    REQUIRE(size == 2);
+    REQUIRE_EQ(test_vector[0], 2);
+    REQUIRE_EQ(test_vector[1], 4);
+    REQUIRE_EQ(size, 2);
 }
 
 TEST(inherited_list, can_use_iterator) {
@@ -106,21 +106,21 @@ TEST(inherited_list, can_use_iterator) {
         head.add(&v);
     }
     auto it = head.begin();
-    REQUIRE(it->a == 0);
+    REQUIRE_EQ(it->a, 0);
     ++it;
-    REQUIRE(it->a == 2);
+    REQUIRE_EQ(it->a, 2);
     ++it;
-    REQUIRE(it->a == 4);
+    REQUIRE_EQ(it->a, 4);
     --it;
-    REQUIRE(it->a == 2);
+    REQUIRE_EQ(it->a, 2);
     it++;
-    REQUIRE(it->a == 4);
+    REQUIRE_EQ(it->a, 4);
     it++;
-    REQUIRE(it->a == 9);
+    REQUIRE_EQ(it->a, 9);
     ++it;
-    REQUIRE(it->a == 30);
+    REQUIRE_EQ(it->a, 30);
     it++;
     auto h = *it;
-    REQUIRE(h.a == 109);
+    REQUIRE_EQ(h.a, 109);
 }
 
