@@ -3,17 +3,17 @@
 
 using namespace yacppl;
 
-TEST(array, can_be_empty) {
+TEST(array, can_create_empty_string) {
     array<int, 0> array;
     unsigned result = array.size();
     REQUIRE(result == 0);
     REQUIRE(array.end() - array.begin() == 0);
 }
 
-TEST(array, can_be_initialized) {
+TEST(array, can_create_initialized_array) {
     array<int, 5> array{2, 3, 4, 5, 6};
-    REQUIRE(array[0] == 2);
-    REQUIRE(array[4] == 6);
+    REQUIRE_EQ(array[0], 2);
+    REQUIRE_EQ(array[4], 6);
     REQUIRE(array.size() == 5);
     REQUIRE(array.end() - array.begin() == 5);
 }
@@ -24,9 +24,9 @@ TEST(array, can_read_elements_sequentially) {
     unsigned i = 0;
     for (const auto &elem : array)
         c_array[i++] = elem;
-    REQUIRE(c_array[0] == 2);
-    REQUIRE(c_array[2] == 4);
-    REQUIRE(c_array[4] == 6);
+    REQUIRE_EQ(c_array[0], 2);
+    REQUIRE_EQ(c_array[2], 4);
+    REQUIRE_EQ(c_array[4], 6);
 }
 
 TEST(array, can_modify_elements_sequentially) {
@@ -34,48 +34,48 @@ TEST(array, can_modify_elements_sequentially) {
     unsigned i = 10;
     for (auto &elem : array)
         elem = i++;
-    REQUIRE(array[0] == 10);
-    REQUIRE(array[2] == 12);
-    REQUIRE(array[4] == 14);
+    REQUIRE_EQ(array[0], 10);
+    REQUIRE_EQ(array[2], 12);
+    REQUIRE_EQ(array[4], 14);
 }
 
-TEST(array, can_be_modified_using_brackets) {
+TEST(array, can_modify) {
     array<int, 5> array{2, 3, 4, 5, 6};
     array[0] = 10;
     array[1] = 11;
     array[4] = 14;
-    REQUIRE(array[0] == 10);
-    REQUIRE(array[1] == 11);
-    REQUIRE(array[4] == 14);
+    REQUIRE_EQ(array[0], 10);
+    REQUIRE_EQ(array[1], 11);
+    REQUIRE_EQ(array[4], 14);
 }
 
 TEST(array, can_increment_iterator) {
     array<int, 5> array{2, 3, 4, 5, 6};
     auto it = array.begin();
-    REQUIRE(*it == 2);
+    REQUIRE_EQ(*it, 2);
     it++;
-    REQUIRE(*it == 3);
+    REQUIRE_EQ(*it, 3);
     ++it;
-    REQUIRE(*it == 4);
+    REQUIRE_EQ(*it, 4);
 }
 
 TEST(array, can_decrement_iterator) {
     array<int, 5> array{2, 3, 4, 5, 6};
     auto it = array.end();
     it--;
-    REQUIRE(*it == 6);
+    REQUIRE_EQ(*it, 6);
     --it;
-    REQUIRE(*it == 5);
+    REQUIRE_EQ(*it, 5);
 }
 
 TEST(array, can_increment_and_decrement_iterator) {
     array<int, 5> array{2, 3, 4, 5, 6};
     auto it = array.begin();
-    REQUIRE(*it == 2);
+    REQUIRE_EQ(*it, 2);
     it++;
-    REQUIRE(*it == 3);
+    REQUIRE_EQ(*it, 3);
     it--;
-    REQUIRE(*it == 2);
+    REQUIRE_EQ(*it, 2);
 }
 
 TEST(array, can_compare_iterators) {
@@ -90,7 +90,7 @@ TEST(array, can_compare_iterators) {
 TEST(array, can_be_copied) {
     array<int, 5> array{2, 3, 4, 5, 6};
     auto array2 = array;
-    REQUIRE(2 == array2[0]);
+    REQUIRE_EQ(2, array2[0]);
     auto it = array2.begin();
     REQUIRE(array2.end() - it == 5);
     ++it;
