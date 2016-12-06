@@ -12,17 +12,17 @@ cores=$(nproc)
 
 case "$JOB" in
     "valgrind")
-        cmake ..
+        cmake -DCI=ON ..
         make -j$cores
         valgrind ./tests/yacppl ;;
     "coverage")
-        cmake -DCOVERAGE=ON ..
+        cmake -DCI=ON -DCOVERAGE=ON ..
         make tests-cov -j$cores ;;
     "sanitizers")
-        cmake -DSANITIZERS=ON ..
+        cmake -DCI=ON -DSANITIZERS=ON ..
         make tests-run -j$cores ;;
     *)
-        cmake ..
+        cmake -DCI=ON ..
         make tests-run -j$cores ;;
 esac
 
