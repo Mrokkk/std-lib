@@ -13,7 +13,7 @@ class shared_ptr {
 
 public:
 
-    shared_ptr() {}
+    constexpr shared_ptr() {}
 
     shared_ptr(Pointer ptr)
             : _ptr(ptr), _ref_count(new unsigned(1)) {}

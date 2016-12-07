@@ -12,7 +12,7 @@ class unique_ptr {
 
 public:
 
-    unique_ptr() {}
+    constexpr unique_ptr() {}
 
     unique_ptr(Pointer ptr)
             : _ptr(ptr) {}

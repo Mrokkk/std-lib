@@ -28,7 +28,6 @@ class kernel_list {
         return reinterpret_cast<Type *>(reinterpret_cast<char *>(this) + offset);
     }
 
-
 public:
 
     class iterator {

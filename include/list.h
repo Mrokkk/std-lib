@@ -91,7 +91,7 @@ public:
     public:
 
         explicit iterator(list_element *node)
-                : _node(node) {}
+            : _node(node) {}
 
         list_element *node() const {
             return _node;
