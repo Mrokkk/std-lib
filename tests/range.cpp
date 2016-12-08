@@ -4,7 +4,7 @@
 using namespace yacppl;
 
 TEST(range, can_create_string_range) {
-    auto str = "test";
+    const char str[] = "test";
     auto a = make_range(str);
     auto i = 0u;
     for (auto it : a) {
@@ -25,5 +25,22 @@ TEST(range, can_create_int_array_range) {
     }
     REQUIRE_EQ(b.size(), 4u);
     REQUIRE_EQ(i, 4u);
+}
+
+struct helper {
+    int a;
+    helper(int a) : a(a) {}
+};
+
+TEST(range, can_create_struct_array_range) {
+    helper a[] = {1, 4, 6, 8};
+    auto r = make_range(a);
+    auto size = 0u;
+    for (auto it : r) {
+        REQUIRE_EQ(it.a, a[size].a);
+        ++size;
+    }
+    REQUIRE_EQ(r.size(), 4u);
+    REQUIRE_EQ(size, 4u);
 }
 
