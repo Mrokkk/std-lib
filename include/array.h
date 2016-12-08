@@ -5,7 +5,7 @@
 
 namespace yacppl {
 
-template<typename ElementType, unsigned int _size = 0>
+template<typename ElementType, size_t _size = 0>
 class array {
 
     ElementType _array[_size];
@@ -71,7 +71,7 @@ public:
             _array[i++] = v;
     }
 
-    unsigned int size() const {
+    auto size() const {
         return _size;
     }
 
@@ -79,12 +79,16 @@ public:
         return _array[index];
     }
 
-    iterator begin() {
+    auto begin() {
         return iterator(_array);
     }
 
-    iterator end() {
+    auto end() {
         return iterator(_array + _size);
+    }
+
+    auto data() {
+        return _array;
     }
 
 };
