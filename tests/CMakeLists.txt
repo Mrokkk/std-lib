@@ -33,6 +33,7 @@ add_executable(${PROJECT_NAME}
     stack.cpp
     static_string.cpp
     unique_ptr.cpp
+    range.cpp
 )
 
 add_custom_target(tests-run

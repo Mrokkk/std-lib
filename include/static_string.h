@@ -1,6 +1,7 @@
 #pragma once
 
 #include "array.h"
+#include "range.h"
 
 namespace yacppl {
 
@@ -25,7 +26,7 @@ class static_string : public array<char, _size + 1> {
 
 public:
 
-    explicit static_string()
+    constexpr explicit static_string()
             : _ptr(Array::begin()) {
         for (size_t i = 0; i <= _size; i++) {
             Array::operator[](i) = 0;
@@ -33,8 +34,8 @@ public:
     }
 
     static_string &operator=(const char *str) {
-        for (auto i = 0u; str[i] != 0; ++i) {
-            Array::operator[](i) = str[i];
+        for (auto it : make_range(str)) {
+            *_ptr = it;
             ++_ptr;
         }
         return *this;
