@@ -15,7 +15,7 @@ TEST(static_string, can_write_to) {
     static_string<32> string;
     string = "test";
     REQUIRE_EQ(string.length(), 4u);
-    REQUIRE_EQ(string, "test");
+    REQUIRE(string == "test");
     REQUIRE_FALSE(string == "random");
 }
 
