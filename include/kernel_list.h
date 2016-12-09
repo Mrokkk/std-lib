@@ -24,7 +24,7 @@ class kernel_list {
         return reinterpret_cast<char *>(&(static_cast<T *>(nullptr)->*member)) - static_cast<char *>(nullptr);
     }
 
-    auto this_offset(int offset) {
+    Type *this_offset(int offset) {
         return reinterpret_cast<Type *>(reinterpret_cast<char *>(this) + offset);
     }
 
@@ -100,19 +100,19 @@ public:
         return (_prev == this) && (_next == this);
     }
 
-    auto entry() {
+    Type *entry() {
         return this_offset(-_offset);
     }
 
-    auto next_entry() {
+    Type *next_entry() {
         return _next == this ? nullptr : _next->entry();
     }
 
-    auto begin() {
+    iterator begin() {
         return iterator(_next);
     }
 
-    auto end() {
+    iterator end() {
         return iterator(this);
     }
 

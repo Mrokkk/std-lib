@@ -17,7 +17,7 @@ public:
 
     constexpr initializer_list() {}
 
-    auto size() const {
+    size_t size() const {
         return _size;
     }
 

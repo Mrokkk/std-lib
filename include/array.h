@@ -14,7 +14,7 @@ public:
 
     class iterator {
 
-        ElementType *_ptr = nullptr;
+        ElementType *_ptr;
 
     public:
 
@@ -63,7 +63,7 @@ public:
 
     };
 
-    array() {}
+    array() = default;
 
     array(std::initializer_list<ElementType> list) {
         unsigned i = 0;
@@ -71,7 +71,7 @@ public:
             _array[i++] = v;
     }
 
-    auto size() const {
+    size_t size() const {
         return _size;
     }
 
@@ -79,15 +79,15 @@ public:
         return _array[index];
     }
 
-    auto begin() {
+    iterator begin() {
         return iterator(_array);
     }
 
-    auto end() {
+    iterator end() {
         return iterator(_array + _size);
     }
 
-    auto data() {
+    ElementType *data() {
         return _array;
     }
 

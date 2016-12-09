@@ -26,7 +26,7 @@ public:
 
     public:
 
-        iterator(Type *t)
+        constexpr iterator(Type *t)
             : _ptr(t) {}
 
         iterator &operator++() {
@@ -63,7 +63,7 @@ public:
 
     };
 
-    inherited_list() {
+    constexpr inherited_list() {
         _next = _prev = reinterpret_cast<Type *>(this);
     }
 
@@ -96,11 +96,11 @@ public:
         return _next == this && _next == this;
     }
 
-    auto begin() {
+    iterator begin() {
         return iterator(_next);
     }
 
-    auto end() {
+    iterator end() {
         return iterator(reinterpret_cast<Type *>(this));
     }
 
