@@ -3,8 +3,20 @@
 
 using namespace yacppl;
 
-TEST(range, can_create_string_range) {
-    const char str[] = "test";
+TEST(range, can_create_const_string_range) {
+    const char *str = "test";
+    auto a = make_range(str);
+    auto i = 0u;
+    for (auto it : a) {
+        REQUIRE_EQ(it, "test"[i]);
+        ++i;
+    }
+    REQUIRE_EQ(a.size(), 4u);
+    REQUIRE_EQ(i, 4u);
+}
+
+TEST(range, can_create_nonconst_string_range) {
+    char str[] = "test";
     auto a = make_range(str);
     auto i = 0u;
     for (auto it : a) {
