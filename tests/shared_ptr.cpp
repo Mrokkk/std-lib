@@ -97,3 +97,19 @@ TEST(shared_ptr, can_have_its_value_modified) {
     REQUIRE(ptr.get_ref_count() == 1);
 }
 
+namespace {
+
+struct helper {
+    int a;
+    explicit helper(int a) : a(a) {}
+};
+
+} // namespace anon
+
+TEST(shared_ptr, can_work_with_struct) {
+    for (auto i = 0; i < 1024; i++) {
+        auto ptr = make_shared<helper>(i);
+        REQUIRE_EQ(ptr->a, i);
+    }
+}
+

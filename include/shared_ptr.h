@@ -88,5 +88,10 @@ inline shared_ptr<Type> make_shared(Type &&a) {
     return shared_ptr<Type>(new Type(a));
 }
 
+template<typename T, typename... Args>
+shared_ptr<T> make_shared(Args&&... args) {
+    return shared_ptr<T>(new T(args...));
+}
+
 } // namespace yacppl
 

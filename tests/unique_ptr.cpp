@@ -49,3 +49,19 @@ TEST(unique_ptr, can_have_its_value_modified) {
     REQUIRE_EQ(*ptr, 39);
 }
 
+namespace {
+
+struct helper {
+    int a;
+    explicit helper(int a) : a(a) {}
+};
+
+} // namespace anon
+
+TEST(unique_ptr, can_work_with_struct) {
+    for (auto i = 0; i < 1024; i++) {
+        auto ptr = make_unique<helper>(i);
+        REQUIRE_EQ(ptr->a, i);
+    }
+}
+

@@ -65,5 +65,10 @@ inline unique_ptr<Type> make_unique(Type &&a) {
     return unique_ptr<Type>(new Type(a));
 }
 
+template<typename T, typename... Args>
+unique_ptr<T> make_unique(Args&&... args) {
+    return unique_ptr<T>(new T(args...));
+}
+
 } // namespace yacppl
 
