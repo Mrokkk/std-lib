@@ -3,7 +3,7 @@
 namespace yacppl {
 
 template<typename Type>
-class shared_ptr {
+class shared_ptr final {
 
     using Reference = Type &;
     using Pointer = Type *;

@@ -5,7 +5,7 @@
 namespace yacppl {
 
 template<typename ElementType>
-class list {
+class list final {
 
     struct list_element {
 

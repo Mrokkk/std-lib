@@ -7,7 +7,7 @@ namespace yacppl {
 namespace detail {
 
 template<typename T, size_t _size = 0>
-class range {
+class range final {
 
     T *_ptr;
 

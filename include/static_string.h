@@ -6,7 +6,7 @@
 namespace yacppl {
 
 template <size_t _size>
-class static_string : public array<char, _size + 1> {
+class static_string final : public array<char, _size + 1> {
 
     using Array = array<char, _size + 1>;
     typename Array::iterator _ptr;

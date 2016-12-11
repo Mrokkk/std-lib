@@ -1,7 +1,7 @@
 #pragma once
 
 template <typename Type>
-class optional {
+class optional final {
 
     Type _value;
     bool _has_value = false;

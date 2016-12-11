@@ -5,7 +5,7 @@
 namespace yacppl {
 
 template<typename ElementType>
-class stack {
+class stack final {
 
     list<ElementType> _list;
 

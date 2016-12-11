@@ -5,7 +5,7 @@
 namespace yacppl {
 
 template<typename ElementType>
-class queue {
+class queue final {
 
     list<ElementType> _list;
 

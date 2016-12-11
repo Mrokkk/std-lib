@@ -7,7 +7,7 @@
 namespace yacppl {
 
 template <class Type>
-class kernel_list {
+class kernel_list final {
 
     kernel_list *_next = this, *_prev = this;
     size_t _offset;

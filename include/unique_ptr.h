@@ -3,7 +3,7 @@
 namespace yacppl {
 
 template<typename Type>
-class unique_ptr {
+class unique_ptr final {
 
     using Reference = Type &;
     using Pointer = Type *;
