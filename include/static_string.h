@@ -69,6 +69,10 @@ public:
         return !strcmp(str, Array::data());
     }
 
+    bool operator!=(const char *str) {
+        return strcmp(str, Array::data());
+    }
+
 };
 
 } // namespace yacppl

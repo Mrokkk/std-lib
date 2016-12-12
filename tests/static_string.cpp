@@ -17,5 +17,19 @@ TEST(static_string, can_write_to) {
     REQUIRE_EQ(string.length(), 4u);
     REQUIRE(string == "test");
     REQUIRE_FALSE(string == "random");
+    REQUIRE_FALSE(string == "rand");
+    REQUIRE(string != "random");
+    REQUIRE(string != "rand");
+}
+
+TEST(static_string, can_iterate) {
+    static_string<32> string;
+    string = "test";
+    const char *s = "test";
+    size_t size = 0;
+    for (auto c : string) {
+        REQUIRE_EQ(c, s[size]);
+        size++;
+    }
 }
 
