@@ -23,7 +23,7 @@ public:
         return _list.back();
     }
 
-    unsigned long size() const {
+    size_t size() const {
         return _list.size();
     }
 

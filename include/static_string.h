@@ -49,11 +49,11 @@ public:
         return _ptr;
     }
 
-    auto length() {
+    size_t length() {
         return _ptr - begin();
     }
 
-    auto size() {
+    size_t size() {
         return _size;
     }
 
