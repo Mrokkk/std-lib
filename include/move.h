@@ -15,8 +15,8 @@ inline constexpr Type &&forward(typename remove_reference<Type>::type &&t) {
 }
 
 template<typename Type>
-inline typename remove_const<Type>::type &&move(Type &moved) {
-    return static_cast<Type &&>(moved);
+inline constexpr typename remove_reference<Type>::type &&move(Type &&t) {
+    return static_cast<typename remove_reference<Type>::type &&>(t);
 }
 
 } // namespace yacppl
