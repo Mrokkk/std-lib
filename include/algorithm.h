@@ -23,20 +23,20 @@ inline int count(Container &c, Type elem) {
     auto result = 0;
     for_each(c, [&](const Type &e) { if (e == elem) result++; });
     return result;
-};
+}
 
 template<typename Container, typename Lambda>
 inline int count_if(Container &c, Lambda lambda) {
     auto result = 0;
     for_each(c, [&](const auto &e) { if (lambda(e)) result++; });
     return result;
-};
+}
 
 template<typename Container, typename Type>
 inline void fill(Container &c, const Type &e) {
     for (auto &i : c)
         i = e;
-};
+}
 
 template<typename Container>
 inline void swap(Container &c1, Container &c2) {

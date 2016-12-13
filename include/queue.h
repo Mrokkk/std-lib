@@ -4,18 +4,18 @@
 
 namespace yacppl {
 
-template<typename ElementType>
+template<typename Type>
 class queue final {
 
-    list<ElementType> _list;
+    list<Type> _list;
 
 public:
 
-    void push(ElementType &element) {
+    void push(Type &element) {
         _list.push_back(element);
     }
 
-    void push(const ElementType &element) {
+    void push(const Type &element) {
         _list.push_back(element);
     }
 
@@ -23,7 +23,7 @@ public:
         _list.pop_front();
     }
 
-    constexpr const ElementType &front() const {
+    constexpr const Type &front() const {
         return _list.front();
     }
 
@@ -31,12 +31,12 @@ public:
         return _list.size();
     }
 
-    queue &operator<<(const ElementType &element) {
+    queue &operator<<(const Type &element) {
         push(element);
         return *this;
     }
 
-    queue &operator>>(ElementType &element) {
+    queue &operator>>(Type &element) {
         element = front();
         pop();
         return *this;

@@ -4,14 +4,14 @@
 
 namespace yacppl {
 
-template<typename ElementType>
+template<typename Type>
 class stack final {
 
-    list<ElementType> _list;
+    list<Type> _list;
 
 public:
 
-    void push(const ElementType &element) {
+    void push(const Type &element) {
         _list.push_back(element);
     }
 
@@ -19,7 +19,7 @@ public:
         _list.pop_back();
     }
 
-    const ElementType &front() const {
+    const Type &front() const {
         return _list.back();
     }
 
@@ -27,12 +27,12 @@ public:
         return _list.size();
     }
 
-    stack &operator<<(const ElementType &element) {
+    stack &operator<<(const Type &element) {
         push(element);
         return *this;
     }
 
-    stack &operator>>(ElementType &element) {
+    stack &operator>>(Type &element) {
         element = front();
         pop();
         return *this;

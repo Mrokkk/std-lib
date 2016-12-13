@@ -4,18 +4,18 @@
 
 namespace yacppl {
 
-template<typename ElementType>
+template<typename Type>
 class list final {
 
     struct list_element {
 
-        ElementType data;
+        Type data;
         list_element *prev = nullptr, *next = nullptr;
 
         list_element()
                 : prev(this), next(this) {}
 
-        list_element(const ElementType &e)
+        list_element(const Type &e)
                 : data(e), prev(this), next(this) {}
 
     };
@@ -59,13 +59,13 @@ class list final {
         del(element->prev, element->next);
     }
 
-    template<typename Type>
-    void copy_elements_from(const Type &other) {
+    template<typename T>
+    void copy_elements_from(const T &other) {
         for (const auto &e : other)
             push_back(e);
     }
 
-    void move_elements_from(list<ElementType> &other) {
+    void move_elements_from(list &other) {
         while (other._size) {
             push_back(other.front());
             other.pop_front();
@@ -117,11 +117,11 @@ public:
             return *this;
         }
 
-        ElementType &operator*() const {
+        Type &operator*() const {
             return _node->data;
         }
 
-        ElementType *operator->() const {
+        Type *operator->() const {
             return &_node->data;
         }
 
@@ -137,15 +137,15 @@ public:
 
     list() = default;
 
-    list(const std::initializer_list<ElementType> &list) {
+    list(const std::initializer_list<Type> &list) {
         copy_elements_from(list);
     }
 
-    list(const list<ElementType> &list) {
+    list(const list &list) {
         copy_elements_from(list);
     }
 
-    list(list<ElementType> &&list) {
+    list(list &&list) {
         move_elements_from(list);
     }
 
@@ -157,19 +157,19 @@ public:
         return _size;
     }
 
-    void push_front(const ElementType &element) {
+    void push_front(const Type &element) {
         add_front_element(new list_element(element));
     }
 
-    void push_back(const ElementType &element) {
+    void push_back(const Type &element) {
         add_back_element(new list_element(element));
     }
 
-    const ElementType &front() const {
+    const Type &front() const {
         return front_element()->data;
     }
 
-    const ElementType &back() const {
+    const Type &back() const {
         return back_element()->data;
     }
 
@@ -193,7 +193,7 @@ public:
         erase_elements(front_element(), back_element()->next);
     }
 
-    void resize(unsigned long count, ElementType val = ElementType()) {
+    void resize(unsigned long count, Type val = Type()) {
         if (_size < count) {
             while (_size != count)
                 push_back(val);
@@ -211,13 +211,13 @@ public:
         erase_elements(first.node(), last.node());
     }
 
-    list<ElementType> &operator=(const list<ElementType> &other) {
+    list &operator=(const list &other) {
         clear();
         copy_elements_from(other);
         return *this;
     }
 
-    list<ElementType> &operator=(list<ElementType> &&other) {
+    list &operator=(list &&other) {
         clear();
         move_elements_from(other);
         return *this;

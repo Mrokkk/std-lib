@@ -5,20 +5,20 @@
 
 namespace yacppl {
 
-template<typename ElementType, size_t _size = 0>
+template<typename Type, size_t _size = 0>
 class array {
 
-    ElementType _array[_size];
+    Type _array[_size];
 
 public:
 
     class iterator {
 
-        ElementType *_ptr;
+        Type *_ptr;
 
     public:
 
-        explicit iterator(ElementType *ptr)
+        explicit iterator(Type *ptr)
             : _ptr(ptr) {}
 
         iterator &operator++() {
@@ -41,11 +41,11 @@ public:
             return *this;
         }
 
-        ElementType &operator*() {
+        Type &operator*() {
             return *_ptr;
         }
 
-        ElementType *operator->() {
+        Type *operator->() {
             return _ptr;
         }
 
@@ -65,7 +65,7 @@ public:
 
     array() = default;
 
-    array(std::initializer_list<ElementType> list) {
+    array(std::initializer_list<Type> list) {
         unsigned i = 0;
         for (auto v : list)
             _array[i++] = v;
@@ -75,7 +75,7 @@ public:
         return _size;
     }
 
-    ElementType &operator[](int index) {
+    Type &operator[](int index) {
         return _array[index];
     }
 
@@ -87,7 +87,7 @@ public:
         return iterator(_array + _size);
     }
 
-    ElementType *data() {
+    Type *data() {
         return _array;
     }
 
