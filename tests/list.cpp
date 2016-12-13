@@ -259,7 +259,7 @@ TEST(list, can_erase_single_element) {
     REQUIRE(list.size() == 1);
     REQUIRE_EQ(list.front(), 23);
     REQUIRE_EQ(list.back(), 23);
-    list.erase(list.end()--);
+    list.erase(--list.end());
     REQUIRE(list.size() == 0);
 }
 
