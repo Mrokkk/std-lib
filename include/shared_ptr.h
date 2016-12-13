@@ -1,5 +1,7 @@
 #pragma once
 
+#include "move.h"
+
 namespace yacppl {
 
 template<typename Type>
@@ -85,12 +87,12 @@ inline shared_ptr<Type> make_shared() {
 
 template<typename Type>
 inline shared_ptr<Type> make_shared(Type &&a) {
-    return shared_ptr<Type>(new Type(a));
+    return shared_ptr<Type>(new Type(forward<Type>(a)));
 }
 
 template<typename T, typename... Args>
 shared_ptr<T> make_shared(Args&&... args) {
-    return shared_ptr<T>(new T(args...));
+    return shared_ptr<T>(new T(forward<Args>(args)...));
 }
 
 } // namespace yacppl

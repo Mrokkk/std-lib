@@ -64,7 +64,7 @@ inline unique_ptr<Type> make_unique() {
 
 template<typename Type>
 inline unique_ptr<Type> make_unique(Type &&a) {
-    return unique_ptr<Type>(new Type(a));
+    return unique_ptr<Type>(new Type(forward<Type>(a)));
 }
 
 template<typename Type, typename... Args>
