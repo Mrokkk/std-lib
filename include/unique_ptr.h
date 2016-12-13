@@ -1,5 +1,7 @@
 #pragma once
 
+#include "move.h"
+
 namespace yacppl {
 
 template<typename Type>
@@ -65,9 +67,9 @@ inline unique_ptr<Type> make_unique(Type &&a) {
     return unique_ptr<Type>(new Type(a));
 }
 
-template<typename T, typename... Args>
-unique_ptr<T> make_unique(Args&&... args) {
-    return unique_ptr<T>(new T(args...));
+template<typename Type, typename... Args>
+unique_ptr<Type> make_unique(Args&&... args) {
+    return unique_ptr<Type>(new Type(forward<Args>(args)...));
 }
 
 } // namespace yacppl
