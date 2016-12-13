@@ -27,7 +27,7 @@ public:
         return _list.front();
     }
 
-    constexpr unsigned long size() const {
+    constexpr size_t size() const {
         return _list.size();
     }
 

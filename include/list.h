@@ -103,8 +103,9 @@ public:
         }
 
         iterator operator++(int) {
+            auto tmp = *this;
             _node = _node->next;
-            return *this;
+            return tmp;
         }
 
         iterator &operator--() {
@@ -113,8 +114,9 @@ public:
         }
 
         iterator operator--(int) {
+            auto tmp = *this;
             _node = _node->prev;
-            return *this;
+            return tmp;
         }
 
         Type &operator*() const {

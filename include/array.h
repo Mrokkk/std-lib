@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stddef.h>
+#include <cstddef>
 #include "initializer_list.h"
 
 namespace yacppl {
@@ -27,8 +27,9 @@ public:
         }
 
         iterator operator++(int) {
+            auto tmp = *this;
             ++_ptr;
-            return *this;
+            return tmp;
         }
 
         iterator &operator--() {
@@ -37,8 +38,9 @@ public:
         }
 
         iterator operator--(int) {
+            auto tmp = *this;
             --_ptr;
-            return *this;
+            return tmp;
         }
 
         Type &operator*() {

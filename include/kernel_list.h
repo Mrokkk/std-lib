@@ -45,8 +45,9 @@ public:
         }
 
         iterator operator++(int) {
+            auto tmp = *this;
             ptr = ptr->_next;
-            return *this;
+            return tmp;
         }
 
         iterator &operator--() {
@@ -55,8 +56,9 @@ public:
         }
 
         iterator operator--(int) {
+            auto tmp = *this;
             ptr = ptr->_prev;
-            return *this;
+            return tmp;
         }
 
         Type &operator *() {
