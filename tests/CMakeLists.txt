@@ -34,6 +34,7 @@ add_executable(${PROJECT_NAME}
     static_string.cpp
     unique_ptr.cpp
     range.cpp
+    allocator.cpp
 )
 
 add_custom_target(tests-run
