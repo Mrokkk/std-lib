@@ -25,7 +25,7 @@ class allocator final {
         size_t size;
         bool free = false;
 
-        explicit memory_block(size_t s)
+        constexpr explicit memory_block(size_t s)
             : size(s), free(false) {
         }
 
@@ -59,7 +59,7 @@ class allocator final {
     inherited_list<memory_block> _blocks;
     BackendAllocator _backend_allocator;
 
-    void adapt_size(size_t &size) {
+    void adapt_size(size_t &size) const {
         if (size % _memory_block_size)
             size = (size / _memory_block_size) * _memory_block_size + _memory_block_size;
     }
@@ -70,7 +70,7 @@ class allocator final {
 
 public:
 
-    explicit allocator(char *heap_start)
+    constexpr explicit allocator(char *heap_start)
         : _backend_allocator(heap_start) {}
 
     void *allocate(size_t size) {
@@ -87,11 +87,11 @@ public:
         return new_block->data();
     }
 
-    int free(void *address) {
+    bool free(void *address) {
         for (auto &temp : _blocks) {
             if (temp.data() == address) {
                 temp.free = true;
-                return 0;
+                return true;
             }
             auto next = temp.next();
             if (!next) continue;
@@ -100,7 +100,7 @@ public:
                 next->remove();
             }
         }
-        return -1;
+        return false;
     }
 
 };

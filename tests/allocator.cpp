@@ -43,12 +43,12 @@ TEST(allocator, cannot_free_invalid_ptr) {
     constexpr size_t memory_block_size = 32;
     allocator<heap_allocator, memory_block_size> test_allocator(allocator_test_map);
     for (auto i = 0; i < 4096; ++i) {
-        REQUIRE(test_allocator.free(reinterpret_cast<void *>(i)));
+        REQUIRE_FALSE(test_allocator.free(reinterpret_cast<void *>(i)));
     }
     for (auto i = 0; i < 100; ++i)
         test_allocator.allocate(i);
     for (auto i = 0; i < 4096; ++i) {
-        REQUIRE(test_allocator.free(reinterpret_cast<void *>(i)));
+        REQUIRE_FALSE(test_allocator.free(reinterpret_cast<void *>(i)));
     }
 }
 
