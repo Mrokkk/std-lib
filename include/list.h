@@ -1,6 +1,7 @@
 #pragma once
 
 #include "initializer_list.h"
+#include <cstddef>
 
 namespace yacppl {
 
@@ -21,7 +22,7 @@ class list final {
     };
 
     list_element _head;
-    unsigned int _size = 0;
+    size_t _size = 0;
 
     list_element *back_element() const {
         return _head.prev;
@@ -155,7 +156,7 @@ public:
         clear();
     }
 
-    unsigned int size() const {
+    size_t size() const {
         return _size;
     }
 

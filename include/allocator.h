@@ -50,7 +50,7 @@ class allocator final {
             return reinterpret_cast<_data *>(this)->block_ptr;
         }
 
-        void *operator new(size_t, void *address) {
+        constexpr void *operator new(size_t, void *address) {
             return address;
         }
 
