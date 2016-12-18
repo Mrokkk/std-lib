@@ -14,7 +14,7 @@ struct helper {
 
 void test_adding(kernel_list<helper> &head, helper &e, std::vector<int> &comp, int s) {
     auto size = 0;
-    head.add(&e.list);
+    head.push_back(&e.list);
     for (const auto &h : head) {
         REQUIRE_EQ(comp[size], h.a);
         size++;
@@ -25,7 +25,7 @@ void test_adding(kernel_list<helper> &head, helper &e, std::vector<int> &comp, i
 
 void test_adding_front(kernel_list<helper> &head, helper &e, std::vector<int> &comp, int s) {
     auto size = 0;
-    head.add_front(&e.list);
+    head.push_front(&e.list);
     for (const auto &h : head) {
         REQUIRE_EQ(comp[size], h.a);
         size++;

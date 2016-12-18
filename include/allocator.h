@@ -36,7 +36,7 @@ class allocator final {
             auto new_block = reinterpret_cast<memory_block *>(pointer_offset(data(), pivot));
             new_block->size = old_size - _memory_block_size - size;
             new_block->free = true;
-            inherited_list<memory_block>::add_front(new_block);
+            inherited_list<memory_block>::push_front(new_block);
         }
 
         void try_to_divide(size_t pivot) {
@@ -83,7 +83,7 @@ public:
         }
         auto new_block = create_memory_block(size);
         if (new_block == nullptr) return nullptr;
-        _blocks.add(new_block);
+        _blocks.push_back(new_block);
         return new_block->data();
     }
 

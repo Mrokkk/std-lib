@@ -69,12 +69,12 @@ public:
         _next = _prev = reinterpret_cast<Type *>(this);
     }
 
-    Type &add(Type *new_element) {
+    Type &push_back(Type *new_element) {
         add_element(*new_element, *_prev, *this);
         return *this;
     }
 
-    Type &add_front(Type *new_element) {
+    Type &push_front(Type *new_element) {
         add_element(*new_element, *this, *_next);
         return *this;
     }

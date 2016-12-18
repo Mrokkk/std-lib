@@ -31,7 +31,7 @@ void test_adding(inherited_list<helper> &head, int s) {
     auto expected_size = 1;
     for (auto &h : helper_vec) {
         auto size = 0;
-        head.add(&h);
+        head.push_back(&h);
         for (const auto &h : head) {
             REQUIRE_EQ(v[size], h.a);
             size++;
@@ -50,7 +50,7 @@ void test_adding_front(inherited_list<helper> &head, int s) {
     auto expected_size = 1;
     for (auto &h : helper_vec) {
         auto size = 0;
-        head.add_front(&h);
+        head.push_front(&h);
         for (const auto &h : head) {
             REQUIRE_EQ(v[expected_size - 1 - size], h.a);
             size++;
@@ -85,7 +85,7 @@ TEST(inherited_list, can_remove) {
     inherited_list<helper> head;
     std::vector<helper> helper_vec{0, 2, 4};
     for (auto &v : helper_vec) {
-        head.add(&v);
+        head.push_back(&v);
     }
     helper_vec[0].remove();
     std::vector<int> test_vector;
@@ -103,7 +103,7 @@ TEST(inherited_list, can_use_iterator) {
     inherited_list<helper> head;
     std::vector<helper> helper_vec{0, 2, 4, 9, 30, 109, 938, -231, 3, -29};
     for (auto &v : helper_vec) {
-        head.add(&v);
+        head.push_back(&v);
     }
     auto it = head.begin();
     REQUIRE_EQ(it->a, 0);

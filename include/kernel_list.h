@@ -84,11 +84,11 @@ public:
         _offset = offset_of(member);
     }
 
-    void add(kernel_list *new_element) {
+    void push_back(kernel_list *new_element) {
         add_element(new_element, _prev, this);
     }
 
-    void add_front(kernel_list *new_element) {
+    void push_front(kernel_list *new_element) {
         add_element(new_element, this, _next);
     }
 
