@@ -33,6 +33,11 @@ public:
         }
     }
 
+    constexpr explicit static_string(const char *str)
+            : _ptr(Array::begin()) {
+        *this = str;
+    }
+
     static_string &operator=(const char *str) {
         for (auto it : make_range(str)) {
             *_ptr = it;

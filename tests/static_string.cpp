@@ -11,6 +11,16 @@ TEST(static_string, can_create_empty) {
         REQUIRE_EQ(string[i], 0);
 }
 
+TEST(static_string, can_create_from_cstring) {
+    const char *str = "hello world";
+    static_string<16> string(str);
+    REQUIRE_EQ(string.length(), 11u);
+    REQUIRE_EQ(string.size(), 16u);
+    for (int i = 0; i < 11; i++)
+        REQUIRE_EQ(string[i], str[i]);
+    REQUIRE(string == str);
+}
+
 TEST(static_string, can_write_to) {
     static_string<32> string;
     string = "test";
