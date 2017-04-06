@@ -6,7 +6,7 @@ using namespace yacppl;
 
 TEST(unique_ptr, can_create_empty_pointer) {
     unique_ptr<int> ptr;
-    REQUIRE_EQ(ptr.get(), (void *) NULL);
+    REQUIRE_EQ(ptr.get(), nullptr);
 }
 
 TEST(unique_ptr, can_create_valid_pointer) {
@@ -25,14 +25,14 @@ TEST(unique_ptr, can_be_moved) {
     unique_ptr<int> ptr2;
     ptr2 = move(ptr1);
     REQUIRE_EQ(*ptr2, 10);
-    REQUIRE_EQ(ptr1.get(), (void *) NULL);
+    REQUIRE_EQ(ptr1.get(), nullptr);
 }
 
 TEST(unique_ptr, can_be_constructed_by_moving) {
     auto ptr1 = make_unique<int>(10);
     unique_ptr<int> ptr2(move(ptr1));
     REQUIRE_EQ(*ptr2, 10);
-    REQUIRE_EQ(ptr1.get(), (void *) NULL);
+    REQUIRE_EQ(ptr1.get(), nullptr);
 }
 
 TEST(unique_ptr, can_be_casted_to_raw_pointer) {

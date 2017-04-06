@@ -59,8 +59,7 @@ public:
     }
 
     ~path() {
-        if (path_)
-            delete [] path_;
+        delete [] path_;
     }
 
     path(const path &p)
@@ -98,12 +97,24 @@ public:
         return *this;
     }
 
+    const char *get() const {
+        return path_;
+    }
+
     operator const char*() const {
         return path_;
     }
 
     bool operator==(const char *str) const {
         return strcmp(path_, str) == 0;
+    }
+
+    const char *basename() const {
+        auto ptr = strrchr(path_, '/');
+        if (ptr) {
+            return ptr + 1;
+        }
+        return path_;
     }
 
 };
