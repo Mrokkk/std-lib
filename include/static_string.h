@@ -2,6 +2,7 @@
 
 #include "array.h"
 #include "range.h"
+#include "string.h"
 
 namespace yacppl {
 
@@ -10,19 +11,6 @@ class static_string final : public array<char, _size + 1> {
 
     using Array = array<char, _size + 1>;
     typename Array::iterator _ptr;
-
-    int strcmp(const char *string1, const char *string2) {
-        if (string1 == 0 || string2 == 0) return 1;
-        while (1) {
-            if (*string1++ != *string2++)
-                return 1;
-            if (*string1 == '\0' && *string2 == '\0')
-                return 0;
-            if (*string1 == '\0' || *string2 == '\0')
-                return 1;
-        }
-        return 0;
-    }
 
 public:
 
@@ -50,8 +38,16 @@ public:
         return Array::begin();
     }
 
+    auto cbegin() const {
+        return Array::cbegin();
+    }
+
     auto end() {
         return _ptr;
+    }
+
+    auto cend() const {
+        return typename Array::const_iterator(_ptr);
     }
 
     size_t length() {
@@ -71,11 +67,11 @@ public:
     }
 
     bool operator==(const char *str) {
-        return !strcmp(str, Array::data());
+        return !clib::compare(str, Array::data());
     }
 
     bool operator!=(const char *str) {
-        return strcmp(str, Array::data());
+        return clib::compare(str, Array::data());
     }
 
 };

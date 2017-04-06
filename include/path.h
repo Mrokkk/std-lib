@@ -1,47 +1,10 @@
 #pragma once
 
+#include "string.h"
+
 namespace yacppl {
 
-inline int strcmp(const char *s1, const char *s2) {
-    while(*s1 && (*s1 == *s2))
-        s1++, s2++;
-    return *(const unsigned char*)s1 - *(const unsigned char*)s2;
-}
-
-inline unsigned strlen(const char *string) {
-    char *temp;
-    for (temp=(char *)string; *temp!=0; temp++);
-    return temp-string;
-}
-
-inline char *strchr(const char *string, int c) {
-    int i, len;
-    if (string == 0) return 0;
-    len = strlen(string);
-    for (i = 0; i < len; ++i) {
-        if (string[i] == (char)c) {
-            return (char *)&string[i];
-        }
-    }
-    return 0;
-}
-
-inline char *strrchr(const char *string, int c) {
-    int i, len, last = -1;
-    if (string == 0) return 0;
-    len = strlen(string);
-    for (i = 0; i < len; ++i) {
-        if (string[i] == (char)c) {
-            last = i;
-        }
-    }
-    if (last != -1) {
-        return (char *)&string[last];
-    }
-    return 0;
-}
-
-class path {
+class path final {
 
     static const constexpr unsigned initial_size_ = 256;
 
@@ -62,7 +25,7 @@ class path {
         return end;
     }
 
-    const char *remove_leading_slash(const char *str) {
+    const char *omit_leading_slash(const char *str) {
         while (*str == '/') {
             str++;
         }
@@ -118,7 +81,7 @@ public:
     }
 
     void append(const char *str) {
-        str = remove_leading_slash(str);
+        str = omit_leading_slash(str);
         *it_++ = '/';
         cat(str);
     }
@@ -143,12 +106,12 @@ public:
     }
 
     bool operator==(const char *str) const {
-        return strcmp(path_, str) == 0;
+        return clib::compare(path_, str) == 0;
     }
 
     const char *basename() const {
-        auto ptr = strrchr(path_, '/');
-        if (ptr) {
+        auto ptr = clib::last_occurrence(path_, '/');
+        if (ptr != clib::end(path_)) {
             return ptr + 1;
         }
         return path_;

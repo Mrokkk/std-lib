@@ -26,6 +26,11 @@ public:
             return *this;
         }
 
+        iterator &operator+(int i) {
+            _ptr += i;
+            return *this;
+        }
+
         iterator operator++(int) {
             auto tmp = *this;
             ++_ptr;
@@ -51,6 +56,10 @@ public:
             return _ptr;
         }
 
+        Type *get() const {
+            return _ptr;
+        }
+
         size_t operator-(const iterator &rhs) const {
             return _ptr - rhs._ptr;
         }
@@ -64,6 +73,68 @@ public:
         }
 
     };
+
+    class const_iterator {
+
+        const Type *_ptr;
+
+    public:
+
+        explicit const_iterator(const Type *ptr)
+            : _ptr(ptr) {}
+
+        explicit const_iterator(const iterator &ptr)
+            : _ptr(ptr.get()) {}
+
+        const const_iterator &operator++() {
+            ++_ptr;
+            return *this;
+        }
+
+        const const_iterator &operator+(int i) {
+            _ptr += i;
+            return *this;
+        }
+
+        const_iterator operator++(int) {
+            auto tmp = *this;
+            ++_ptr;
+            return tmp;
+        }
+
+        const const_iterator &operator--() {
+            --_ptr;
+            return *this;
+        }
+
+        const_iterator operator--(int) {
+            auto tmp = *this;
+            --_ptr;
+            return tmp;
+        }
+
+        const Type &operator*() const {
+            return *_ptr;
+        }
+
+        const Type *operator->() const {
+            return _ptr;
+        }
+
+        size_t operator-(const const_iterator &rhs) const {
+            return _ptr - rhs._ptr;
+        }
+
+        bool operator==(const const_iterator &element) const {
+            return element._ptr == _ptr;
+        }
+
+        bool operator!=(const const_iterator &element) const {
+            return element._ptr != _ptr;
+        }
+
+    };
+
 
     array() = default;
 
@@ -85,8 +156,16 @@ public:
         return iterator(_array);
     }
 
+    const_iterator cbegin() const {
+        return const_iterator(_array);
+    }
+
     iterator end() {
         return iterator(_array + _size);
+    }
+
+    const_iterator cend() const {
+        return const_iterator(_array + _size);
     }
 
     Type *data() {
