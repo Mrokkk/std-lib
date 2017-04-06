@@ -50,11 +50,11 @@ public:
         return typename Array::const_iterator(_ptr);
     }
 
-    size_t length() {
-        return _ptr - begin();
+    size_t length() const {
+        return typename Array::const_iterator(_ptr) - cbegin();
     }
 
-    size_t size() {
+    size_t size() const {
         return _size;
     }
 
@@ -62,16 +62,16 @@ public:
         return Array::operator[](index);
     }
 
-    const char *get() {
+    const char *get() const {
         return Array::data();
     }
 
-    bool operator==(const char *str) {
-        return !clib::compare(str, Array::data());
+    bool operator==(const char *str) const {
+        return !compare(str, Array::data());
     }
 
-    bool operator!=(const char *str) {
-        return clib::compare(str, Array::data());
+    bool operator!=(const char *str) const {
+        return compare(str, Array::data());
     }
 
 };

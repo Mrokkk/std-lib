@@ -1,5 +1,6 @@
 #include <static_string.h>
 #include <string.h>
+#include <algorithm.h>
 #include "yatf/include/yatf.h"
 
 using namespace yacppl;
@@ -42,11 +43,11 @@ TEST(static_string, can_iterate) {
         REQUIRE_EQ(c, s[size]);
         size++;
     }
-    REQUIRE(*clib::begin(string) == 't');
+    REQUIRE(*begin(string) == 't');
     auto str = "test";
-    REQUIRE(*clib::cbegin(str) == 't');
-    REQUIRE(*clib::cbegin("test") == 't');
-    REQUIRE(*(clib::cend("testa") - 1) == 'a');
-    REQUIRE(clib::last_occurrence(string, 'a') == clib::cend(string));
+    REQUIRE(*cbegin(str) == 't');
+    REQUIRE(*cbegin("test") == 't');
+    REQUIRE(*(cend("testa") - 1) == 'a');
+    REQUIRE(last_occurrence(string, 'a') == cend(string));
 }
 

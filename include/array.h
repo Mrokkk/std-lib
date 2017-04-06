@@ -172,6 +172,10 @@ public:
         return _array;
     }
 
+    const Type *data() const {
+        return _array;
+    }
+
 };
 
 } // namespace yacppl

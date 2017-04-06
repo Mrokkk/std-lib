@@ -1,6 +1,7 @@
 #pragma once
 
 #include "string.h"
+#include "algorithm.h"
 
 namespace yacppl {
 
@@ -86,7 +87,7 @@ public:
         cat(str);
     }
 
-    path operator/(const char *str) {
+    path operator/(const char *str) const {
         path p(path_);
         p.append(str);
         return p;
@@ -106,12 +107,12 @@ public:
     }
 
     bool operator==(const char *str) const {
-        return clib::compare(path_, str) == 0;
+        return compare(path_, str) == 0;
     }
 
     const char *basename() const {
-        auto ptr = clib::last_occurrence(path_, '/');
-        if (ptr != clib::end(path_)) {
+        auto ptr = last_occurrence(path_, '/');
+        if (ptr != end(path_)) {
             return ptr + 1;
         }
         return path_;

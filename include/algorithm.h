@@ -45,5 +45,52 @@ inline void swap(Container &c1, Container &c2) {
     c2 = move(temp);
 }
 
+template <typename Container>
+inline auto begin(Container &c) -> decltype (c.begin()) {
+    return c.begin();
+}
+
+template <typename Container>
+inline auto cbegin(const Container &c) -> decltype (c.cbegin()) {
+    return c.cbegin();
+}
+
+template <typename Container>
+inline auto end(Container &c) -> decltype (c.end()) {
+    return c.end();
+}
+
+template <typename Container>
+inline auto cend(const Container &c) -> decltype (c.cend()) {
+    return c.cend();
+}
+
+template <typename Container, typename Value>
+inline auto first_occurrence(Container container, Value c) -> decltype (cbegin(container)) {
+    int i, l;
+    l = cend(container) - cbegin(container);
+    for (i = 0; i < l; ++i) {
+        if (container[i] == c) {
+            return cbegin(container) + i;
+        }
+    }
+    return cend(container);
+}
+
+template <typename Container, typename Value>
+inline auto last_occurrence(Container &container, Value c) -> decltype (cbegin(container)) {
+    int i, l, last = -1;
+    l = cend(container) - cbegin(container);
+    for (i = 0; i < l; ++i) {
+        if (container[i] == c) {
+            last = i;
+        }
+    }
+    if (last != -1) {
+        return cbegin(container) + last;
+    }
+    return cend(container);
+}
+
 } // namespace yacppl
 
