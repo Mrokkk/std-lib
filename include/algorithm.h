@@ -67,11 +67,9 @@ inline auto cend(const Container &c) -> decltype (c.cend()) {
 
 template <typename Container, typename Value>
 inline auto first_occurrence(Container container, Value c) -> decltype (cbegin(container)) {
-    int i, l;
-    l = cend(container) - cbegin(container);
-    for (i = 0; i < l; ++i) {
-        if (container[i] == c) {
-            return cbegin(container) + i;
+    for (auto i = cbegin(container); i != cend(container); ++i) {
+        if (*i == c) {
+            return i;
         }
     }
     return cend(container);
@@ -79,17 +77,13 @@ inline auto first_occurrence(Container container, Value c) -> decltype (cbegin(c
 
 template <typename Container, typename Value>
 inline auto last_occurrence(Container &container, Value c) -> decltype (cbegin(container)) {
-    int i, l, last = -1;
-    l = cend(container) - cbegin(container);
-    for (i = 0; i < l; ++i) {
-        if (container[i] == c) {
+    auto last = cend(container);
+    for (auto i = cbegin(container); i != cend(container); ++i) {
+        if (*i == c) {
             last = i;
         }
     }
-    if (last != -1) {
-        return cbegin(container) + last;
-    }
-    return cend(container);
+    return last;
 }
 
 } // namespace yacppl

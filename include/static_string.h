@@ -67,11 +67,11 @@ public:
     }
 
     bool operator==(const char *str) const {
-        return !compare(str, Array::data());
+        return !compare(str, get());
     }
 
     bool operator!=(const char *str) const {
-        return compare(str, Array::data());
+        return compare(str, get());
     }
 
 };

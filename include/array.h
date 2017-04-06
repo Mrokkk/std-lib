@@ -14,7 +14,7 @@ public:
 
     class iterator {
 
-        Type *_ptr;
+        Type *_ptr = nullptr;
 
     public:
 
@@ -26,9 +26,8 @@ public:
             return *this;
         }
 
-        iterator &operator+(int i) {
-            _ptr += i;
-            return *this;
+        iterator operator+(int i) const {
+            return iterator(_ptr + i);
         }
 
         iterator operator++(int) {
@@ -76,7 +75,7 @@ public:
 
     class const_iterator {
 
-        const Type *_ptr;
+        const Type *_ptr = nullptr;
 
     public:
 
@@ -91,13 +90,12 @@ public:
             return *this;
         }
 
-        const const_iterator &operator+(int i) {
-            _ptr += i;
-            return *this;
+        const_iterator operator+(int i) const {
+            return const_iterator(_ptr + i);
         }
 
-        const_iterator operator++(int) {
-            auto tmp = *this;
+        const_iterator operator++(int) const {
+            auto tmp = const_iterator(_ptr);
             ++_ptr;
             return tmp;
         }
@@ -123,6 +121,10 @@ public:
 
         size_t operator-(const const_iterator &rhs) const {
             return _ptr - rhs._ptr;
+        }
+
+        const_iterator operator-(int i) const {
+            return const_iterator(_ptr - i);
         }
 
         bool operator==(const const_iterator &element) const {

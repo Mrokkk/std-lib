@@ -49,5 +49,9 @@ TEST(static_string, can_iterate) {
     REQUIRE(*cbegin("test") == 't');
     REQUIRE(*(cend("testa") - 1) == 'a');
     REQUIRE(last_occurrence(string, 'a') == cend(string));
+    REQUIRE(last_occurrence(string, 't') == cend(string) - 1);
+    // FIXME
+    //auto it = first_occurrence(string, 't');
+    //REQUIRE_EQ(cend(string) - it, 0u);
 }
 
