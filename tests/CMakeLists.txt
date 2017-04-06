@@ -62,7 +62,7 @@ if(COVERAGE)
             DEPENDS tests-run
             COMMENT "Running GCOVR coverage generating")
         add_custom_target(tests-cov-html
-            COMMAND gcovr --html --html-details -o ut.coverage.html -r ${CMAKE_SOURCE_DIR}/include
+            COMMAND gcovr --html --html-details -o ut.coverage.html -r ${CMAKE_SOURCE_DIR}/include ${CMAKE_BINARY_DIR}
             DEPENDS tests-run
             COMMENT "Running GCOVR coverage generating (HTML)")
     endif()

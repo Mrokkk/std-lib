@@ -25,6 +25,31 @@ class path {
         return end;
     }
 
+    const char *remove_leading_slash(const char *str) {
+        while (*str == '/') {
+            str++;
+        }
+        return str;
+    }
+
+    void copy_string(const char *str) {
+        while (*str) {
+            if (*str != 0) {
+                if (*str == '/' && str[1] == '/') {
+                    str++;
+                    continue;
+                }
+            }
+            *it_++ = *str++;
+        }
+        *it_ = 0;
+    }
+
+    void cat(const char *str) {
+        copy_string(str);
+        it_ = remove_trailing_slash(path_, it_);
+    }
+
 public:
 
     path()
@@ -35,41 +60,31 @@ public:
 
     ~path() {
         if (path_)
-            delete path_;
+            delete [] path_;
     }
 
     path(const path &p)
             : path_(new char[initial_size_]) {
         it_ = path_;
-        append(p.path_);
+        cat(p.path_);
     }
 
     path &operator=(const path &p) {
         it_ = path_;
-        append(p.path_);
+        cat(p.path_);
         return *this;
     }
 
     path(const char *str)
             : path_(new char[initial_size_]) {
         it_ = path_;
-        append(str);
+        cat(str);
     }
 
     void append(const char *str) {
+        str = remove_leading_slash(str);
         *it_++ = '/';
-        while (*str == '/') {
-            str++;
-        }
-        while (*str) {
-            if (*str == '/' && str[1] == '/') {
-                str++;
-                continue;
-            }
-            *it_++ = *str++;
-        }
-        *it_ = 0;
-        it_ = remove_trailing_slash(path_, it_);
+        cat(str);
     }
 
     path operator/(const char *str) {

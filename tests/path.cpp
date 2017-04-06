@@ -13,12 +13,24 @@ TEST(path_tests, path_constructed_from_string_is_valid) {
     REQUIRE(p == "/root/dir");
 }
 
-TEST(path_tests, can_be_appended) {
+TEST(path_tests, paths_can_be_appended) {
+    path p1("home");
+    path p2("user");
+    path p3(p1 / p2);
+    REQUIRE(p3 == "home/user");
+    p3 /= "dir";
+    REQUIRE(p3 == "home/user/dir");
+}
+
+TEST(path_tests, removes_trailing_slash_when_appending) {
     path p;
     p = p / "root" / "////test//" / "/dir////";
-    //REQUIRE_EQ(p.operator const char *(), "/root/test/dir");
     REQUIRE(p == "/root/test/dir");
     auto p2 = p / path("dir2");
     REQUIRE(p2 == "/root/test/dir/dir2");
+    p2 /= "//dir3////dir4/";
+    REQUIRE(p2 == "/root/test/dir/dir2/dir3/dir4");
+    path p3("/////dir/////////");
+    REQUIRE(p3 == "/dir");
 }
 
