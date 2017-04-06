@@ -1,8 +1,45 @@
 #pragma once
 
-#include <cstring>
-
 namespace yacppl {
+
+inline int strcmp(const char *s1, const char *s2) {
+    while(*s1 && (*s1 == *s2))
+        s1++, s2++;
+    return *(const unsigned char*)s1 - *(const unsigned char*)s2;
+}
+
+inline unsigned strlen(const char *string) {
+    char *temp;
+    for (temp=(char *)string; *temp!=0; temp++);
+    return temp-string;
+}
+
+inline char *strchr(const char *string, int c) {
+    int i, len;
+    if (string == 0) return 0;
+    len = strlen(string);
+    for (i = 0; i < len; ++i) {
+        if (string[i] == (char)c) {
+            return (char *)&string[i];
+        }
+    }
+    return 0;
+}
+
+inline char *strrchr(const char *string, int c) {
+    int i, len, last = -1;
+    if (string == 0) return 0;
+    len = strlen(string);
+    for (i = 0; i < len; ++i) {
+        if (string[i] == (char)c) {
+            last = i;
+        }
+    }
+    if (last != -1) {
+        return (char *)&string[last];
+    }
+    return 0;
+}
 
 class path {
 
