@@ -9,13 +9,20 @@ class path final {
 
 public:
 
-    class const_iterator {
+    class const_iterator final {
 
         const char *iterator_ = nullptr;
 
     public:
 
         explicit const_iterator(const char *path) : iterator_(path) {
+        }
+
+        const_iterator(const const_iterator &it) : iterator_(it.iterator_) {
+        }
+
+        const_iterator(const_iterator &&it) : iterator_(it.iterator_) {
+            it.iterator_= nullptr;
         }
 
         string operator*() const {
@@ -47,15 +54,25 @@ public:
             return iterator_ != it.iterator_;
         }
 
-        const_iterator operator+(int i) {
-            return const_iterator(iterator_ + i);
+        const_iterator operator+(unsigned a) {
+            auto it = iterator_;
+            for (auto i = 0u; i < a; ++i) {
+                it = first_occurrence(it, '/');
+                if (*it == 0) {
+                    return const_iterator(it);
+                }
+                else {
+                    ++it;
+                }
+            }
+            return const_iterator(it);
         }
 
     };
 
 private:
 
-    static const constexpr unsigned initial_size_ = 256;
+    static const constexpr unsigned initial_size_ = 32;
 
     char *path_;
     char *it_;

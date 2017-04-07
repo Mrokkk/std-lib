@@ -72,9 +72,29 @@ TEST(path, can_be_iterated) {
     }
     {
         path p("/dir1/dir2/dir3/dir4/other_dir");
+        string paths[5] = {
+            "dir1",
+            "dir2",
+            "dir3",
+            "dir4",
+            "other_dir"
+        };
+        auto i = 0u;
         for (const auto &it : p) {
-            REQUIRE(it != 0);
+            REQUIRE_EQ((const char *)it, (const char *)paths[i]);
+            ++i;
         }
+    }
+    {
+        path p("/dir1/dir2/dir3/dir4/other_dir");
+        auto it = p.begin();
+        REQUIRE_EQ((const char *)*(it + 1), "dir2");
+        REQUIRE_EQ((const char *)*(it + 2), "dir3");
+        REQUIRE_EQ((const char *)*(it + 3), "dir4");
+        REQUIRE_EQ((const char *)*(it + 4), "other_dir");
+        REQUIRE((it + 5) == p.end());
+        REQUIRE((it + 6) == p.end());
+        REQUIRE((it + 1024) == p.end());
     }
 }
 
