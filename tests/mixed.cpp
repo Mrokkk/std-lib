@@ -3,6 +3,7 @@
 #include <shared_ptr.h>
 #include <algorithm.h>
 #include <string.h>
+#include <array.h>
 #include "yatf/include/yatf.h"
 
 using namespace yacppl;
@@ -49,13 +50,11 @@ TEST(mixed, can_use_count_on_list) {
     REQUIRE_EQ(result1, 10);
     auto result2 = count_if(list, [](const int &e) { return e < 3; });
     REQUIRE_EQ(result2, 0);
-    auto result3 = count_if(list, [](const int &e) {
-        (void) e;
+    auto result3 = count_if(list, [](const int &) {
         return 1;
     });
     REQUIRE_EQ(result3, 12);
-    auto result4 = count_if(list, [](const int &e) {
-        (void) e;
+    auto result4 = count_if(list, [](const int &) {
         return 0;
     });
     REQUIRE_EQ(result4, 0);
@@ -111,5 +110,19 @@ TEST(mixed, can_fill_list) {
     REQUIRE(list.size() == 10);
     REQUIRE_EQ(list.front(), 3);
     REQUIRE_EQ(list.back(), 3);
+}
+
+TEST(mixed, can_find_first_occurrence_in_array) {
+    array<char, 4> string{'t', 'e', 's', 't'};
+    REQUIRE(first_occurrence(string, 't') == cbegin(string));
+    REQUIRE(first_occurrence(string, 'e') == cbegin(string) + 1);
+    REQUIRE(first_occurrence(string, 'a') == cend(string));
+}
+
+TEST(mixed, can_find_last_occurrence_in_array) {
+    array<char, 4> string{'t', 'e', 's', 't'};
+    REQUIRE(last_occurrence(string, 't') == cend(string) - 1);
+    REQUIRE(last_occurrence(string, 'e') == cbegin(string) + 1);
+    REQUIRE(last_occurrence(string, 'a') == cend(string));
 }
 

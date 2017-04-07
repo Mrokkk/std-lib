@@ -66,7 +66,7 @@ inline auto cend(const Container &c) -> decltype (c.cend()) {
 }
 
 template <typename Container, typename Value>
-inline auto first_occurrence(Container container, Value c) -> decltype (cbegin(container)) {
+inline auto first_occurrence(Container &container, Value c) -> decltype (cbegin(container)) {
     for (auto i = cbegin(container); i != cend(container); ++i) {
         if (*i == c) {
             return i;
