@@ -18,6 +18,14 @@ TEST(string, can_be_constructed_from_cstring) {
     REQUIRE_EQ(*(str.begin()), 't');
 }
 
+TEST(string, can_be_iterated) {
+    string str("test_string");
+    size_t i = 0;
+    for (auto c : str) {
+        REQUIRE_EQ(c, "test_string"[i++]);
+    }
+}
+
 TEST(string, can_be_appended) {
     {
         string str("hello ");
