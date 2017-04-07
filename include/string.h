@@ -4,7 +4,7 @@
 
 namespace yacppl {
 
-inline unsigned length(const char *string) {
+inline size_t length(const char *string) {
     const char *temp;
     for (temp = string; *temp != 0; ++temp);
     return temp-string;

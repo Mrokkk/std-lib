@@ -5,15 +5,17 @@ using namespace yacppl;
 
 TEST(path, empty_path_is_empty_string) {
     path p;
-    REQUIRE(p == "");
+    REQUIRE_EQ((const char *)p, "");
     REQUIRE_EQ(p.get(), "");
 }
 
 TEST(path, path_constructed_from_string_is_valid) {
     path p("/root/dir");
-    REQUIRE(p == "/root/dir");
+    REQUIRE_EQ((const char *)p, "/root/dir");
     path p2("some_dir/another_dir");
-    REQUIRE(p2 == "some_dir/another_dir");
+    REQUIRE_EQ((const char *)p2, "some_dir/another_dir");
+    path p3("/");
+    REQUIRE_EQ((const char *)p3, "/");
 }
 
 TEST(path, paths_can_be_appended) {
@@ -33,13 +35,13 @@ TEST(path, paths_can_be_appended) {
 TEST(path, paths_are_normalized) {
     path p;
     p = p / "root" / "////test//" / "/dir////";
-    REQUIRE(p == "/root/test/dir");
+    REQUIRE_EQ((const char *)p, "/root/test/dir");
     auto p2 = p / path("dir2");
-    REQUIRE(p2 == "/root/test/dir/dir2");
+    REQUIRE_EQ((const char *)p2, "/root/test/dir/dir2");
     p2 /= "//dir3////dir4/";
-    REQUIRE(p2 == "/root/test/dir/dir2/dir3/dir4");
+    REQUIRE_EQ((const char *)p2, "/root/test/dir/dir2/dir3/dir4");
     path p3("/////dir/////////");
-    REQUIRE(p3 == "/dir");
+    REQUIRE_EQ((const char *)p3, "/dir");
 }
 
 TEST(path, can_get_basename) {

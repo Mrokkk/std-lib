@@ -3,31 +3,6 @@
 #include "string.h"
 #include "algorithm.h"
 
-//FIXME in test: path.paths_are_normalized
-//==14533== Invalid read of size 1
-//==14533==    at 0x447279: yacppl::path::remove_trailing_slash(char*, char*) (path.h:42)
-//==14533==    by 0x44737A: yacppl::path::cat(char const*) (path.h:75)
-//==14533==    by 0x447473: yacppl::path::path(char const*) (path.h:105)
-//==14533==    by 0x4474F5: yacppl::path::operator/(char const*) const (path.h:115)
-//==14533==    by 0x44654C: path_paths_are_normalized() (path.cpp:35)
-//==14533==    by 0x421BBB: yatf::detail::test_session::test_case::test_case(char const*, char const*, void (*)())::{lambda(void (*)())#1}::operator()(void (*)()) const (yatf.h:190)
-//==14533==    by 0x421BDB: yatf::detail::test_session::test_case::test_case(char const*, char const*, void (*)())::{lambda(void (*)())#1}::_FUN(void (*)()) (yatf.h:190)
-//==14533==    by 0x41F99A: yatf::detail::test_session::test_case::call() (yatf.h:216)
-//==14533==    by 0x41FD49: yatf::detail::test_session::run(yatf::config) (yatf.h:291)
-//==14533==    by 0x41FFA5: yatf::main(int (*)(char const*, ...), unsigned int, char const**) (yatf.h:395)
-//==14533==    by 0x41F857: main (main.cpp:6)
-//==14533==  Address 0x5aff49f is 1 bytes before a block of size 256 alloc'd
-//==14533==    at 0x4C2BCAF: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
-//==14533==    by 0x447447: yacppl::path::path(char const*) (path.h:103)
-//==14533==    by 0x4474F5: yacppl::path::operator/(char const*) const (path.h:115)
-//==14533==    by 0x44654C: path_paths_are_normalized() (path.cpp:35)
-//==14533==    by 0x421BBB: yatf::detail::test_session::test_case::test_case(char const*, char const*, void (*)())::{lambda(void (*)())#1}::operator()(void (*)()) const (yatf.h:190)
-//==14533==    by 0x421BDB: yatf::detail::test_session::test_case::test_case(char const*, char const*, void (*)())::{lambda(void (*)())#1}::_FUN(void (*)()) (yatf.h:190)
-//==14533==    by 0x41F99A: yatf::detail::test_session::test_case::call() (yatf.h:216)
-//==14533==    by 0x41FD49: yatf::detail::test_session::run(yatf::config) (yatf.h:291)
-//==14533==    by 0x41FFA5: yatf::main(int (*)(char const*, ...), unsigned int, char const**) (yatf.h:395)
-//==14533==    by 0x41F857: main (main.cpp:6)
-
 namespace yacppl {
 
 class path final {
@@ -86,8 +61,8 @@ private:
     char *it_;
 
     char *remove_trailing_slash(char *start, char *end) {
-        end--;
-        for (; end != start; --end) {
+        --end;
+        for (; end > start; --end) {
             if (*end != '/') {
                 return end + 1;
             }
@@ -95,7 +70,7 @@ private:
                 *end = 0;
             }
         }
-        return end;
+        return end + 1;
     }
 
     const char *omit_leading_slash(const char *str) {

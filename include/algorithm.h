@@ -6,15 +6,17 @@ namespace yacppl {
 
 template<typename Container, typename Lambda>
 inline Lambda &&for_each(Container &c, Lambda lambda) {
-    for (auto &it : c)
+    for (auto &it : c) {
         lambda(it);
+    }
     return move(lambda);
 }
 
 template<typename Iterator, typename Lambda>
 inline Lambda &&for_each(Iterator first, Iterator last, Lambda lambda) {
-    for (; first != last; ++first)
+    for (; first != last; ++first) {
         lambda(*first);
+    }
     return move(lambda);
 }
 
@@ -34,8 +36,9 @@ inline int count_if(Container &c, Lambda lambda) {
 
 template<typename Container, typename Type>
 inline void fill(Container &c, const Type &e) {
-    for (auto &i : c)
-        i = e;
+    for (auto it = begin(c); it != end(c); ++it) {
+        *it = e;
+    }
 }
 
 template<typename Container>
