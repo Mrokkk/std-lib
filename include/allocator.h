@@ -94,7 +94,7 @@ public:
                 return true;
             }
             auto next = temp.next();
-            if (!next) continue;
+            if (!next) break;
             if (next->free && temp.free) {
                 temp.size = temp.size + next->size + _memory_block_size;
                 next->remove();
