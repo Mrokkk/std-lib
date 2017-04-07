@@ -10,12 +10,22 @@ TEST(string, can_be_created) {
 }
 
 TEST(string, can_be_constructed_from_cstring) {
-    string str("test_string");
-    REQUIRE(str == "test_string");
-    REQUIRE_EQ(*(str.cend() - 1), 'g');
-    REQUIRE_EQ(*(str.end() - 1), 'g');
-    REQUIRE_EQ(*(str.cbegin()), 't');
-    REQUIRE_EQ(*(str.begin()), 't');
+    {
+        string str("test_string");
+        REQUIRE(str == "test_string");
+        REQUIRE_EQ(*(str.cend() - 1), 'g');
+        REQUIRE_EQ(*(str.end() - 1), 'g');
+        REQUIRE_EQ(*(str.cbegin()), 't');
+        REQUIRE_EQ(*(str.begin()), 't');
+    }
+    {
+        string str("test_string", 4);
+        REQUIRE(str == "test");
+        REQUIRE_EQ(*(str.cend() - 1), 't');
+        REQUIRE_EQ(*(str.end() - 1), 't');
+        REQUIRE_EQ(*(str.cbegin()), 't');
+        REQUIRE_EQ(*(str.begin()), 't');
+    }
 }
 
 TEST(string, can_be_iterated) {

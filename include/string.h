@@ -33,6 +33,13 @@ inline auto copy(const char *s1, char *s2) {
     *s2 = 0;
 }
 
+inline auto copy(const char *s1, char *s2, size_t n) {
+    while (n--) {
+        *s2++ = *s1++;
+    }
+    *s2 = 0;
+}
+
 inline int compare(const char *s1, const char *s2) {
     while(*s1 && (*s1 == *s2))
         s1++, s2++;
@@ -71,6 +78,12 @@ public:
         allocate(len);
         copy(str, string_);
         end_ += len;
+    }
+
+    string(const char *begin, size_t size) {
+        allocate(size);
+        copy(begin, string_, size);
+        end_ += size;
     }
 
     ~string() {
