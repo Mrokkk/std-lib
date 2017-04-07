@@ -50,12 +50,29 @@ TEST(path, can_get_basename) {
 }
 
 TEST(path, can_be_iterated) {
-    path p("/root/dir");
-    auto it = p.cbegin();
-    REQUIRE_EQ((const char *)*it, "root")
-    ++it;
-    REQUIRE_EQ((const char *)*it, "dir")
-    path p2("root/dir");
-    REQUIRE_EQ((const char *)*p2.cbegin(), "root")
+    {
+        path p("/root/dir");
+        auto it = p.cbegin();
+        REQUIRE_EQ((const char *)*it, "root");
+        ++it;
+        REQUIRE_EQ((const char *)*it, "dir");
+        ++it;
+        REQUIRE(it == p.cend());
+    }
+    {
+        path p("root/dir");
+        auto it = p.begin();
+        REQUIRE_EQ((const char *)*it, "root");
+        it++;
+        REQUIRE_EQ((const char *)*it, "dir");
+        it++;
+        REQUIRE(it == p.end());
+    }
+    {
+        path p("/dir1/dir2/dir3/dir4/other_dir");
+        for (const auto &it : p) {
+            REQUIRE(it != 0);
+        }
+    }
 }
 

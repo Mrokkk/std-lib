@@ -40,16 +40,40 @@ public:
 
     public:
 
-        const_iterator(const char *path) : iterator_(path) {
+        explicit const_iterator(const char *path) : iterator_(path) {
         }
 
-        string operator*() {
+        string operator*() const {
             return string(iterator_, first_occurrence(iterator_, '/') - iterator_);
         }
 
         const_iterator &operator++() {
-            iterator_ = first_occurrence(iterator_, '/') + 1;
+            auto it = first_occurrence(iterator_, '/');
+            if (*it == 0) {
+                iterator_ = it;
+            }
+            else {
+                iterator_ = it + 1;
+            }
             return *this;
+        }
+
+        const_iterator operator++(int) {
+            const_iterator ret_val(iterator_);
+            this->operator++();
+            return ret_val;
+        }
+
+        bool operator==(const const_iterator &it) const {
+            return iterator_ == it.iterator_;
+        }
+
+        bool operator!=(const const_iterator &it) const {
+            return iterator_ != it.iterator_;
+        }
+
+        const_iterator operator+(int i) {
+            return const_iterator(iterator_ + i);
         }
 
     };
@@ -63,14 +87,13 @@ private:
 
     char *remove_trailing_slash(char *start, char *end) {
         end--;
-        while (end != start) {
+        for (; end != start; --end) {
             if (*end != '/') {
                 return end + 1;
             }
             else {
                 *end = 0;
             }
-            end--;
         }
         return end;
     }
@@ -82,28 +105,19 @@ private:
         return str;
     }
 
-    void copy_string(const char *str) {
-        while (*str) {
-            if (*str != 0) {
-                if (*str == '/' && str[1] == '/') {
-                    str++;
-                    continue;
-                }
-            }
-            *it_++ = *str++;
-        }
-        *it_ = 0;
-    }
-
     void cat(const char *str) {
-        copy_string(str);
+        it_ = copy(str, it_, [this](const char *c) {
+            if (*c == '/' && c[1] == '/') {
+                return false;
+            }
+            return true;
+        });
         it_ = remove_trailing_slash(path_, it_);
     }
 
 public:
 
-    path()
-            : path_(new char[initial_size_]) {
+    path() : path_(new char[initial_size_]) {
         it_ = path_;
         *it_ = 0;
     }
@@ -112,8 +126,7 @@ public:
         delete [] path_;
     }
 
-    path(const path &p)
-            : path_(new char[initial_size_]) {
+    path(const path &p) : path_(new char[initial_size_]) {
         it_ = path_;
         cat(p.path_);
     }
@@ -159,14 +172,6 @@ public:
         return compare(path_, str) == 0;
     }
 
-    const char *basename() const {
-        auto ptr = last_occurrence(path_, '/');
-        if (ptr != end(path_)) {
-            return ptr + 1;
-        }
-        return path_;
-    }
-
     auto cbegin() const {
         if (*path_ == '/') {
             return const_iterator(path_ + 1);
@@ -174,6 +179,26 @@ public:
         else {
             return const_iterator(path_);
         }
+    }
+
+    auto begin() const {
+        return cbegin();
+    }
+
+    auto cend() const {
+        return const_iterator(it_);
+    }
+
+    auto end() const {
+        return cend();
+    }
+
+    const char *basename() const {
+        auto ptr = last_occurrence(path_, '/');
+        if (ptr != ::yacppl::end(path_)) {
+            return ptr + 1;
+        }
+        return path_;
     }
 
 };

@@ -31,6 +31,21 @@ inline auto copy(const char *s1, char *s2) {
         *s2++ = *s1++;
     }
     *s2 = 0;
+    return s2;
+}
+
+template <typename F>
+inline auto copy(const char *s1, char *s2, F callback) {
+    while (*s1) {
+        if (callback(s1)) {
+            *s2++ = *s1++;
+        }
+        else {
+            ++s1;
+        }
+    }
+    *s2 = 0;
+    return s2;
 }
 
 inline auto copy(const char *s1, char *s2, size_t n) {
@@ -38,6 +53,7 @@ inline auto copy(const char *s1, char *s2, size_t n) {
         *s2++ = *s1++;
     }
     *s2 = 0;
+    return s2;
 }
 
 inline int compare(const char *s1, const char *s2) {
