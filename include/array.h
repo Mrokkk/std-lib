@@ -63,11 +63,15 @@ public:
             return _ptr - rhs._ptr;
         }
 
-        bool operator==(iterator &element) const {
+        iterator operator-(int i) const {
+            return iterator(_ptr - i);
+        }
+
+        bool operator==(const iterator &element) const {
             return element._ptr == _ptr;
         }
 
-        bool operator!=(iterator &element) const {
+        bool operator!=(const iterator &element) const {
             return element._ptr != _ptr;
         }
 

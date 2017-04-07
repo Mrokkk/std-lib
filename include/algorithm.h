@@ -69,21 +69,42 @@ inline auto cend(const Container &c) -> decltype (c.cend()) {
 }
 
 template <typename Container, typename Value>
-inline auto first_occurrence(Container &container, Value c) -> decltype (cbegin(container)) {
+inline auto first_occurrence(Container &container, const Value &v) -> decltype (cbegin(container)) {
     for (auto i = cbegin(container); i != cend(container); ++i) {
-        if (*i == c) {
+        if (*i == v) {
             return i;
         }
     }
     return cend(container);
 }
 
+template <typename Iterator, typename Value>
+inline Iterator first_occurrence(Iterator begin, Iterator end, const Value &v) {
+    for (; begin != end; ++begin) {
+        if (*begin == v) {
+            return begin;
+        }
+    }
+    return end;
+}
+
 template <typename Container, typename Value>
-inline auto last_occurrence(Container &container, Value c) -> decltype (cbegin(container)) {
+inline auto last_occurrence(Container &container, const Value &v) -> decltype (cbegin(container)) {
     auto last = cend(container);
     for (auto i = cbegin(container); i != cend(container); ++i) {
-        if (*i == c) {
+        if (*i == v) {
             last = i;
+        }
+    }
+    return last;
+}
+
+template <typename Iterator, typename Value>
+inline auto last_occurrence(Iterator begin, Iterator end, const Value &v) {
+    auto last = end;
+    for (; begin != end; ++begin) {
+        if (*begin == v) {
+            last = begin;
         }
     }
     return last;

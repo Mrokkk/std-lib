@@ -117,6 +117,11 @@ TEST(mixed, can_find_first_occurrence_in_array) {
     REQUIRE(first_occurrence(string, 't') == cbegin(string));
     REQUIRE(first_occurrence(string, 'e') == cbegin(string) + 1);
     REQUIRE(first_occurrence(string, 'a') == cend(string));
+    REQUIRE(first_occurrence(string.cbegin(), string.cend(), 't') == string.cbegin());
+    REQUIRE(first_occurrence(string.begin(), string.end(), 't') == string.begin());
+    REQUIRE(first_occurrence(string.begin(), string.begin() + 2, 't') == string.begin());
+    REQUIRE(first_occurrence(string.begin(), string.begin() + 2, 'e') == string.begin() + 1);
+    REQUIRE(first_occurrence(string.begin(), string.begin() + 2, 'z') == string.begin() + 2);
 }
 
 TEST(mixed, can_find_last_occurrence_in_array) {
@@ -124,5 +129,10 @@ TEST(mixed, can_find_last_occurrence_in_array) {
     REQUIRE(last_occurrence(string, 't') == cend(string) - 1);
     REQUIRE(last_occurrence(string, 'e') == cbegin(string) + 1);
     REQUIRE(last_occurrence(string, 'a') == cend(string));
+    REQUIRE(last_occurrence(string.cbegin(), string.cend(), 't') == string.cend() - 1);
+    REQUIRE(last_occurrence(string.begin(), string.end(), 't') == string.end() - 1);
+    REQUIRE(last_occurrence(string.begin(), string.begin() + 2, 't') == string.begin());
+    REQUIRE(last_occurrence(string.begin(), string.begin() + 2, 'e') == string.begin() + 1);
+    REQUIRE(last_occurrence(string.begin(), string.begin() + 2, 'z') == string.begin() + 2);
 }
 
