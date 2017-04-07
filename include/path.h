@@ -7,6 +7,14 @@ namespace yacppl {
 
 class path final {
 
+public:
+
+    class const_iterator {
+        // TODO
+    };
+
+private:
+
     static const constexpr unsigned initial_size_ = 256;
 
     char *path_;
