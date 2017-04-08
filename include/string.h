@@ -153,6 +153,14 @@ public:
         return *this;
     }
 
+    string substring(size_t pos, size_t len) const {
+        auto new_begin = string_ + pos;
+        if (len > reinterpret_cast<size_t>(end_) - reinterpret_cast<size_t>(new_begin)) {
+            len = end_ - new_begin;
+        }
+        return string(string_ + pos, len);
+    }
+
     size_t length() const {
         return end_ - string_;
     }

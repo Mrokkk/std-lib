@@ -61,3 +61,13 @@ TEST(string, can_be_appended) {
     }
 }
 
+TEST(string, can_get_substring) {
+    string str("hello world");
+    auto str2 = str.substring(6, 5);
+    REQUIRE_EQ((const char *)str2, "world");
+    auto str3 = str.substring(6, 1024);
+    REQUIRE_EQ((const char *)str3, "world");
+    auto str4 = str.substring(11, 1024);
+    REQUIRE_EQ((const char *)str4, "");
+}
+
