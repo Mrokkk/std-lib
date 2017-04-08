@@ -6,6 +6,7 @@ using namespace yacppl;
 TEST(string, can_be_created) {
     string str;
     REQUIRE(str == "");
+    REQUIRE_EQ(str.length(), 0u);
     REQUIRE_FALSE(str == "abc");
 }
 
@@ -13,6 +14,7 @@ TEST(string, can_be_constructed_from_cstring) {
     {
         string str("test_string");
         REQUIRE(str == "test_string");
+        REQUIRE_EQ(str.length(), 11u);
         REQUIRE_EQ(*(str.cend() - 1), 'g');
         REQUIRE_EQ(*(str.end() - 1), 'g');
         REQUIRE_EQ(*(str.cbegin()), 't');
@@ -21,6 +23,8 @@ TEST(string, can_be_constructed_from_cstring) {
     {
         string str("test_string", 4);
         REQUIRE(str == "test");
+        REQUIRE_EQ(str.length(), 4u);
+        REQUIRE_EQ(str.size(), 4u);
         REQUIRE_EQ(*(str.cend() - 1), 't');
         REQUIRE_EQ(*(str.end() - 1), 't');
         REQUIRE_EQ(*(str.cbegin()), 't');

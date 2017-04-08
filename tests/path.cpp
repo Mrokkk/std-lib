@@ -56,6 +56,7 @@ TEST(path, can_be_iterated) {
         path p("/root/dir");
         auto it = p.cbegin();
         REQUIRE_EQ((const char *)*it, "root");
+        REQUIRE_EQ((*it).length(), 4u);
         ++it;
         REQUIRE_EQ((const char *)*it, "dir");
         ++it;

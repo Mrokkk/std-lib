@@ -73,6 +73,7 @@ class string final {
         string_ = new char[size + 1];
         end_ = string_;
         allocation_counter_++;
+        size_ = size;
     }
 
     void reallocate(size_t size) {
@@ -81,7 +82,7 @@ class string final {
         delete [] string_;
         string_ = new_string;
         size_ = size;
-        end_ = string_ + length(string_);
+        end_ = string_ + ::yacppl::length(string_);
         allocation_counter_++;
     }
 
@@ -90,7 +91,7 @@ public:
     string() = default;
 
     string(const char *str) {
-        auto len = length(str);
+        auto len = ::yacppl::length(str);
         allocate(len);
         copy(str, string_);
         end_ += len;
@@ -137,7 +138,7 @@ public:
     }
 
     string &append(const char *str) {
-        auto len = length(str);
+        auto len = ::yacppl::length(str);
         size_t current_len = end_ - string_;
         if (current_len + len >= size_) {
             if (string_) {
@@ -150,6 +151,14 @@ public:
         copy(str, end_);
         end_ += len;
         return *this;
+    }
+
+    size_t length() const {
+        return end_ - string_;
+    }
+
+    size_t size() const {
+        return size_;
     }
 
 };

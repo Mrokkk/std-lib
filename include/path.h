@@ -70,6 +70,8 @@ public:
 
     };
 
+    using iterator = const_iterator;
+
 private:
 
     static const constexpr unsigned initial_size_ = 32;
