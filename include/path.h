@@ -68,6 +68,13 @@ public:
             return const_iterator(it);
         }
 
+        explicit operator bool() const {
+            if (*iterator_) {
+                return true;
+            }
+            return false;
+        }
+
     };
 
     using iterator = const_iterator;

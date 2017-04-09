@@ -97,6 +97,13 @@ public:
         end_ += len;
     }
 
+    string(const string &s) {
+        auto len = s.length();
+        allocate(len);
+        copy(s.string_, string_);
+        end_ += len;
+    }
+
     string(const char *begin, size_t size) {
         allocate(size);
         copy(begin, string_, size);
