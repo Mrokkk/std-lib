@@ -204,6 +204,9 @@ public:
 
     string dirname() const {
         auto ptr = last_occurrence(path_, '/');
+        if (ptr == ::yacppl::cend(path_)) {
+            return string("");
+        }
         return string(path_, ptr - path_);
     }
 
