@@ -46,9 +46,18 @@ TEST(path, paths_are_normalized) {
 
 TEST(path, can_get_basename) {
     path p("/root/dir1/dir2//dir3/");
-    REQUIRE_EQ(p.basename(), "dir3");
+    REQUIRE_EQ((const char *)p.basename(), "dir3");
     path p2("some_dir");
-    REQUIRE_EQ(p2.basename(), "some_dir");
+    REQUIRE_EQ((const char *)p2.basename(), "some_dir");
+    path p3("/");
+    REQUIRE_EQ((const char *)p3.basename(), "");
+}
+
+TEST(path, can_get_dirname) {
+    path p("/");
+    REQUIRE_EQ((const char *)p.dirname(), "");
+    path p2("/root/dir1/dir2//dir3/");
+    REQUIRE_EQ((const char *)p2.dirname(), "/root/dir1/dir2");
 }
 
 TEST(path, can_be_iterated) {

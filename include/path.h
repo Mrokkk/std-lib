@@ -194,12 +194,17 @@ public:
         return cend();
     }
 
-    const char *basename() const {
+    string basename() const {
         auto ptr = last_occurrence(path_, '/');
         if (ptr != ::yacppl::end(path_)) {
             return ptr + 1;
         }
         return path_;
+    }
+
+    string dirname() const {
+        auto ptr = last_occurrence(path_, '/');
+        return string(path_, ptr - path_);
     }
 
 };

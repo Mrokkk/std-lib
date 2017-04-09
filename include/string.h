@@ -26,6 +26,13 @@ inline auto cend(const char *c) {
     return cbegin(c) + length(c);
 }
 
+inline auto memcopy(const char *s, char *d, size_t size) {
+    while (size--) {
+        *d++ = *s++;
+    }
+    return d;
+}
+
 inline auto copy(const char *s1, char *s2) {
     while (*s1) {
         *s2++ = *s1++;
@@ -49,9 +56,7 @@ inline auto copy(const char *s1, char *s2, F callback) {
 }
 
 inline auto copy(const char *s1, char *s2, size_t n) {
-    while (n--) {
-        *s2++ = *s1++;
-    }
+    s2 = memcopy(s1, s2, n);
     *s2 = 0;
     return s2;
 }
