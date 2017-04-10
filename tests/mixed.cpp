@@ -120,6 +120,13 @@ TEST(mixed, can_fill_list) {
             REQUIRE_EQ(*it, 43);
         }
     }
+    {
+        array<unsigned, 10> array;
+        fill(array.begin(), 10, 21);
+        for (auto it = array.begin(); it != array.end(); ++it) {
+            REQUIRE_EQ(*it, 21u);
+        }
+    }
 }
 
 TEST(mixed, can_find_first_occurrence_in_array) {

@@ -49,6 +49,13 @@ inline void fill(Iterator begin, Iterator end, const Type &v) {
     }
 }
 
+template<typename Iterator, typename Type>
+inline void fill(Iterator begin, size_t n, const Type &v) {
+    for (auto i = 0u; i < n; ++begin, ++i) {
+        *begin = v;
+    }
+}
+
 template<typename Container>
 inline void swap(Container &c1, Container &c2) {
     auto temp(move(c1));
