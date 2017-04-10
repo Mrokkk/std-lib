@@ -1,6 +1,7 @@
 #pragma once
 
 #include "move.h"
+#include "iterator.h"
 
 namespace yacppl {
 
@@ -41,31 +42,18 @@ inline void fill(Container &c, const Type &e) {
     }
 }
 
+template<typename Iterator, typename Type>
+inline void fill(Iterator begin, Iterator end, const Type &v) {
+    for (auto it = begin; it != end; ++it) {
+        *it = v;
+    }
+}
+
 template<typename Container>
 inline void swap(Container &c1, Container &c2) {
     auto temp(move(c1));
     c1 = move(c2);
     c2 = move(temp);
-}
-
-template <typename Container>
-inline auto begin(Container &c) -> decltype (c.begin()) {
-    return c.begin();
-}
-
-template <typename Container>
-inline auto cbegin(const Container &c) -> decltype (c.cbegin()) {
-    return c.cbegin();
-}
-
-template <typename Container>
-inline auto end(Container &c) -> decltype (c.end()) {
-    return c.end();
-}
-
-template <typename Container>
-inline auto cend(const Container &c) -> decltype (c.cend()) {
-    return c.cend();
 }
 
 template <typename Container, typename Value>
@@ -108,6 +96,14 @@ inline auto last_occurrence(Iterator begin, Iterator end, const Value &v) {
         }
     }
     return last;
+}
+
+template <typename Iterator1, typename Iterator2>
+inline auto copy(Iterator1 begin1, Iterator1 end1, Iterator2 begin2, Iterator2 end2) {
+    for (; begin1 != end1 || begin2 != end2; ++begin1, ++begin2) {
+        *begin2 = *begin1;
+    }
+    return begin2;
 }
 
 } // namespace yacppl

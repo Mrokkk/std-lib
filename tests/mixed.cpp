@@ -99,17 +99,27 @@ TEST(mixed, can_swap_different_size_lists) {
 }
 
 TEST(mixed, can_fill_list) {
-    list<int> list;
-    list.resize(30);
-    fill(list, 945);
-    REQUIRE(list.size() == 30);
-    REQUIRE_EQ(list.front(), 945);
-    REQUIRE_EQ(list.back(), 945);
-    list.resize(10);
-    fill(list, 3);
-    REQUIRE(list.size() == 10);
-    REQUIRE_EQ(list.front(), 3);
-    REQUIRE_EQ(list.back(), 3);
+    {
+        list<int> list;
+        list.resize(30);
+        fill(list, 945);
+        REQUIRE(list.size() == 30);
+        REQUIRE_EQ(list.front(), 945);
+        REQUIRE_EQ(list.back(), 945);
+        list.resize(10);
+        fill(list, 3);
+        REQUIRE(list.size() == 10);
+        REQUIRE_EQ(list.front(), 3);
+        REQUIRE_EQ(list.back(), 3);
+    }
+    {
+        list<char> list;
+        list.resize(100);
+        fill(list.begin(), list.end(), 43);
+        for (auto it = list.begin(); it != list.end(); ++it) {
+            REQUIRE_EQ(*it, 43);
+        }
+    }
 }
 
 TEST(mixed, can_find_first_occurrence_in_array) {
@@ -134,5 +144,19 @@ TEST(mixed, can_find_last_occurrence_in_array) {
     REQUIRE(last_occurrence(string.begin(), string.begin() + 2, 't') == string.begin());
     REQUIRE(last_occurrence(string.begin(), string.begin() + 2, 'e') == string.begin() + 1);
     REQUIRE(last_occurrence(string.begin(), string.begin() + 2, 'z') == string.begin() + 2);
+}
+
+TEST(mixed, can_copy_from_list_to_array) {
+    list<int> list{1, 2, 4, 6, 8};
+    array<int, 5> array;
+    copy(list.begin(), list.end(), array.begin(), array.end());
+    REQUIRE_EQ(*list.begin(), 1);
+    REQUIRE_EQ(*--list.end(), 8);
+    auto it = array.begin();
+    REQUIRE_EQ(*it++, 1);
+    REQUIRE_EQ(*it++, 2);
+    REQUIRE_EQ(*it++, 4);
+    REQUIRE_EQ(*it++, 6);
+    REQUIRE_EQ(*it++, 8);
 }
 

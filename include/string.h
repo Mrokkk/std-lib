@@ -1,30 +1,9 @@
 #pragma once
 
 #include <cstddef>
+#include "iterator.h"
 
 namespace yacppl {
-
-inline size_t length(const char *string) {
-    const char *temp;
-    for (temp = string; *temp != 0; ++temp);
-    return temp-string;
-}
-
-inline auto begin(char *c) {
-    return c;
-}
-
-inline auto cbegin(const char *c) {
-    return c;
-}
-
-inline auto end(char *c) {
-    return begin(c) + length(c);
-}
-
-inline auto cend(const char *c) {
-    return cbegin(c) + length(c);
-}
 
 inline auto memcopy(const char *s, char *d, size_t size) {
     while (size--) {
