@@ -72,6 +72,22 @@ public:
         return _ptr;
     }
 
+    Pointer get() {
+        return _ptr;
+    }
+
+    operator bool() const {
+        return _ptr != nullptr;
+    }
+
+    bool operator==(const shared_ptr &ptr) const {
+        return ptr._ptr == _ptr;
+    }
+
+    bool operator==(const Pointer ptr) const {
+        return ptr == _ptr;
+    }
+
     unsigned get_ref_count() const {
         if (_ref_count)
             return *_ref_count;
