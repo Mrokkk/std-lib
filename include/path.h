@@ -205,6 +205,9 @@ public:
         if (ptr == ::yacppl::cend(path_)) {
             return string("");
         }
+        if (ptr == path_) {
+            return string(path_, ptr - path_ + 1);
+        }
         return string(path_, ptr - path_);
     }
 

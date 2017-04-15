@@ -144,6 +144,7 @@ TEST(mixed, can_find_first_occurrence_in_array) {
 TEST(mixed, can_find_last_occurrence_in_array) {
     array<char, 4> string{'t', 'e', 's', 't'};
     REQUIRE(last_occurrence(string, 't') == cend(string) - 1);
+    REQUIRE(*last_occurrence(string, 't') == 't');
     REQUIRE(last_occurrence(string, 'e') == cbegin(string) + 1);
     REQUIRE(last_occurrence(string, 'a') == cend(string));
     REQUIRE(last_occurrence(string.cbegin(), string.cend(), 't') == string.cend() - 1);
