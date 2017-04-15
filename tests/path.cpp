@@ -72,8 +72,10 @@ TEST(path, can_be_iterated) {
     {
         path p("/root/dir");
         auto it = p.cbegin();
+        REQUIRE_EQ((const char *)*it, "/");
+        REQUIRE_EQ((*it).length(), 1u);
+        ++it;
         REQUIRE_EQ((const char *)*it, "root");
-        REQUIRE_EQ((*it).length(), 4u);
         ++it;
         REQUIRE_EQ((const char *)*it, "dir");
         ++it;
@@ -90,7 +92,8 @@ TEST(path, can_be_iterated) {
     }
     {
         path p("/dir1/dir2/dir3/dir4/other_dir");
-        string paths[5] = {
+        string paths[6] = {
+            "/",
             "dir1",
             "dir2",
             "dir3",
@@ -106,12 +109,13 @@ TEST(path, can_be_iterated) {
     {
         path p("/dir1/dir2/dir3/dir4/other_dir");
         auto it = p.begin();
-        REQUIRE_EQ((const char *)*(it + 1), "dir2");
-        REQUIRE_EQ((const char *)*(it + 2), "dir3");
-        REQUIRE_EQ((const char *)*(it + 3), "dir4");
-        REQUIRE_EQ((const char *)*(it + 4), "other_dir");
-        REQUIRE((it + 5) == p.end());
+        REQUIRE_EQ((const char *)*(it + 1), "dir1");
+        REQUIRE_EQ((const char *)*(it + 2), "dir2");
+        REQUIRE_EQ((const char *)*(it + 3), "dir3");
+        REQUIRE_EQ((const char *)*(it + 4), "dir4");
+        REQUIRE_EQ((const char *)*(it + 5), "other_dir");
         REQUIRE((it + 6) == p.end());
+        REQUIRE((it + 7) == p.end());
         REQUIRE((it + 1024) == p.end());
     }
 }

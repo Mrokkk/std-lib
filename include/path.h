@@ -26,6 +26,9 @@ public:
         }
 
         string operator*() const {
+            if (*iterator_ == '/') {
+                return string("/");
+            }
             return string(iterator_, first_occurrence(iterator_, '/') - iterator_);
         }
 
@@ -174,12 +177,7 @@ public:
     }
 
     auto cbegin() const {
-        if (*path_ == '/') {
-            return const_iterator(path_ + 1);
-        }
-        else {
-            return const_iterator(path_);
-        }
+        return const_iterator(path_);
     }
 
     auto begin() const {
