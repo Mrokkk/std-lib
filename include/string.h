@@ -72,6 +72,9 @@ class string final {
 
 public:
 
+    using iterator = char *;
+    using const_iterator = const char *;
+
     string() = default;
 
     string(const char *str) {
@@ -152,12 +155,25 @@ public:
         return string(string_ + pos, len);
     }
 
+    void erase(iterator begin, const_iterator end) {
+        if (begin > end) {
+            return;
+        }
+        ::yacppl::memcopy(end, begin, end_ - end);
+        end_ -= end - begin;
+        *end_ = 0;
+    }
+
     size_t length() const {
         return end_ - string_;
     }
 
     size_t size() const {
         return size_;
+    }
+
+    bool empty() const {
+        return length() == 0;
     }
 
 };

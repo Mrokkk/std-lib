@@ -6,6 +6,7 @@ using namespace yacppl;
 TEST(string, can_be_created) {
     string str;
     REQUIRE(str == "");
+    REQUIRE(str.empty());
     REQUIRE_EQ(str.length(), 0u);
     REQUIRE_EQ(str.size(), 0u);
     REQUIRE_FALSE(str == "abc");
@@ -69,5 +70,25 @@ TEST(string, can_get_substring) {
     REQUIRE_EQ((const char *)str3, "world");
     auto str4 = str.substring(11, 1024);
     REQUIRE_EQ((const char *)str4, "");
+}
+
+TEST(string, can_be_erased) {
+    string str("hello world");
+    str.erase(str.begin() + 5, str.end());
+    REQUIRE_EQ((const char *)str, "hello");
+    REQUIRE_EQ(str.length(), 5u);
+    REQUIRE_EQ(str.size(), 11u);
+    REQUIRE(not str.empty());
+    str.erase(str.end() - 1, str.end());
+    REQUIRE_EQ((const char *)str, "hell");
+    REQUIRE_EQ(str.length(), 4u);
+    REQUIRE_EQ(str.size(), 11u);
+    REQUIRE(not str.empty());
+}
+
+TEST(string, cannot_be_erased_if_begin_after_end) {
+    string str("hello world");
+    str.erase(str.end(), str.begin());
+    REQUIRE_EQ((const char *)str, "hello world");
 }
 
