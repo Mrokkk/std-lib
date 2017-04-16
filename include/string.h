@@ -99,7 +99,13 @@ public:
 
     string &operator=(const string &s) {
         auto len = s.length();
-        allocate(len);
+        if (string_) {
+            if (s.length() > length())
+            reallocate(len);
+        }
+        else {
+            allocate(len);
+        }
         copy(s.string_, string_);
         end_ += len;
         return *this;
