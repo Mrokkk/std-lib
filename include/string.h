@@ -97,6 +97,14 @@ public:
         end_ += size;
     }
 
+    string &operator=(const string &s) {
+        auto len = s.length();
+        allocate(len);
+        copy(s.string_, string_);
+        end_ += len;
+        return *this;
+    }
+
     ~string() {
         if (string_) {
             delete [] string_;
@@ -147,6 +155,12 @@ public:
         return *this;
     }
 
+    string &append(char c) {
+        char str[2] = {c, 0};
+        append(str);
+        return *this;
+    }
+
     string substring(size_t pos, size_t len) const {
         auto new_begin = string_ + pos;
         if (len > reinterpret_cast<size_t>(end_) - reinterpret_cast<size_t>(new_begin)) {
@@ -174,6 +188,15 @@ public:
 
     bool empty() const {
         return length() == 0;
+    }
+
+    void reserve(size_t size) {
+        if (string_) {
+            reallocate(size);
+        }
+        else {
+            allocate(size);
+        }
     }
 
 };

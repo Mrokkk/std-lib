@@ -5,8 +5,7 @@ using namespace yacppl;
 
 TEST(path, empty_path_is_empty_string) {
     path p;
-    REQUIRE_EQ((const char *)p, "");
-    REQUIRE_EQ(p.get(), "");
+    REQUIRE(p == "");
 }
 
 TEST(path, path_constructed_from_string_is_valid) {
@@ -22,7 +21,7 @@ TEST(path, paths_can_be_appended) {
     path p1("home");
     path p2("user");
     path p3(p1 / p2);
-    REQUIRE(p3 == "home/user");
+    REQUIRE_EQ((const char *)p3, "home/user");
     p3 /= "dir";
     REQUIRE(p3 == "home/user/dir");
     p3 /= "next_dir";

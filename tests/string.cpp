@@ -35,6 +35,26 @@ TEST(string, can_be_constructed_from_cstring) {
     }
 }
 
+TEST(string, can_be_created_from_other_string) {
+    string str("test_string");
+    {
+        auto str2 = str;
+        REQUIRE(not str.empty());
+        REQUIRE(not str2.empty());
+        REQUIRE(str == "test_string");
+        REQUIRE(str2 == "test_string");
+    }
+    {
+        string str2(str);
+        REQUIRE(not str.empty());
+        REQUIRE(not str2.empty());
+        REQUIRE(str == "test_string");
+        REQUIRE(str2 == "test_string");
+    }
+    str = string("some");
+    REQUIRE(str == "some");
+}
+
 TEST(string, can_be_iterated) {
     string str("test_string");
     size_t i = 0;

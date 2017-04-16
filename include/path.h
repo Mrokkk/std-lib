@@ -84,19 +84,13 @@ public:
 
 private:
 
-    static const constexpr unsigned initial_size_ = 32;
+    string path_;
 
-    char *path_;
-    char *it_;
-
-    char *remove_trailing_slash(char *start, char *end) {
+    char *find_trailing_slash(char *begin, char *end) {
         --end;
-        for (; end > start; --end) {
+        for (; end > begin; --end) {
             if (*end != '/') {
                 return end + 1;
-            }
-            else {
-                *end = 0;
             }
         }
         return end + 1;
@@ -110,51 +104,51 @@ private:
     }
 
     void cat(const char *str) {
-        it_ = copy(str, it_, [this](const char *c) {
-            if (*c == '/' && c[1] == '/') {
-                return false;
+        for (auto it = str; it != ::yacppl::cend(str); ++it) {
+            if (*it == '/' && it[1] == '/') {
             }
-            return true;
-        });
-        it_ = remove_trailing_slash(path_, it_);
+            else {
+                path_.append(*it);
+            }
+        }
+        path_.erase(find_trailing_slash(path_.begin(), path_.end()), path_.end());
     }
 
 public:
 
-    path() : path_(new char[initial_size_]) {
-        it_ = path_;
-        *it_ = 0;
+    path() {
     }
 
-    ~path() {
-        delete [] path_;
-    }
-
-    path(const path &p) : path_(new char[initial_size_]) {
-        it_ = path_;
-        cat(p.path_);
+    path(const path &p) {
+        path_ = p.path_;
     }
 
     path &operator=(const path &p) {
-        it_ = path_;
-        cat(p.path_);
+        path_ = p.path_;
         return *this;
     }
 
-    path(const char *str)
-            : path_(new char[initial_size_]) {
-        it_ = path_;
+    path(const char *str) {
         cat(str);
     }
 
     void append(const char *str) {
+        auto len = length(str);
+        if (len) {
+            path_.append('/');
+            if (path_.empty()) {
+                path_.reserve(len + 10);
+            }
+        }
         str = omit_leading_slash(str);
-        *it_++ = '/';
         cat(str);
     }
 
     path operator/(const char *str) const {
-        path p(path_);
+        path p;
+        if (not path_.empty()) {
+            p = *this;
+        }
         p.append(str);
         return p;
     }
@@ -165,7 +159,7 @@ public:
     }
 
     const char *get() const {
-        return path_;
+        return static_cast<const char *>(path_);
     }
 
     operator const char*() const {
@@ -173,11 +167,11 @@ public:
     }
 
     bool operator==(const char *str) const {
-        return compare(path_, str) == 0;
+        return path_ == str;
     }
 
     auto cbegin() const {
-        return const_iterator(path_);
+        return const_iterator(path_.cbegin());
     }
 
     auto begin() const {
@@ -185,7 +179,7 @@ public:
     }
 
     auto cend() const {
-        return const_iterator(it_);
+        return const_iterator(path_.cend());
     }
 
     auto end() const {
