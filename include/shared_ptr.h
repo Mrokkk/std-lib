@@ -22,8 +22,13 @@ public:
 
     shared_ptr(const shared_ptr &ptr) {
         _ptr = ptr._ptr;
-        _ref_count = ptr._ref_count;
-        ++*_ref_count;
+        if (ptr._ref_count == nullptr) {
+            _ref_count = new unsigned(1);
+        }
+        else {
+            _ref_count = ptr._ref_count;
+            ++*_ref_count;
+        }
     }
 
     shared_ptr(shared_ptr &&other) {
@@ -43,8 +48,13 @@ public:
 
     shared_ptr &operator=(const shared_ptr &ptr) {
         _ptr = ptr._ptr;
-        _ref_count = ptr._ref_count;
-        ++*_ref_count;
+        if (ptr._ref_count == nullptr) {
+            _ref_count = new unsigned(1);
+        }
+        else {
+            _ref_count = ptr._ref_count;
+            ++*_ref_count;
+        }
         return *this;
     }
 
