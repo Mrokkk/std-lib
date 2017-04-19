@@ -13,25 +13,38 @@ class shared_ptr final {
     Pointer _ptr = nullptr;
     unsigned *_ref_count = nullptr;
 
+    void release() {
+        if (_ref_count) {
+            if (!--*_ref_count) {
+                delete _ptr;
+                delete _ref_count;
+                _ptr = nullptr;
+                _ref_count = nullptr;
+            }
+        }
+    }
+
 public:
 
     constexpr shared_ptr() {}
 
-    shared_ptr(Pointer ptr)
-            : _ptr(ptr), _ref_count(new unsigned(1)) {}
+    shared_ptr(Pointer ptr) {
+        _ptr = ptr;
+        if (_ptr) {
+            _ref_count = new unsigned(1);
+        }
+    }
 
     shared_ptr(const shared_ptr &ptr) {
         _ptr = ptr._ptr;
-        if (ptr._ref_count == nullptr) {
-            _ref_count = new unsigned(1);
-        }
-        else {
+        if (ptr._ref_count != nullptr) {
             _ref_count = ptr._ref_count;
             ++*_ref_count;
         }
     }
 
     shared_ptr(shared_ptr &&other) {
+        release();
         _ptr = other._ptr;
         other._ptr = nullptr;
         _ref_count = other._ref_count;
@@ -39,19 +52,13 @@ public:
     }
 
     ~shared_ptr() {
-        if (_ref_count == nullptr) return;
-        if (!--*_ref_count) {
-            delete _ptr;
-            delete _ref_count;
-        }
+        release();
     }
 
     shared_ptr &operator=(const shared_ptr &ptr) {
+        release();
         _ptr = ptr._ptr;
-        if (ptr._ref_count == nullptr) {
-            _ref_count = new unsigned(1);
-        }
-        else {
+        if (ptr._ref_count != nullptr) {
             _ref_count = ptr._ref_count;
             ++*_ref_count;
         }
@@ -59,6 +66,7 @@ public:
     }
 
     shared_ptr &operator=(shared_ptr &&other) {
+        release();
         _ptr = other._ptr;
         other._ptr = nullptr;
         _ref_count = other._ref_count;

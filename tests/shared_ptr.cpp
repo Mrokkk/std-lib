@@ -24,6 +24,22 @@ TEST(shared_ptr, can_be_assigned) {
     shared_ptr<int> ptr;
     ptr = make_shared<int>(5);
     REQUIRE(*ptr ==  5);
+    ptr = shared_ptr<int>();
+    REQUIRE(ptr.get() == nullptr);
+    REQUIRE_EQ(ptr.get_ref_count(), 0u);
+    auto other_ptr = make_shared<int>(3);
+    ptr = other_ptr;
+    REQUIRE(ptr);
+    REQUIRE_EQ(*ptr, 3);
+    REQUIRE_EQ(ptr.get_ref_count(), 2u);
+    REQUIRE_EQ(other_ptr.get_ref_count(), 2u);
+    ptr = nullptr;
+    REQUIRE_FALSE(ptr);
+    REQUIRE_EQ(ptr.get_ref_count(), 0u);
+    ptr = make_shared<int>(-214);
+    REQUIRE(ptr);
+    REQUIRE_EQ(*ptr, -214);
+    REQUIRE_EQ(ptr.get_ref_count(), 1u);
 }
 
 TEST(shared_ptr, can_be_copied) {
