@@ -3,48 +3,48 @@
 template <typename Type>
 class optional final {
 
-    Type _value;
-    bool _has_value = false;
+    Type value_;
+    bool has_value_ = false;
 
 public:
 
     optional() = default;
 
-    optional(Type v) : _value(v), _has_value(true) {
+    optional(Type v) : value_(v), has_value_(true) {
     }
 
     bool has_value() const {
-        return _has_value;
+        return has_value_;
     }
 
     Type &value() {
-        return _value;
+        return value_;
     }
 
     Type value_or(Type a) {
-        return _has_value ? _value : a;
+        return has_value_ ? value_ : a;
     }
 
     operator bool() const {
-        return _has_value;
+        return has_value_;
     }
 
     optional &operator=(Type v) {
-        _value = v;
-        _has_value = true;
+        value_ = v;
+        has_value_ = true;
         return *this;
     }
 
     template <typename T>
     bool operator==(const T &rhs) const {
-        return _has_value && rhs == _value;
+        return has_value_ && rhs == value_;
     }
 
     bool operator==(const optional &rhs) const {
-        if (_has_value && rhs._has_value) {
-            return rhs._value == _value;
+        if (has_value_ && rhs.has_value_) {
+            return rhs.value_ == value_;
         }
-        else if (!_has_value && !rhs._has_value) {
+        else if (!has_value_ && !rhs.has_value_) {
             return true;
         }
         return false;
@@ -61,22 +61,22 @@ public:
 
     template <typename T>
     bool operator>(const T &rhs) const {
-        return _has_value && _value > rhs;
+        return has_value_ && value_ > rhs;
     }
 
     template <typename T>
     bool operator>=(const T &rhs) const {
-        return _has_value && _value >= rhs;
+        return has_value_ && value_ >= rhs;
     }
 
     template <typename T>
     bool operator<(const T &rhs) const {
-        return _has_value && _value < rhs;
+        return has_value_ && value_ < rhs;
     }
 
     template <typename T>
     bool operator<=(const T &rhs) const {
-        return _has_value && _value <= rhs;
+        return has_value_ && value_ <= rhs;
     }
 
 };

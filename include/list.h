@@ -21,15 +21,15 @@ class list final {
 
     };
 
-    list_element _head;
-    size_t _size = 0;
+    list_element head_;
+    size_t size_ = 0;
 
     list_element *back_element() const {
-        return _head.prev;
+        return head_.prev;
     }
 
     list_element *front_element() const {
-        return _head.next;
+        return head_.next;
     }
 
     void add(list_element *new_elem, list_element *prev, list_element *next) {
@@ -37,23 +37,23 @@ class list final {
         prev->next = new_elem;
         new_elem->next = next;
         new_elem->prev = prev;
-        ++_size;
+        ++size_;
     }
 
     void del(list_element *prev, list_element *next) {
         auto temp = prev->next;
         next->prev = prev;
         prev->next = next;
-        --_size;
+        --size_;
         delete temp;
     }
 
     void add_front_element(list_element *new_elem) {
-        add(new_elem, &_head, _head.next);
+        add(new_elem, &head_, head_.next);
     }
 
     void add_back_element(list_element *new_elem) {
-        add(new_elem, _head.prev, &_head);
+        add(new_elem, head_.prev, &head_);
     }
 
     void delete_element(list_element *element) {
@@ -67,7 +67,7 @@ class list final {
     }
 
     void move_elements_from(list &other) {
-        while (other._size) {
+        while (other.size_) {
             push_back(other.front());
             other.pop_front();
         }
@@ -87,53 +87,53 @@ public:
 
     private:
 
-        list_element *_node = nullptr;
+        list_element *node_ = nullptr;
 
     public:
 
         iterator(list_element *node)
-            : _node(node) {}
+            : node_(node) {}
 
         list_element *node() const {
-            return _node;
+            return node_;
         }
 
         iterator &operator++() {
-            _node = _node->next;
+            node_ = node_->next;
             return *this;
         }
 
         iterator operator++(int) {
             auto tmp = *this;
-            _node = _node->next;
+            node_ = node_->next;
             return tmp;
         }
 
         iterator &operator--() {
-            _node = _node->prev;
+            node_ = node_->prev;
             return *this;
         }
 
         iterator operator--(int) {
             auto tmp = *this;
-            _node = _node->prev;
+            node_ = node_->prev;
             return tmp;
         }
 
         Type &operator*() const {
-            return _node->data;
+            return node_->data;
         }
 
         Type *operator->() const {
-            return &_node->data;
+            return &node_->data;
         }
 
         bool operator!=(const iterator &element) const {
-            return element._node != _node;
+            return element.node_ != node_;
         }
 
         bool operator==(const iterator &element) const {
-            return element._node == _node;
+            return element.node_ == node_;
         }
 
     };
@@ -157,7 +157,7 @@ public:
     }
 
     size_t size() const {
-        return _size;
+        return size_;
     }
 
     void push_front(const Type &element) {
@@ -197,11 +197,11 @@ public:
     }
 
     void resize(unsigned long count, Type val = Type()) {
-        if (_size < count) {
-            while (_size != count)
+        if (size_ < count) {
+            while (size_ != count)
                 push_back(val);
         } else {
-            while (_size != count)
+            while (size_ != count)
                 pop_back();
         }
     }

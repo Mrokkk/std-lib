@@ -56,8 +56,8 @@ class allocator final {
 
     };
 
-    inherited_list<memory_block> _blocks;
-    BackendAllocator _backend_allocator;
+    inherited_list<memory_block> blocks_;
+    BackendAllocator backend_allocator_;
 
     void adapt_size(size_t &size) const {
         if (size % _memory_block_size)
@@ -65,17 +65,17 @@ class allocator final {
     }
 
     memory_block *create_memory_block(size_t size) {
-        return new(_backend_allocator.grow_heap(_memory_block_size + size)) memory_block(size);
+        return new(backend_allocator_.grow_heap(_memory_block_size + size)) memory_block(size);
     }
 
 public:
 
     constexpr explicit allocator(char *heap_start)
-        : _backend_allocator(heap_start) {}
+        : backend_allocator_(heap_start) {}
 
     void *allocate(size_t size) {
         adapt_size(size);
-        for (auto &temp : _blocks) {
+        for (auto &temp : blocks_) {
             if (temp.free && temp.size >= size) {
                 temp.try_to_divide(size);
                 return temp.data();
@@ -83,12 +83,12 @@ public:
         }
         auto new_block = create_memory_block(size);
         if (new_block == nullptr) return nullptr;
-        _blocks.push_back(new_block);
+        blocks_.push_back(new_block);
         return new_block->data();
     }
 
     bool free(void *address) {
-        for (auto &temp : _blocks) {
+        for (auto &temp : blocks_) {
             if (temp.data() == address) {
                 temp.free = true;
                 return true;

@@ -10,49 +10,49 @@ class unique_ptr final {
     using Reference = Type &;
     using Pointer = Type *;
 
-    Pointer _ptr = nullptr;
+    Pointer ptr_ = nullptr;
 
 public:
 
     constexpr unique_ptr() {}
 
     unique_ptr(Pointer ptr)
-            : _ptr(ptr) {}
+            : ptr_(ptr) {}
 
     unique_ptr(const unique_ptr &) = delete;
 
     unique_ptr(unique_ptr &) = delete;
 
     unique_ptr(unique_ptr &&other) {
-        _ptr = other._ptr;
-        other._ptr = nullptr;
+        ptr_ = other.ptr_;
+        other.ptr_ = nullptr;
     }
 
     ~unique_ptr() {
-        if (_ptr)
-            delete _ptr;
+        if (ptr_)
+            delete ptr_;
     }
 
     unique_ptr &operator=(unique_ptr &&other) {
-        _ptr = other._ptr;
-        other._ptr = nullptr;
+        ptr_ = other.ptr_;
+        other.ptr_ = nullptr;
         return *this;
     }
 
     Pointer get() const {
-        return _ptr;
+        return ptr_;
     }
 
     Reference operator*() const {
-        return *_ptr;
+        return *ptr_;
     }
 
     Pointer operator->() const {
-        return _ptr;
+        return ptr_;
     }
 
     operator Pointer() const {
-        return _ptr;
+        return ptr_;
     }
 
 };

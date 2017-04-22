@@ -8,7 +8,7 @@ namespace yacppl {
 template<typename Type, size_t _size = 0>
 class array {
 
-    Type _array[_size];
+    Type array_[_size];
 
 public:
 
@@ -147,7 +147,7 @@ public:
     array(std::initializer_list<Type> list) {
         unsigned i = 0;
         for (auto v : list)
-            _array[i++] = v;
+            array_[i++] = v;
     }
 
     size_t size() const {
@@ -155,31 +155,31 @@ public:
     }
 
     Type &operator[](int index) {
-        return _array[index];
+        return array_[index];
     }
 
     iterator begin() {
-        return iterator(_array);
+        return iterator(array_);
     }
 
     const_iterator cbegin() const {
-        return const_iterator(_array);
+        return const_iterator(array_);
     }
 
     iterator end() {
-        return iterator(_array + _size);
+        return iterator(array_ + _size);
     }
 
     const_iterator cend() const {
-        return const_iterator(_array + _size);
+        return const_iterator(array_ + _size);
     }
 
     Type *data() {
-        return _array;
+        return array_;
     }
 
     const Type *data() const {
-        return _array;
+        return array_;
     }
 
 };

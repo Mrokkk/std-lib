@@ -9,14 +9,14 @@ namespace yacppl {
 template <class Type>
 class kernel_list final {
 
-    kernel_list *_next = this, *_prev = this;
-    size_t _offset;
+    kernel_list *next_ = this, *prev_ = this;
+    size_t offset_;
 
     void add_element(kernel_list *new_element, kernel_list *prev, kernel_list *next) {
-        next->_prev = new_element;
-        prev->_next = new_element;
-        new_element->_next = next;
-        new_element->_prev = prev;
+        next->prev_ = new_element;
+        prev->next_ = new_element;
+        new_element->next_ = next;
+        new_element->prev_ = prev;
     }
 
     template <typename T, typename U>
@@ -40,24 +40,24 @@ public:
             : ptr(p) {}
 
         iterator &operator++() {
-            ptr = ptr->_next;
+            ptr = ptr->next_;
             return *this;
         }
 
         iterator operator++(int) {
             auto tmp = *this;
-            ptr = ptr->_next;
+            ptr = ptr->next_;
             return tmp;
         }
 
         iterator &operator--() {
-            ptr = ptr->_prev;
+            ptr = ptr->prev_;
             return *this;
         }
 
         iterator operator--(int) {
             auto tmp = *this;
-            ptr = ptr->_prev;
+            ptr = ptr->prev_;
             return tmp;
         }
 
@@ -81,37 +81,37 @@ public:
 
     template <typename U>
     explicit kernel_list(U Type::*member) {
-        _offset = offset_of(member);
+        offset_ = offset_of(member);
     }
 
     void push_back(kernel_list *new_element) {
-        add_element(new_element, _prev, this);
+        add_element(new_element, prev_, this);
     }
 
     void push_front(kernel_list *new_element) {
-        add_element(new_element, this, _next);
+        add_element(new_element, this, next_);
     }
 
     void remove() {
-        _next->_prev = _prev;
-        _prev->_next = _next;
-        _prev = _next = this;
+        next_->prev_ = prev_;
+        prev_->next_ = next_;
+        prev_ = next_ = this;
     }
 
     bool empty() const {
-        return (_prev == this) && (_next == this);
+        return (prev_ == this) && (next_ == this);
     }
 
     Type *entry() {
-        return this_offset(-_offset);
+        return this_offset(-offset_);
     }
 
     Type *next_entry() {
-        return _next == this ? nullptr : _next->entry();
+        return next_ == this ? nullptr : next_->entry();
     }
 
     iterator begin() {
-        return iterator(_next);
+        return iterator(next_);
     }
 
     iterator end() {

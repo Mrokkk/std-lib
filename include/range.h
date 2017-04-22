@@ -9,19 +9,19 @@ namespace detail {
 template<typename T, size_t _size = 0>
 class range final {
 
-    T *_ptr;
+    T *ptr_;
 
 public:
 
     constexpr explicit range(T *ptr)
-        : _ptr(ptr) {}
+        : ptr_(ptr) {}
 
     constexpr T *begin() {
-        return _ptr;
+        return ptr_;
     }
 
     constexpr T *end() {
-        return _ptr + size();
+        return ptr_ + size();
     }
 
     constexpr size_t size() {
@@ -33,23 +33,23 @@ public:
 template <>
 class range<const char> {
 
-    const char *_ptr;
+    const char *ptr_;
 
 public:
 
     constexpr explicit range(const char *ptr)
-        : _ptr(ptr) {}
+        : ptr_(ptr) {}
 
     constexpr const char *begin() {
-        return _ptr;
+        return ptr_;
     }
 
     const char *end() {
-        return _ptr + size();
+        return ptr_ + size();
     }
 
     size_t size() {
-        return [&](){ auto s = 0u; for (; _ptr[s] != 0; ++s){}; return s; }();
+        return [&](){ auto s = 0u; for (; ptr_[s] != 0; ++s){}; return s; }();
     }
 
 };

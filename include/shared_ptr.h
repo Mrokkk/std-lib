@@ -10,16 +10,16 @@ class shared_ptr final {
     using Reference = Type &;
     using Pointer = Type *;
 
-    Pointer _ptr = nullptr;
-    unsigned *_ref_count = nullptr;
+    Pointer ptr_ = nullptr;
+    unsigned *ref_count_ = nullptr;
 
     void release() {
-        if (_ref_count) {
-            if (!--*_ref_count) {
-                delete _ptr;
-                delete _ref_count;
-                _ptr = nullptr;
-                _ref_count = nullptr;
+        if (ref_count_) {
+            if (!--*ref_count_) {
+                delete ptr_;
+                delete ref_count_;
+                ptr_ = nullptr;
+                ref_count_ = nullptr;
             }
         }
     }
@@ -29,26 +29,26 @@ public:
     constexpr shared_ptr() {}
 
     shared_ptr(Pointer ptr) {
-        _ptr = ptr;
-        if (_ptr) {
-            _ref_count = new unsigned(1);
+        ptr_ = ptr;
+        if (ptr_) {
+            ref_count_ = new unsigned(1);
         }
     }
 
     shared_ptr(const shared_ptr &ptr) {
-        _ptr = ptr._ptr;
-        if (ptr._ref_count != nullptr) {
-            _ref_count = ptr._ref_count;
-            ++*_ref_count;
+        ptr_ = ptr.ptr_;
+        if (ptr.ref_count_ != nullptr) {
+            ref_count_ = ptr.ref_count_;
+            ++*ref_count_;
         }
     }
 
     shared_ptr(shared_ptr &&other) {
         release();
-        _ptr = other._ptr;
-        other._ptr = nullptr;
-        _ref_count = other._ref_count;
-        other._ref_count = nullptr;
+        ptr_ = other.ptr_;
+        other.ptr_ = nullptr;
+        ref_count_ = other.ref_count_;
+        other.ref_count_ = nullptr;
     }
 
     ~shared_ptr() {
@@ -57,58 +57,58 @@ public:
 
     shared_ptr &operator=(const shared_ptr &ptr) {
         release();
-        _ptr = ptr._ptr;
-        if (ptr._ref_count != nullptr) {
-            _ref_count = ptr._ref_count;
-            ++*_ref_count;
+        ptr_ = ptr.ptr_;
+        if (ptr.ref_count_ != nullptr) {
+            ref_count_ = ptr.ref_count_;
+            ++*ref_count_;
         }
         return *this;
     }
 
     shared_ptr &operator=(shared_ptr &&other) {
         release();
-        _ptr = other._ptr;
-        other._ptr = nullptr;
-        _ref_count = other._ref_count;
-        other._ref_count = nullptr;
+        ptr_ = other.ptr_;
+        other.ptr_ = nullptr;
+        ref_count_ = other.ref_count_;
+        other.ref_count_ = nullptr;
         return *this;
     }
 
     Reference operator*() const {
-        return *_ptr;
+        return *ptr_;
     }
 
     Pointer operator->() const {
-        return _ptr;
+        return ptr_;
     }
 
     operator Pointer() const {
-        return _ptr;
+        return ptr_;
     }
 
     Pointer get() const {
-        return _ptr;
+        return ptr_;
     }
 
     Pointer get() {
-        return _ptr;
+        return ptr_;
     }
 
     operator bool() const {
-        return _ptr != nullptr;
+        return ptr_ != nullptr;
     }
 
     bool operator==(const shared_ptr &ptr) const {
-        return ptr._ptr == _ptr;
+        return ptr.ptr_ == ptr_;
     }
 
     bool operator==(const Pointer ptr) const {
-        return ptr == _ptr;
+        return ptr == ptr_;
     }
 
     unsigned get_ref_count() const {
-        if (_ref_count)
-            return *_ref_count;
+        if (ref_count_)
+            return *ref_count_;
         return 0;
     }
 

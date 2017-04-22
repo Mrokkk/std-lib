@@ -7,24 +7,24 @@ namespace yacppl {
 template<typename Type>
 class stack final {
 
-    list<Type> _list;
+    list<Type> list_;
 
 public:
 
     void push(const Type &element) {
-        _list.push_back(element);
+        list_.push_back(element);
     }
 
     void pop() {
-        _list.pop_back();
+        list_.pop_back();
     }
 
     const Type &front() const {
-        return _list.back();
+        return list_.back();
     }
 
     size_t size() const {
-        return _list.size();
+        return list_.size();
     }
 
     stack &operator<<(const Type &element) {
