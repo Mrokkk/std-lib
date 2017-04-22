@@ -47,10 +47,45 @@ TEST(hash_map, cannot_get_nonexistent_element) {
 TEST(hash_map, can_erase) {
     hash_map<unsigned, int> map;
     map.insert(make_pair(914324u, 32));
+    REQUIRE_EQ(map.size(), 1u);
     map.erase(914324u);
     REQUIRE_EQ(map.size(), 0u);
     auto node = map[914324u];
     REQUIRE_FALSE(node);
+    map.insert(make_pair(914324u, 9));
+    map.insert(make_pair(0u, 823));
+    map.insert(make_pair(324u, -125));
+    map.insert(make_pair(13u, 0));
+    map.insert(make_pair(923482455u, 1994));
+    REQUIRE_EQ(map.size(), 5u);
+    map.erase(13u);
+    REQUIRE_EQ(map.size(), 4u);
+    REQUIRE_FALSE(map[13u]);
+    map.erase(0u);
+    REQUIRE_EQ(map.size(), 3u);
+    REQUIRE_FALSE(map[0u]);
+    map.erase(324u);
+    REQUIRE_EQ(map.size(), 2u);
+    REQUIRE_FALSE(map[324u]);
+    map.erase(914324u);
+    REQUIRE_EQ(map.size(), 1u);
+    REQUIRE_FALSE(map[914324u]);
+    map.erase(923482455u);
+    REQUIRE_EQ(map.size(), 0u);
+    REQUIRE_FALSE(map[923482455u]);
+}
+
+TEST(hash_map, cannot_erase_nonexisting_keys) {
+    hash_map<unsigned, int> map;
+    for (auto i = 0u; i < 1024u; ++i) {
+        map.erase(i);
+        REQUIRE_EQ(map.size(), 0u);
+    }
+    map.insert(make_pair(23u, 43));
+    for (auto i = 0u; i < 23u; ++i) {
+        map.erase(i);
+        REQUIRE_EQ(map.size(), 1u);
+    }
 }
 
 namespace {
