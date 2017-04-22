@@ -30,6 +30,12 @@ matrix:
             - COMPILER=g++
           services:
             - docker
+        - env:
+            - IMAGE=mrokkk/devel
+            - JOB=sanitizers
+            - COMPILER=clang++
+          services:
+            - docker
 
 language: cpp
 
