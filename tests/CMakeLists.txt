@@ -31,7 +31,6 @@ add_executable(${PROJECT_NAME}
     queue.cpp
     shared_ptr.cpp
     stack.cpp
-    static_string.cpp
     unique_ptr.cpp
     range.cpp
     allocator.cpp
