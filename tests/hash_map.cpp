@@ -6,13 +6,16 @@
 using namespace yacppl;
 
 TEST(hash_map, can_create_empty) {
-    hash_map<int, int> map;
+    hash_map<int, int, 32u> map;
     REQUIRE_EQ(map.size(), 0u);
+    REQUIRE_EQ(map.bucket_count(), 0u);
+    REQUIRE_EQ(map.max_bucket_count(), 32u);
 }
 
 TEST(hash_map, can_add_elements) {
-    hash_map<unsigned, int> map;
+    hash_map<unsigned, int, 32> map;
     map.insert(make_pair(23u, 43));
+    REQUIRE_EQ(map.bucket_count(), 1u);
     REQUIRE_EQ(map.size(), 1u);
     {
         auto pair = map[23u];
@@ -20,6 +23,7 @@ TEST(hash_map, can_add_elements) {
         REQUIRE_EQ(pair->second, 43);
     }
     map.insert(make_pair(2053u, 4167));
+    REQUIRE_EQ(map.bucket_count(), 2u);
     REQUIRE_EQ(map.size(), 2u);
     {
         auto pair = map[2053u];
@@ -107,10 +111,13 @@ template <typename T>
 void check_type() {
     hash_map<T, char> map;
     REQUIRE_EQ(map.size(), 0u);
+    REQUIRE_EQ(map.bucket_count(), 0u);
     map.insert(make_pair(T(), 'a'));
     REQUIRE_EQ(map.size(), 1u);
+    REQUIRE(map.bucket_count() != 0u);
     map.insert(make_pair(std::numeric_limits<T>::max(), 'c'));
     REQUIRE_EQ(map.size(), 2u);
+    REQUIRE(map.bucket_count() != 0u);
     {
         auto pair = map[T()];
         REQUIRE(pair);

@@ -102,6 +102,20 @@ public:
         return size_;
     }
 
+    size_t max_bucket_count() const {
+        return Size;
+    }
+
+    size_t bucket_count() const {
+        size_t count = 0u;
+        for (auto i = 0u; i < Size; ++i) {
+            if (buckets_[i] != nullptr) {
+                ++count;
+            }
+        }
+        return count;
+    }
+
 };
 
 } // namespace yacppl
