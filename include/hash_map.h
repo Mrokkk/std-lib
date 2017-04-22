@@ -67,6 +67,7 @@ public:
     hash_map &append(const node &kv) {
         auto index = get_bucket_index(kv.first);
         add_to_bucket(index, kv);
+        ++size_;
         return *this;
     }
 
@@ -76,7 +77,7 @@ public:
     }
 
     size_t size() const {
-        return 0u;
+        return size_;
     }
 
 };

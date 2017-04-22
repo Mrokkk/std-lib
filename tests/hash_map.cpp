@@ -11,12 +11,14 @@ TEST(hash_map, can_create_empty) {
 TEST(hash_map, can_add_elements) {
     hash_map<unsigned, int> map;
     map.append(make_pair(23u, 43));
+    REQUIRE_EQ(map.size(), 1u);
     {
         auto pair = map[23u];
         REQUIRE_EQ(pair->first, 23u);
         REQUIRE_EQ(pair->second, 43);
     }
     map.append(make_pair(2053u, 4167));
+    REQUIRE_EQ(map.size(), 2u);
     {
         auto pair = map[2053u];
         REQUIRE_EQ(pair->first, 2053u);
