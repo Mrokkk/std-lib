@@ -3,20 +3,20 @@
 
 using namespace yacppl;
 
-TEST(stack, canCreateEmptyStack) {
+TEST(stack, can_create_empty_stack) {
     stack<int> stack;
     unsigned long size = stack.size();
     REQUIRE(size == 0);
 }
 
-TEST(stack, canPushTempElement) {
+TEST(stack, can_push_temp_element) {
     stack<int> stack;
     stack.push(439);
     REQUIRE(stack.size() == 1);
     REQUIRE_EQ(stack.front(), 439);
 }
 
-TEST(stack, canPushElement) {
+TEST(stack, can_push_element) {
     stack<int> stack;
     auto element = 5423;
     stack.push(element);
@@ -24,7 +24,7 @@ TEST(stack, canPushElement) {
     REQUIRE_EQ(stack.front(), 5423);
 }
 
-TEST(stack, canPushMoreElements) {
+TEST(stack, can_push_more_elements) {
     stack<int> stack;
     stack.push(33);
     REQUIRE(stack.size() == 1);
@@ -40,14 +40,14 @@ TEST(stack, canPushMoreElements) {
     REQUIRE_EQ(stack.front(), 37);
 }
 
-TEST(stack, canPushAndPopElement) {
+TEST(stack, can_push_and_pop_element) {
     stack<int> stack;
     stack.push(439);
     stack.pop();
     REQUIRE(stack.size() == 0);
 }
 
-TEST(stack, canPushAndPopMoreElements) {
+TEST(stack, can_push_and_pop_more_elements) {
     stack<int> stack;
     stack.push(439);
     stack.push(599);
@@ -72,7 +72,7 @@ TEST(stack, canPushAndPopMoreElements) {
     REQUIRE(stack.size() == 0);
 }
 
-TEST(stack, canPushAndPopByShiftOperators) {
+TEST(stack, can_push_and_pop_by_shift_operators) {
     stack<int> stack;
     int temp = -4;
     stack << temp;
@@ -97,3 +97,4 @@ TEST(stack, canPushAndPopByShiftOperators) {
     REQUIRE_EQ(result[4], 93);
     REQUIRE_EQ(result[5], -4);
 }
+
