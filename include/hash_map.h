@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include "pair.h"
 #include "list.h"
 
 namespace yacppl {
