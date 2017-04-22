@@ -21,7 +21,7 @@ public:
 
 private:
 
-    list<node> *buckets_[Size];
+    list<node> *buckets_[Size + 1];
     size_t size_ = 0u;
 
     void add_to_bucket(unsigned hash, const node &kv) {
@@ -31,13 +31,13 @@ private:
         buckets_[hash]->push_back(kv);
     }
 
-    const node *find_in_bucket(unsigned hash, const Key &key) const {
+    typename list<node>::iterator find_in_bucket(unsigned hash, const Key &key) const {
         if (buckets_[hash] == nullptr) {
             return nullptr;
         }
-        for (const auto &node : *buckets_[hash]) {
-            if (node.first == key) {
-                return &node;
+        for (auto it =  buckets_[hash]->begin(); it != buckets_[hash]->end(); ++it) {
+            if (it->first == key) {
+                return it;
             }
         }
         return nullptr;
@@ -64,16 +64,31 @@ public:
         }
     }
 
-    hash_map &append(const node &kv) {
+    hash_map &insert(const node &kv) {
         auto index = get_bucket_index(kv.first);
         add_to_bucket(index, kv);
         ++size_;
         return *this;
     }
 
+    hash_map &erase(const Key &key) {
+        auto index = get_bucket_index(key);
+        auto it = find_in_bucket(index, key);
+        if (it == nullptr) {
+            return *this;
+        }
+        buckets_[index]->erase(it);
+        --size_;
+        return *this;
+    }
+
     const node *operator[](const Key &key) const {
         auto index = get_bucket_index(key);
-        return find_in_bucket(index, key);
+        auto it = find_in_bucket(index, key);
+        if (it == nullptr) {
+            return nullptr;
+        }
+        return &(*it);
     }
 
     size_t size() const {

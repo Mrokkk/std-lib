@@ -10,14 +10,14 @@ TEST(hash_map, can_create_empty) {
 
 TEST(hash_map, can_add_elements) {
     hash_map<unsigned, int> map;
-    map.append(make_pair(23u, 43));
+    map.insert(make_pair(23u, 43));
     REQUIRE_EQ(map.size(), 1u);
     {
         auto pair = map[23u];
         REQUIRE_EQ(pair->first, 23u);
         REQUIRE_EQ(pair->second, 43);
     }
-    map.append(make_pair(2053u, 4167));
+    map.insert(make_pair(2053u, 4167));
     REQUIRE_EQ(map.size(), 2u);
     {
         auto pair = map[2053u];
@@ -37,11 +37,20 @@ TEST(hash_map, cannot_get_nonexistent_element) {
         auto pair = map[i];
         REQUIRE_FALSE(pair);
     }
-    map.append(make_pair(23u, 43));
+    map.insert(make_pair(23u, 43));
     for (auto i = 0u; i < 23u; ++i) {
         auto pair = map[i];
         REQUIRE_FALSE(pair);
     }
+}
+
+TEST(hash_map, can_erase) {
+    hash_map<unsigned, int> map;
+    map.insert(make_pair(914324u, 32));
+    map.erase(914324u);
+    REQUIRE_EQ(map.size(), 0u);
+    auto node = map[914324u];
+    REQUIRE_FALSE(node);
 }
 
 namespace {
@@ -49,7 +58,7 @@ namespace {
 template <typename T>
 void check_type() {
     hash_map<T, char> map;
-    map.append(make_pair(T(), 'a'));
+    map.insert(make_pair(T(), 'a'));
     auto pair = map[T()];
     REQUIRE(pair);
     REQUIRE_EQ(pair->second, 'a');
