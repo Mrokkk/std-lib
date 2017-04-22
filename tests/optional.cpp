@@ -10,6 +10,8 @@ void test_no_value() {
     REQUIRE_FALSE(opt.has_value());
     REQUIRE_FALSE(opt == T{});
     REQUIRE(opt != T{});
+    REQUIRE(opt == optional<T>());
+    REQUIRE_FALSE(opt != optional<T>());
 }
 
 } // namespace anon
@@ -48,5 +50,9 @@ TEST(optional, can_set_value) {
     REQUIRE_FALSE(opt > 5);
     REQUIRE(opt >= 4);
     REQUIRE_FALSE(opt >= 9);
+    REQUIRE(opt == optional<int>(4));
+    REQUIRE(opt != optional<int>(10));
+    REQUIRE_FALSE(opt == optional<int>());
+    REQUIRE(opt != optional<int>());
 }
 
