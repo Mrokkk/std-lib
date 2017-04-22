@@ -4,8 +4,26 @@ namespace yacppl {
 
 template <typename Type>
 struct hash {
-    unsigned operator()(const Type &v) {
-        return reinterpret_cast<unsigned>(v);
+};
+
+template <>
+struct hash<signed char> {
+    unsigned operator()(signed char v) {
+        return static_cast<unsigned>(v);
+    }
+};
+
+template <>
+struct hash<unsigned char> {
+    unsigned operator()(unsigned char v) {
+        return static_cast<unsigned>(v);
+    }
+};
+
+template <>
+struct hash<short> {
+    unsigned operator()(short v) {
+        return static_cast<unsigned>(v);
     }
 };
 
@@ -17,8 +35,22 @@ struct hash<int> {
 };
 
 template <>
-struct hash<short> {
-    unsigned operator()(short v) {
+struct hash<unsigned int> {
+    unsigned operator()(unsigned int v) {
+        return static_cast<unsigned>(v);
+    }
+};
+
+template <>
+struct hash<long> {
+    unsigned operator()(long v) {
+        return static_cast<unsigned>(v);
+    }
+};
+
+template <>
+struct hash<long long> {
+    unsigned operator()(long long v) {
         return static_cast<unsigned>(v);
     }
 };
