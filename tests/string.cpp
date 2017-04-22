@@ -133,5 +133,7 @@ TEST(string, can_reserve_size) {
     }
     str.append('c');
     REQUIRE(str.size() != 1024u);
+    str.reserve(4096);
+    REQUIRE_EQ(str.size(), 4096u);
 }
 
