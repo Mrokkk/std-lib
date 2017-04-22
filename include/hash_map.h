@@ -57,11 +57,7 @@ public:
     }
 
     ~hash_map() {
-        for (auto i = 0u; i < Size; ++i) {
-            if (buckets_[i] != nullptr) {
-                delete buckets_[i];
-            }
-        }
+        clear();
     }
 
     hash_map &insert(const node &kv) {
@@ -79,6 +75,17 @@ public:
         }
         buckets_[index]->erase(it);
         --size_;
+        return *this;
+    }
+
+    hash_map &clear() {
+        for (auto i = 0u; i < Size; ++i) {
+            if (buckets_[i] != nullptr) {
+                delete buckets_[i];
+                buckets_[i] = nullptr;
+            }
+        }
+        size_ = 0u;
         return *this;
     }
 

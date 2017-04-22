@@ -90,6 +90,17 @@ TEST(hash_map, cannot_erase_nonexisting_keys) {
     }
 }
 
+TEST(hash_map, can_be_cleared) {
+    hash_map<unsigned, int> map;
+    map.clear();
+    REQUIRE_EQ(map.size(), 0u);
+    for (auto i = 0u; i < 1024; ++i) {
+        map.insert(make_pair(i, 91));
+    }
+    map.clear();
+    REQUIRE_EQ(map.size(), 0u);
+}
+
 namespace {
 
 template <typename T>
