@@ -42,3 +42,27 @@ TEST(hash_map, cannot_get_nonexistent_element) {
     }
 }
 
+namespace {
+
+template <typename T>
+void check_type() {
+    hash_map<T, char> map;
+    map.append(make_pair(T(), 'a'));
+    auto pair = map[T()];
+    REQUIRE(pair);
+    REQUIRE_EQ(pair->second, 'a');
+}
+
+} // namspace
+
+TEST(hash_map, works_with_simple_types_keys) {
+    check_type<signed char>();
+    check_type<unsigned char>();
+    check_type<short>();
+    check_type<unsigned short>();
+    check_type<int>();
+    check_type<unsigned int>();
+    check_type<long>();
+    check_type<long long>();
+}
+

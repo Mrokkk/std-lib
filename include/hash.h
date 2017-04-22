@@ -28,6 +28,13 @@ struct hash<short> {
 };
 
 template <>
+struct hash<unsigned short> {
+    unsigned operator()(short v) {
+        return static_cast<unsigned>(v);
+    }
+};
+
+template <>
 struct hash<int> {
     unsigned operator()(int v) {
         return static_cast<unsigned>(v);
