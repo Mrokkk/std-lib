@@ -45,6 +45,13 @@ add_custom_target(tests-run
     COMMAND ./${PROJECT_NAME} ${TESTS_PARAMS}
     COMMENT "Running tests")
 
+if(NOT SANITIZERS)
+    add_custom_target(tests-valgrind
+        DEPENDS ${PROJECT_NAME}
+        COMMAND valgrind ./${PROJECT_NAME} ${TESTS_PARAMS}
+        COMMENT "Running tests with Valgrind")
+endif()
+
 if(COVERAGE)
     add_custom_target(clean-coverage
         COMMAND find ${CMAKE_BINARY_DIR} -name '*.gcda' -exec rm {} "\;"
