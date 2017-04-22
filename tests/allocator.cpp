@@ -75,3 +75,21 @@ TEST(allocator, can_divide_blocks) {
     REQUIRE(data6 == expected);
 }
 
+TEST(allocator, can_merge_blocks) {
+    constexpr size_t memory_block_size = 32;
+    allocator<heap_allocator, memory_block_size> alloc(allocator_test_map);
+    auto data1 = alloc.allocate(1024);
+    auto data2 = alloc.allocate(1024);
+    auto data3 = alloc.allocate(1024);
+    auto data4 = alloc.allocate(1024);
+    REQUIRE(data1);
+    REQUIRE(data2);
+    REQUIRE(data3);
+    REQUIRE(data4);
+    alloc.free(data1);
+    alloc.free(data2);
+    alloc.free(data3);
+    auto data5 = alloc.allocate(2 * 1024);
+    REQUIRE_EQ(data1, data5);
+}
+
