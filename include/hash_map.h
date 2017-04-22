@@ -2,11 +2,17 @@
 
 #include <cstddef>
 #include "pair.h"
+#include "hash.h"
 #include "list.h"
 
 namespace yacppl {
 
-template <typename Key, typename Value, size_t Size = 32>
+template <
+    typename Key,
+    typename Value,
+    size_t Size = 32,
+    typename HashFn = ::yacppl::hash<Key>
+>
 class hash_map {
 
 public:
@@ -17,11 +23,6 @@ private:
 
     list<node> *buckets_[Size];
     size_t size_ = 0u;
-
-    // TODO: specialize for different types
-    static unsigned hash_fn(const Key &k) {
-        return k % Size;
-    }
 
     void add_to_bucket(unsigned hash, const node &kv) {
         if (buckets_[hash] == nullptr) {
@@ -42,6 +43,11 @@ private:
         return nullptr;
     }
 
+    unsigned get_bucket_index(const Key &key) const {
+        HashFn hash_fn;
+        return hash_fn(key) % Size;
+    }
+
 public:
 
     hash_map() {
@@ -59,14 +65,14 @@ public:
     }
 
     hash_map &append(const node &kv) {
-        auto hash = hash_fn(kv.first);
-        add_to_bucket(hash, kv);
+        auto index = get_bucket_index(kv.first);
+        add_to_bucket(index, kv);
         return *this;
     }
 
     const node *operator[](const Key &key) const {
-        auto hash = hash_fn(key);
-        return find_in_bucket(hash, key);
+        auto index = get_bucket_index(key);
+        return find_in_bucket(index, key);
     }
 
     size_t size() const {
