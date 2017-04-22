@@ -1,6 +1,8 @@
 #include <hash_map.h>
 #include "yatf/include/yatf.h"
 
+#include <limits>
+
 using namespace yacppl;
 
 TEST(hash_map, can_create_empty) {
@@ -93,10 +95,31 @@ namespace {
 template <typename T>
 void check_type() {
     hash_map<T, char> map;
+    REQUIRE_EQ(map.size(), 0u);
     map.insert(make_pair(T(), 'a'));
-    auto pair = map[T()];
-    REQUIRE(pair);
-    REQUIRE_EQ(pair->second, 'a');
+    REQUIRE_EQ(map.size(), 1u);
+    map.insert(make_pair(std::numeric_limits<T>::max(), 'c'));
+    REQUIRE_EQ(map.size(), 2u);
+    {
+        auto pair = map[T()];
+        REQUIRE(pair);
+        REQUIRE_EQ(pair->second, 'a');
+    }
+    {
+        auto pair = map[std::numeric_limits<T>::max()];
+        REQUIRE(pair);
+        REQUIRE_EQ(pair->second, 'c');
+    }
+    map.erase(T());
+    REQUIRE_EQ(map.size(), 1u);
+    map.erase(std::numeric_limits<T>::max());
+    REQUIRE_EQ(map.size(), 0u);
+    for (auto i = 0; i < 255; ++i) {
+        REQUIRE_FALSE(map[i]);
+    }
+    for (auto i = std::numeric_limits<T>::max(); i >= (std::numeric_limits<T>::max() - 254); --i) {
+        REQUIRE_FALSE(map[i]);
+    }
 }
 
 } // namspace
