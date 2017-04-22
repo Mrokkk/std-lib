@@ -136,9 +136,6 @@ public:
         auto len = length(str);
         if (len) {
             path_.append('/');
-            if (path_.empty()) {
-                path_.reserve(len + 10);
-            }
         }
         str = omit_leading_slash(str);
         cat(str);
