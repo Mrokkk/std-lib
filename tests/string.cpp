@@ -53,6 +53,8 @@ TEST(string, can_be_created_from_other_string) {
     }
     str = string("some");
     REQUIRE(str == "some");
+    str = string("some very, very, very long string");
+    REQUIRE(str == "some very, very, very long string");
 }
 
 TEST(string, can_be_iterated) {
@@ -110,5 +112,26 @@ TEST(string, cannot_be_erased_if_begin_after_end) {
     string str("hello world");
     str.erase(str.end(), str.begin());
     REQUIRE_EQ((const char *)str, "hello world");
+}
+
+TEST(string, can_append_chars) {
+    string str;
+    for (auto i = 0u; i < 1024u; ++i) {
+        str.append('a');
+        REQUIRE_EQ(str.length(), i + 1);
+    }
+}
+
+TEST(string, can_reserve_size) {
+    string str;
+    str.reserve(1024);
+    REQUIRE_EQ(str.size(), 1024u);
+    for (auto i = 0u; i < 1023u; ++i) {
+        str.append('a');
+        REQUIRE_EQ(str.length(), i + 1);
+        REQUIRE_EQ(str.size(), 1024u);
+    }
+    str.append('c');
+    REQUIRE(str.size() != 1024u);
 }
 
