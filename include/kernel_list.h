@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include "types.h"
 
 // Alloc-free double-linked list based on the Linux kernel list implementation
 
@@ -28,56 +29,76 @@ class kernel_list final {
         return reinterpret_cast<Type *>(reinterpret_cast<char *>(this) + offset);
     }
 
-public:
+    template <bool is_const>
+    struct detail_iterator {
 
-    class iterator {
+        using value_type = Type;
+        using reference = typename conditional<is_const, const value_type &, value_type &>::type;
+        using pointer = typename conditional<is_const, const value_type *, value_type *>::type;
+
+    private:
 
         kernel_list *ptr = nullptr;
 
     public:
 
-        iterator(kernel_list *p)
-            : ptr(p) {}
+        detail_iterator() = default;
 
-        iterator &operator++() {
+        detail_iterator(kernel_list *p) : ptr(p) {
+        }
+
+        detail_iterator(const detail_iterator<true> &it) : ptr(it.ptr) {
+        }
+
+        detail_iterator(const detail_iterator<false> &it) : ptr(it.ptr) {
+        }
+
+        detail_iterator &operator++() {
             ptr = ptr->next_;
             return *this;
         }
 
-        iterator operator++(int) {
+        detail_iterator operator++(int) {
             auto tmp = *this;
             ptr = ptr->next_;
             return tmp;
         }
 
-        iterator &operator--() {
+        detail_iterator &operator--() {
             ptr = ptr->prev_;
             return *this;
         }
 
-        iterator operator--(int) {
+        detail_iterator operator--(int) {
             auto tmp = *this;
             ptr = ptr->prev_;
             return tmp;
         }
 
-        Type &operator *() {
+        reference operator *() {
             return *ptr->entry();
         }
 
-        Type *operator->() {
+        pointer operator->() {
             return ptr->entry();
         }
 
-        bool operator==(const iterator &i) const {
+        bool operator==(const detail_iterator &i) const {
             return i.ptr == ptr;
         }
 
-        bool operator!=(const iterator &i) const {
+        bool operator!=(const detail_iterator &i) const {
             return i.ptr != ptr;
         }
 
+        friend struct detail_iterator<true>;
+
     };
+
+public:
+
+    using iterator = detail_iterator<false>;
+    using const_iterator = detail_iterator<true>;
 
     template <typename U>
     explicit kernel_list(U Type::*member) {
@@ -114,8 +135,16 @@ public:
         return iterator(next_);
     }
 
+    const_iterator cbegin() const {
+        return const_iterator(next_);
+    }
+
     iterator end() {
         return iterator(this);
+    }
+
+    const_iterator cend() const {
+        return const_iterator(this);
     }
 
 };
