@@ -13,11 +13,11 @@ class list final {
         Type data;
         list_element *prev = nullptr, *next = nullptr;
 
-        list_element()
-                : prev(this), next(this) {}
+        list_element() : prev(this), next(this) {
+        }
 
-        list_element(const Type &e)
-                : data(e), prev(this), next(this) {}
+        list_element(const Type &e) : data(e), prev(this), next(this) {
+        }
 
     };
 
