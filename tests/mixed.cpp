@@ -168,3 +168,15 @@ TEST(mixed, can_copy_from_list_to_array) {
     REQUIRE_EQ(*it++, 8);
 }
 
+TEST(mixed, iterators_on_carrays_work) {
+    int data[] = {2, 4, 6, 10, 210, 4345};
+    auto it = begin(data);
+    REQUIRE_EQ(*it, 2);
+    it = end(data);
+    REQUIRE_EQ(it - begin(data), 6u);
+    auto const_it = cbegin(data);
+    REQUIRE_EQ(*const_it, 2);
+    const_it = cend(data);
+    REQUIRE_EQ(const_it - cbegin(data), 6u);
+}
+

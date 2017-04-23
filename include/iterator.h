@@ -46,5 +46,25 @@ inline auto cend(const char *c) {
     return cbegin(c) + length(c);
 }
 
+template <class Array, size_t Size>
+Array *begin(Array (&array)[Size]) {
+    return array;
+}
+
+template <class Array, size_t Size>
+const Array *cbegin(Array (&array)[Size]) {
+    return array;
+}
+
+template <class Array, size_t Size>
+Array *end(Array (&array)[Size]) {
+    return array + Size;
+}
+
+template <class Array, size_t Size>
+const Array *cend(Array (&array)[Size]) {
+    return array + Size;
+}
+
 } // namespace yacppl
 
