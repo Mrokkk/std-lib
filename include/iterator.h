@@ -52,7 +52,7 @@ Array *begin(Array (&array)[Size]) {
 }
 
 template <class Array, size_t Size>
-const Array *cbegin(Array (&array)[Size]) {
+const Array *cbegin(const Array (&array)[Size]) {
     return array;
 }
 
@@ -62,7 +62,7 @@ Array *end(Array (&array)[Size]) {
 }
 
 template <class Array, size_t Size>
-const Array *cend(Array (&array)[Size]) {
+const Array *cend(const Array (&array)[Size]) {
     return array + Size;
 }
 
