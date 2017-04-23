@@ -27,5 +27,11 @@ template <typename T> struct enable_if<true, T> { using type = T; };
 template <typename T, class U> struct is_same : false_type {};
 template <typename T> struct is_same<T, T> : true_type {};
 
+template <bool B, class T, class F>
+struct conditional { typedef T type; };
+
+template <class T, class F>
+struct conditional<false, T, F> { typedef F type; };
+
 } // namespace yacppl
 

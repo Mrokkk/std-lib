@@ -99,3 +99,19 @@ TEST(array, can_be_copied) {
     REQUIRE(array2.end() - it == 3);
 }
 
+TEST(array, iterators_work) {
+    array<int, 5> array{2, 3, 4, 5, 6};
+    auto it = array.cbegin();
+    REQUIRE_EQ(*it, 2);
+    auto it2 = ++it;
+    REQUIRE_EQ(*it2, 3);
+    REQUIRE_EQ(*it, 3);
+    --it;
+    REQUIRE_EQ(*it, 2);
+    it2++;
+    REQUIRE_EQ(*it2, 4);
+    it = array.end();
+    --it;
+    REQUIRE_EQ(*it.get(), 6);
+}
+

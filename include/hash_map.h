@@ -13,9 +13,7 @@ template <
     size_t Size = 32,
     typename HashFn = ::yacppl::hash<Key>
 >
-class hash_map {
-
-public:
+struct hash_map final {
 
     using node = pair<Key, Value>;
 
