@@ -72,10 +72,6 @@ public:
         return array_;
     }
 
-    const Type *data() const {
-        return array_;
-    }
-
 };
 
 } // namespace yacppl

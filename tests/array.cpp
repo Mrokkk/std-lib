@@ -49,6 +49,14 @@ TEST(array, can_modify) {
     REQUIRE_EQ(array[4], 14);
 }
 
+TEST(array, can_access_underlying_data) {
+    array<int, 5> array{2, 12149, -3293, 4340, -1};
+    auto data = array.data();
+    REQUIRE(data);
+    REQUIRE_EQ(*data, 2);
+    REQUIRE_EQ(data[4], -1);
+}
+
 TEST(array, can_increment_iterator) {
     array<int, 5> array{2, 3, 4, 5, 6};
     auto it = array.begin();
