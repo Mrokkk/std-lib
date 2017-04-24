@@ -124,3 +124,31 @@ TEST(inherited_list, can_use_iterator) {
     REQUIRE_EQ(h.a, 109);
 }
 
+void check_const_inherited_list(const inherited_list<helper> &list) {
+    for (const auto &i : list) {
+        REQUIRE_EQ(i.a, 4);
+    }
+}
+
+TEST(inherited_list, works_with_range_based_for) {
+    inherited_list<helper> list1;
+    std::vector<helper> helper_vec{1, 2, 4, 9, 30, 109, 938, -231, 3, -29};
+    for (auto &v : helper_vec) {
+        list1.push_back(&v);
+    }
+    auto size = 0u;
+    for (auto &i : list1) {
+        REQUIRE(i.a != 0);
+        i.a = 4;
+        size++;
+    }
+    REQUIRE_EQ(size, 10u);
+    size = 0u;
+    for (const auto &i : list1) {
+        REQUIRE_EQ(i.a, 4);
+        size++;
+    }
+    REQUIRE_EQ(size, 10u);
+    check_const_inherited_list(list1);
+}
+

@@ -277,3 +277,31 @@ TEST(list, can_erase_elements) {
     REQUIRE(list.size() == 0);
 }
 
+void check_const_list(const list<int> &list) {
+    for (const auto &i : list) {
+        REQUIRE_EQ(i, 4);
+    }
+}
+
+TEST(list, works_with_range_based_for) {
+    list<int> list1;
+    list1.push_back(3);
+    list1.push_front(2);
+    list1.push_front(1);
+    list1.push_front(10);
+    auto size = 0u;
+    for (auto &i : list1) {
+        REQUIRE(i != 0);
+        i = 4;
+        size++;
+    }
+    REQUIRE_EQ(size, 4u);
+    size = 0u;
+    for (const auto &i : list1) {
+        REQUIRE_EQ(i, 4);
+        size++;
+    }
+    REQUIRE_EQ(size, 4u);
+    check_const_list(list1);
+}
+

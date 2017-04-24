@@ -53,12 +53,24 @@ public:
         return next_ == this ? nullptr : next_;
     }
 
+    const Type *next() const {
+        return next_ == this ? nullptr : next_;
+    }
+
     Type *prev() {
+        return prev_ == this ? nullptr : prev_;
+    }
+
+    const Type *prev() const {
         return prev_ == this ? nullptr : prev_;
     }
 
     Type *entry() {
         return reinterpret_cast<Type *>(this);
+    }
+
+    const Type *entry() const {
+        return reinterpret_cast<const Type *>(this);
     }
 
     bool empty() const {
