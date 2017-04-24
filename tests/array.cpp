@@ -158,3 +158,24 @@ TEST(array, range_based_for_works) {
     REQUIRE_EQ(size, 5u);
 }
 
+#include "list.h"
+
+namespace {
+
+template <typename Container, typename Type>
+void check_container() {
+    Container c{1, 2, 4, 7, 9};
+    array<Type, 5> a(c);
+    REQUIRE_EQ(a[0], 1);
+    REQUIRE_EQ(a[1], 2);
+    REQUIRE_EQ(a[2], 4);
+    REQUIRE_EQ(a[3], 7);
+    REQUIRE_EQ(a[4], 9);
+}
+
+} // namespace
+
+TEST(array, can_be_created_from_other_containers) {
+    check_container<list<int>, int>();
+}
+

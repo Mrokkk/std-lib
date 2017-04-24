@@ -21,10 +21,19 @@ public:
 
     array() = default;
 
-    array(std::initializer_list<Type> list) {
+    array(const std::initializer_list<Type> &list) {
         unsigned i = 0;
-        for (auto v : list)
+        for (auto v : list) {
             array_[i++] = v;
+        }
+    }
+
+    template <typename Container>
+    array(const Container &container) {
+        unsigned i = 0;
+        for (auto v : container) {
+            array_[i++] = v;
+        }
     }
 
     size_t size() const {
