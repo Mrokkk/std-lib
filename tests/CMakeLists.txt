@@ -30,7 +30,6 @@ add_executable(${PROJECT_NAME}
     shared_ptr.cpp
     stack.cpp
     unique_ptr.cpp
-    range.cpp
     allocator.cpp
     path.cpp
     string.cpp
