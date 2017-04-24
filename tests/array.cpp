@@ -99,7 +99,7 @@ TEST(array, can_be_copied) {
     REQUIRE(array2.end() - it == 3);
 }
 
-TEST(array, iterators_work) {
+TEST(array, const_iterator_works) {
     array<int, 5> array{2, 3, 4, 5, 6};
     auto it = array.cbegin();
     REQUIRE_EQ(*it, 2);
@@ -113,5 +113,48 @@ TEST(array, iterators_work) {
     it = array.end();
     --it;
     REQUIRE_EQ(*it.get(), 6);
+}
+
+TEST(array, nonconst_iterator_works) {
+    array<int, 5>::iterator it;
+    array<int, 5> array{2, 3, 4, 5, 6};
+    it = array.begin();
+    REQUIRE_EQ(*it, 2);
+    *it = 1;
+    REQUIRE_EQ(*it, 1);
+    auto it2 = ++it;
+    REQUIRE_EQ(*it2, 3);
+    REQUIRE_EQ(*it, 3);
+    --it;
+    REQUIRE_EQ(*it, 1);
+    it2++;
+    REQUIRE_EQ(*it2, 4);
+    it = array.end();
+    --it;
+    REQUIRE_EQ(*it.get(), 6);
+}
+
+void check_const_array(const array<int, 5> &array) {
+    auto size = 0u;
+    for (const auto &i : array) {
+        size++;
+        REQUIRE_EQ(i, 3);
+    }
+}
+
+TEST(array, range_based_for_works) {
+    array<int, 5> array{2, 3, 4, 5, 6};
+    size_t size = 0;
+    for (auto &i : array) {
+        size++;
+        i = 3;
+    }
+    REQUIRE_EQ(size, 5u);
+    size = 0u;
+    for (const auto &i : array) {
+        size++;
+        REQUIRE_EQ(i, 3);
+    }
+    REQUIRE_EQ(size, 5u);
 }
 

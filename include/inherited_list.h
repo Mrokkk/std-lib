@@ -65,20 +65,28 @@ public:
         return next_ == this && next_ == this;
     }
 
-    iterator begin() const {
+    iterator begin() {
         return iterator(next_);
+    }
+
+    const_iterator begin() const {
+        return const_iterator(next_);
     }
 
     iterator end() {
         return iterator(reinterpret_cast<Type *>(this));
     }
 
+    const_iterator end() const {
+        return const_iterator(reinterpret_cast<const Type *>(this));
+    }
+
     const_iterator cbegin() const {
         return const_iterator(next_);
     }
 
-    const_iterator cend() {
-        return const_iterator(reinterpret_cast<Type *>(this));
+    const_iterator cend() const {
+        return const_iterator(reinterpret_cast<const Type *>(this));
     }
 
 };

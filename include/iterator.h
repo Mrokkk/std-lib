@@ -79,6 +79,8 @@ private:
 
 public:
 
+    pointer_iterator() = default;
+
     pointer_iterator(pointer ptr)
         : _ptr(ptr) {}
 

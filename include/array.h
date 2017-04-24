@@ -39,6 +39,14 @@ public:
         return iterator(array_);
     }
 
+    const_iterator begin() const {
+        return const_iterator(array_);
+    }
+
+    const_iterator end() const {
+        return const_iterator(array_ + _size);
+    }
+
     const_iterator cbegin() const {
         return const_iterator(array_);
     }

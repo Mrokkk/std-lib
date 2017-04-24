@@ -20,6 +20,14 @@ class list final {
         list_element(const Type &e) : data(e), prev_(this), next_(this) {
         }
 
+        auto prev() const {
+            return prev_;
+        }
+
+        auto next() const {
+            return next_;
+        }
+
         auto prev() {
             return prev_;
         }
@@ -29,6 +37,10 @@ class list final {
         }
 
         auto entry() {
+            return &data;
+        }
+
+        auto entry() const {
             return &data;
         }
 
@@ -148,11 +160,19 @@ public:
         return const_iterator(back_element()->next_);
     }
 
-    iterator begin() const {
+    const_iterator begin() const {
+        return const_iterator(front_element());
+    }
+
+    const_iterator end() const {
+        return const_iterator(back_element()->next_);
+    }
+
+    iterator begin() {
         return iterator(front_element());
     }
 
-    iterator end() const {
+    iterator end() {
         return iterator(back_element()->next_);
     }
 
