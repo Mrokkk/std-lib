@@ -117,19 +117,27 @@ public:
         }
     }
 
-    auto cbegin() const {
+    iterator begin() {
         return string_;
     }
 
-    auto begin() {
+    const_iterator begin() const {
         return string_;
     }
 
-    auto cend() const {
+    const_iterator cbegin() const {
+        return string_;
+    }
+
+    iterator end() {
         return end_;
     }
 
-    auto end() const {
+    const_iterator end() const {
+        return end_;
+    }
+
+    const_iterator cend() const {
         return end_;
     }
 
