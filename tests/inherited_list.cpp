@@ -8,7 +8,7 @@ using namespace yacppl;
 
 namespace {
 
-struct helper : inherited_list<helper> {
+struct helper : inherited_list<helper>::node {
     int a = 0;
     helper(int x) : a(x) {}
 };
@@ -64,10 +64,7 @@ void test_adding_front(inherited_list<helper> &head, int s) {
 } // namespace anon
 
 TEST(inherited_list, can_create_empty) {
-    helper h(2);
-    REQUIRE_EQ(h.prev(), nullptr);
-    REQUIRE_EQ(h.next(), nullptr);
-    REQUIRE_EQ(h.a, 2);
+    inherited_list<helper> h;
     REQUIRE(h.empty());
 }
 
@@ -87,7 +84,7 @@ TEST(inherited_list, can_remove) {
     for (auto &v : helper_vec) {
         head.push_back(&v);
     }
-    helper_vec[0].remove();
+    head.erase(helper_vec[0]);
     std::vector<int> test_vector;
     int size = 0;;
     for (auto &e : head) {

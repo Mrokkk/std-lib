@@ -92,7 +92,7 @@ public:
         return prev_;
     }
 
-};
+} __attribute__((packed));
 
 } // namespace yacppl
 

@@ -1,14 +1,15 @@
 #pragma once
 
-#include "inherited_list.h"
+#include "kernel_list.h"
 #include <cstddef>
+#include <cstdint>
 
 namespace yacppl {
 
 template <class BackendAllocator, size_t _memory_block_size>
 class allocator final {
 
-    class memory_block : public inherited_list<memory_block> {
+    class memory_block {
 
         struct _data {
             unsigned char data[_memory_block_size];
@@ -22,11 +23,12 @@ class allocator final {
 
     public:
 
-        size_t size;
+        kernel_list<memory_block> list_;
+        uint32_t size;
         bool free = false;
 
         constexpr explicit memory_block(size_t s)
-            : size(s), free(false) {
+            : list_(&memory_block::list_), size(s), free(false) {
         }
 
         void divide(size_t pivot) {
@@ -36,7 +38,7 @@ class allocator final {
             auto new_block = reinterpret_cast<memory_block *>(pointer_offset(data(), pivot));
             new_block->size = old_size - _memory_block_size - size;
             new_block->free = true;
-            inherited_list<memory_block>::push_front(new_block);
+            list_.push_front(&new_block->list_);
         }
 
         void try_to_divide(size_t pivot) {
@@ -54,9 +56,9 @@ class allocator final {
             return address;
         }
 
-    };
+    } __attribute__((packed));
 
-    inherited_list<memory_block> blocks_;
+    kernel_list<memory_block> blocks_;
     BackendAllocator backend_allocator_;
 
     void adapt_size(size_t &size) const {
@@ -71,7 +73,7 @@ class allocator final {
 public:
 
     constexpr explicit allocator(char *heap_start)
-        : backend_allocator_(heap_start) {}
+        : blocks_(&memory_block::list_), backend_allocator_(heap_start) {}
 
     void *allocate(size_t size) {
         adapt_size(size);
@@ -83,7 +85,7 @@ public:
         }
         auto new_block = create_memory_block(size);
         if (new_block == nullptr) return nullptr;
-        blocks_.push_back(new_block);
+        blocks_.push_back(&new_block->list_);
         return new_block->data();
     }
 
@@ -93,11 +95,11 @@ public:
                 temp.free = true;
                 return true;
             }
-            auto next = temp.next();
+            auto next = temp.list_.next_entry();
             if (!next) break;
             if (next->free && temp.free) {
                 temp.size = temp.size + next->size + _memory_block_size;
-                next->remove();
+                next->list_.remove();
             }
         }
         return false;
