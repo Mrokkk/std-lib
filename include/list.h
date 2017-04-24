@@ -1,7 +1,8 @@
 #pragma once
 
-#include "initializer_list.h"
 #include <cstddef>
+#include "initializer_list.h"
+#include "iterator.h"
 
 namespace yacppl {
 
@@ -11,12 +12,24 @@ class list final {
     struct list_element {
 
         Type data;
-        list_element *prev = nullptr, *next = nullptr;
+        list_element *prev_ = nullptr, *next_ = nullptr;
 
-        list_element() : prev(this), next(this) {
+        list_element() : prev_(this), next_(this) {
         }
 
-        list_element(const Type &e) : data(e), prev(this), next(this) {
+        list_element(const Type &e) : data(e), prev_(this), next_(this) {
+        }
+
+        auto prev() {
+            return prev_;
+        }
+
+        auto next() {
+            return next_;
+        }
+
+        auto entry() {
+            return &data;
         }
 
     };
@@ -25,39 +38,39 @@ class list final {
     size_t size_ = 0;
 
     list_element *back_element() const {
-        return head_.prev;
+        return head_.prev_;
     }
 
     list_element *front_element() const {
-        return head_.next;
+        return head_.next_;
     }
 
     void add(list_element *new_elem, list_element *prev, list_element *next) {
-        next->prev = new_elem;
-        prev->next = new_elem;
-        new_elem->next = next;
-        new_elem->prev = prev;
+        next->prev_ = new_elem;
+        prev->next_ = new_elem;
+        new_elem->next_ = next;
+        new_elem->prev_ = prev;
         ++size_;
     }
 
     void del(list_element *prev, list_element *next) {
-        auto temp = prev->next;
-        next->prev = prev;
-        prev->next = next;
+        auto temp = prev->next_;
+        next->prev_ = prev;
+        prev->next_ = next;
         --size_;
         delete temp;
     }
 
     void add_front_element(list_element *new_elem) {
-        add(new_elem, &head_, head_.next);
+        add(new_elem, &head_, head_.next_);
     }
 
     void add_back_element(list_element *new_elem) {
-        add(new_elem, head_.prev, &head_);
+        add(new_elem, head_.prev_, &head_);
     }
 
     void delete_element(list_element *element) {
-        del(element->prev, element->next);
+        del(element->prev_, element->next_);
     }
 
     template<typename T>
@@ -75,68 +88,19 @@ class list final {
 
     void erase_elements(list_element *first_elem, const list_element *last_elem) {
         while (first_elem != last_elem) {
-            auto temp = first_elem->prev;
+            auto temp = first_elem->prev_;
             delete_element(first_elem);
-            first_elem = temp->next;
+            first_elem = temp->next_;
         }
     }
 
+    template <bool is_const>
+    using detail_iterator = list_iterator<Type, list_element, is_const>;
+
 public:
 
-    class iterator {
-
-    private:
-
-        list_element *node_ = nullptr;
-
-    public:
-
-        iterator(list_element *node)
-            : node_(node) {}
-
-        list_element *node() const {
-            return node_;
-        }
-
-        iterator &operator++() {
-            node_ = node_->next;
-            return *this;
-        }
-
-        iterator operator++(int) {
-            auto tmp = *this;
-            node_ = node_->next;
-            return tmp;
-        }
-
-        iterator &operator--() {
-            node_ = node_->prev;
-            return *this;
-        }
-
-        iterator operator--(int) {
-            auto tmp = *this;
-            node_ = node_->prev;
-            return tmp;
-        }
-
-        Type &operator*() const {
-            return node_->data;
-        }
-
-        Type *operator->() const {
-            return &node_->data;
-        }
-
-        bool operator!=(const iterator &element) const {
-            return element.node_ != node_;
-        }
-
-        bool operator==(const iterator &element) const {
-            return element.node_ == node_;
-        }
-
-    };
+    using iterator = detail_iterator<false>;
+    using const_iterator = detail_iterator<true>;
 
     list() = default;
 
@@ -176,24 +140,32 @@ public:
         return back_element()->data;
     }
 
+    const_iterator cbegin() const {
+        return const_iterator(front_element());
+    }
+
+    const_iterator cend() const {
+        return const_iterator(back_element()->next_);
+    }
+
     iterator begin() const {
         return iterator(front_element());
     }
 
     iterator end() const {
-        return iterator(back_element()->next);
+        return iterator(back_element()->next_);
     }
 
     void pop_back() {
-        erase_elements(back_element(), back_element()->next);
+        erase_elements(back_element(), back_element()->next_);
     }
 
     void pop_front() {
-        erase_elements(front_element(), front_element()->next);
+        erase_elements(front_element(), front_element()->next_);
     }
 
     void clear() {
-        erase_elements(front_element(), back_element()->next);
+        erase_elements(front_element(), back_element()->next_);
     }
 
     void resize(unsigned long count, Type val = Type()) {
@@ -207,7 +179,7 @@ public:
     }
 
     void erase(iterator position) {
-        erase_elements(position.node(), position.node()->next);
+        erase_elements(position.node(), position.node()->next_);
     }
 
     void erase(const iterator &first, const iterator &last) {

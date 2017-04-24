@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.h"
+#include "iterator.h"
 
 namespace yacppl {
 
@@ -21,60 +21,7 @@ class inherited_list {
     }
 
     template <bool is_const>
-    struct detail_iterator {
-
-        using value_type = Type;
-        using reference = typename conditional<is_const, const value_type &, value_type &>::type;
-        using pointer = typename conditional<is_const, const value_type *, value_type *>::type;
-
-    private:
-
-        Type *ptr_ = nullptr;
-
-    public:
-
-        constexpr detail_iterator(Type *t)
-            : ptr_(t) {}
-
-        detail_iterator &operator++() {
-            ptr_ = ptr_->next();
-            return *this;
-        }
-
-        detail_iterator operator++(int) {
-            auto tmp = *this;
-            ptr_ = ptr_->next();
-            return tmp;
-        }
-
-        detail_iterator &operator--() {
-            ptr_ = ptr_->prev();
-            return *this;
-        }
-
-        detail_iterator operator--(int) {
-            auto tmp = *this;
-            ptr_ = ptr_->prev();
-            return tmp;
-        }
-
-        reference operator*() {
-            return *ptr_;
-        }
-
-        pointer operator->() {
-            return ptr_;
-        }
-
-        bool operator==(const detail_iterator &comp) const {
-            return ptr_ == comp.ptr_;
-        }
-
-        bool operator!=(const detail_iterator &comp) const {
-            return ptr_ != comp.ptr_;
-        }
-
-    };
+    using detail_iterator = list_iterator<Type, Type, is_const>;
 
 public:
 
@@ -110,16 +57,28 @@ public:
         return prev_ == this ? nullptr : prev_;
     }
 
+    Type *entry() {
+        return reinterpret_cast<Type *>(this);
+    }
+
     bool empty() const {
         return next_ == this && next_ == this;
     }
 
-    iterator begin() {
+    iterator begin() const {
         return iterator(next_);
     }
 
     iterator end() {
         return iterator(reinterpret_cast<Type *>(this));
+    }
+
+    const_iterator cbegin() const {
+        return const_iterator(next_);
+    }
+
+    const_iterator cend() {
+        return const_iterator(reinterpret_cast<Type *>(this));
     }
 
 };

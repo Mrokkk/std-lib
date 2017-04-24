@@ -67,10 +67,9 @@ const Array *cend(const Array (&array)[Size]) {
     return array + Size;
 }
 
-template <typename Type, bool is_const>
+template <typename value_type, bool is_const>
 struct pointer_iterator {
 
-    using value_type = Type;
     using reference = typename conditional<is_const, const value_type &, value_type &>::type;
     using pointer = typename conditional<is_const, const value_type *, value_type *>::type;
 
@@ -83,10 +82,10 @@ public:
     pointer_iterator(pointer ptr)
         : _ptr(ptr) {}
 
-    pointer_iterator(const pointer_iterator<Type, false> &it) : _ptr(it._ptr) {
+    pointer_iterator(const pointer_iterator<value_type, false> &it) : _ptr(it._ptr) {
     }
 
-    pointer_iterator(const pointer_iterator<Type, true> &it) : _ptr(it._ptr) {
+    pointer_iterator(const pointer_iterator<value_type, true> &it) : _ptr(it._ptr) {
     }
 
     pointer_iterator &operator++() {
@@ -143,9 +142,84 @@ public:
         return element._ptr != _ptr;
     }
 
-    friend struct pointer_iterator<Type, true>;
+    friend struct pointer_iterator<value_type, true>;
 
 };
+
+template <typename value_type, typename node_type, bool is_const>
+struct list_iterator {
+
+    using node_pointer = typename conditional<is_const, const node_type *, node_type *>::type;
+    using reference = typename conditional<is_const, const value_type &, value_type &>::type;
+    using pointer = typename conditional<is_const, const value_type *, value_type *>::type;
+
+private:
+
+    node_pointer ptr = nullptr;
+
+public:
+
+    list_iterator() = default;
+
+    list_iterator(node_pointer p) : ptr(p) {
+    }
+
+    list_iterator(const list_iterator<value_type, node_pointer, true> &it) : ptr(it.ptr) {
+    }
+
+    list_iterator(const list_iterator<value_type, node_pointer, false> &it) : ptr(it.ptr) {
+    }
+
+    list_iterator &operator++() {
+        ptr = ptr->next();
+        return *this;
+    }
+
+    list_iterator operator++(int) {
+        auto tmp = *this;
+        ptr = ptr->next();
+        return tmp;
+    }
+
+    list_iterator &operator--() {
+        ptr = ptr->prev();
+        return *this;
+    }
+
+    list_iterator operator--(int) {
+        auto tmp = *this;
+        ptr = ptr->prev();
+        return tmp;
+    }
+
+    reference operator *() {
+        return *ptr->entry();
+    }
+
+    pointer operator->() {
+        return ptr->entry();
+    }
+
+    bool operator==(const list_iterator &i) const {
+        return i.ptr == ptr;
+    }
+
+    bool operator!=(const list_iterator &i) const {
+        return i.ptr != ptr;
+    }
+
+    node_pointer node() {
+        return ptr;
+    }
+
+    const node_pointer node() const {
+        return ptr;
+    }
+
+    friend struct list_iterator<value_type, node_type, true>;
+
+};
+
 
 } // namespace yacppl
 

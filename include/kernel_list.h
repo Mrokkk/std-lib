@@ -1,13 +1,13 @@
 #pragma once
 
 #include <stddef.h>
-#include "types.h"
+#include "iterator.h"
 
 // Alloc-free double-linked list based on the Linux kernel list implementation
 
 namespace yacppl {
 
-template <class Type>
+template <typename Type>
 class kernel_list final {
 
     kernel_list *next_ = this, *prev_ = this;
@@ -30,70 +30,7 @@ class kernel_list final {
     }
 
     template <bool is_const>
-    struct detail_iterator {
-
-        using value_type = Type;
-        using reference = typename conditional<is_const, const value_type &, value_type &>::type;
-        using pointer = typename conditional<is_const, const value_type *, value_type *>::type;
-
-    private:
-
-        kernel_list *ptr = nullptr;
-
-    public:
-
-        detail_iterator() = default;
-
-        detail_iterator(kernel_list *p) : ptr(p) {
-        }
-
-        detail_iterator(const detail_iterator<true> &it) : ptr(it.ptr) {
-        }
-
-        detail_iterator(const detail_iterator<false> &it) : ptr(it.ptr) {
-        }
-
-        detail_iterator &operator++() {
-            ptr = ptr->next_;
-            return *this;
-        }
-
-        detail_iterator operator++(int) {
-            auto tmp = *this;
-            ptr = ptr->next_;
-            return tmp;
-        }
-
-        detail_iterator &operator--() {
-            ptr = ptr->prev_;
-            return *this;
-        }
-
-        detail_iterator operator--(int) {
-            auto tmp = *this;
-            ptr = ptr->prev_;
-            return tmp;
-        }
-
-        reference operator *() {
-            return *ptr->entry();
-        }
-
-        pointer operator->() {
-            return ptr->entry();
-        }
-
-        bool operator==(const detail_iterator &i) const {
-            return i.ptr == ptr;
-        }
-
-        bool operator!=(const detail_iterator &i) const {
-            return i.ptr != ptr;
-        }
-
-        friend struct detail_iterator<true>;
-
-    };
+    using detail_iterator = list_iterator<Type, kernel_list, is_const>;
 
 public:
 
@@ -145,6 +82,14 @@ public:
 
     const_iterator cend() const {
         return const_iterator(this);
+    }
+
+    kernel_list *next() const {
+        return next_;
+    }
+
+    kernel_list *prev() const {
+        return prev_;
     }
 
 };
