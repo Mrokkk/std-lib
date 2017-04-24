@@ -34,6 +34,7 @@ add_executable(${PROJECT_NAME}
     path.cpp
     string.cpp
     hash_map.cpp
+    function.cpp
 )
 
 add_run_target(${PROJECT_NAME} tests-run)
