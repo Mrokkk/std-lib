@@ -104,7 +104,7 @@ public:
     }
 
     const_iterator cend() const {
-        return const_iterator(head_);
+        return const_iterator(&head_);
     }
 
 };

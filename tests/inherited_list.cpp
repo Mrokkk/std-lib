@@ -119,6 +119,17 @@ TEST(inherited_list, can_use_iterator) {
     it++;
     auto h = *it;
     REQUIRE_EQ(h.a, 109);
+    auto const_it = head.cbegin();
+    REQUIRE_EQ(const_it->a, 0);
+    const_it++;
+    REQUIRE_EQ(const_it->a, 2);
+    ++const_it;
+    REQUIRE_EQ(const_it->a, 4);
+    const_it = head.cend();
+    const_it--;
+    REQUIRE_EQ(const_it->a, -29);
+    --const_it;
+    REQUIRE_EQ(const_it->a, 3);
 }
 
 void check_const_inherited_list(const inherited_list<helper> &list) {
