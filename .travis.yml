@@ -26,6 +26,12 @@ matrix:
             - docker
         - env:
             - IMAGE=mrokkk/devel
+            - JOB=valgrind
+            - COMPILER=clang++
+          services:
+            - docker
+        - env:
+            - IMAGE=mrokkk/devel
             - JOB=sanitizers
             - COMPILER=g++
           services:
