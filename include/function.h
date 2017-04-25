@@ -1,5 +1,7 @@
 #pragma once
 
+#include "types.h"
+
 namespace yacppl {
 
 template <typename Type>
@@ -24,6 +26,11 @@ public:
     }
 
 };
+
+template <typename R, typename ...Args>
+function<R(Args...)> make_function(R (*f)(Args...)) {
+    return function<R(Args...)>(f);
+}
 
 } // namespace yacppl
 
