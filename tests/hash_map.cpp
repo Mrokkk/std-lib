@@ -128,6 +128,8 @@ TEST(hash_map, can_iterate) {
     REQUIRE(it == map.end());
     it++;
     REQUIRE(it == map.end());
+    auto const_it = map.cbegin();
+    REQUIRE(const_it == map.cbegin());
 }
 
 namespace {

@@ -4,6 +4,7 @@
 #include "pair.h"
 #include "hash.h"
 #include "list.h"
+#include "types.h"
 
 namespace yacppl {
 
@@ -16,74 +17,6 @@ template <
 struct hash_map final {
 
     using node = pair<Key, Value>;
-
-    class iterator {
-
-        list<node> **bucket_ptr_ = nullptr;
-        list<node> **buckets_end_ = nullptr;
-        unsigned bucket_index_ = 0;
-        typename list<node>::iterator bucket_iterator_;
-        typename list<node>::iterator end_;
-
-        void advance() {
-            if (bucket_index_ == Size) {
-                return;
-            }
-            ++bucket_iterator_;
-            if (bucket_iterator_ == end_) {
-                bucket_index_++;
-                while (bucket_ptr_[bucket_index_] == nullptr && bucket_index_ <= Size) {
-                    bucket_index_++;
-                }
-                if (bucket_index_ == Size) {
-                    bucket_iterator_ = nullptr;
-                    return;
-                }
-                bucket_iterator_ = bucket_ptr_[bucket_index_]->begin();
-                end_ = bucket_ptr_[bucket_index_]->end();
-            }
-        }
-
-    public:
-
-        iterator() = default;
-
-        iterator(list<node> **ptr, unsigned bucket_index) : bucket_ptr_(ptr), bucket_index_(bucket_index) {
-            bucket_iterator_ = bucket_ptr_[bucket_index_]->begin();
-            end_ = bucket_ptr_[bucket_index_]->end();
-        }
-
-        iterator(unsigned bucket_index) : bucket_index_(bucket_index) {
-        }
-
-        iterator &operator++() {
-            advance();
-            return *this;
-        }
-
-        iterator operator++(int) {
-            iterator old = *this;
-            advance();
-            return old;
-        }
-
-        node &operator*() {
-            return *bucket_iterator_;
-        }
-
-        node *operator->() {
-            return &*bucket_iterator_;
-        }
-
-        bool operator==(const iterator &it) const {
-            return bucket_index_ == it.bucket_index_ && bucket_iterator_ == it.bucket_iterator_;
-        }
-
-        bool operator!=(const iterator &it) const {
-            return not operator==(it);
-        }
-
-    };
 
 private:
 
@@ -114,7 +47,90 @@ private:
         return hash_fn(key) % Size;
     }
 
+    template <bool is_const>
+    class detail_iterator {
+
+        using list_ptr = typename conditional<is_const, const list<node> *, list<node> *>::type;
+        using list_iterator = typename conditional<is_const, typename list<node>::const_iterator,
+              typename list<node>::iterator>::type;
+        using list_array_ptr = typename conditional<is_const, const list_ptr *, list_ptr *>::type;
+        using reference = typename conditional<is_const, const node &, node &>::type;
+        using pointer = typename conditional<is_const, const node *, node *>::type;
+
+        list_array_ptr bucket_ptr_ = nullptr;
+        list_array_ptr buckets_end_ = nullptr;
+        unsigned bucket_index_ = 0;
+        list_iterator bucket_iterator_;
+        list_iterator end_;
+
+        void advance() {
+            if (bucket_index_ == Size) {
+                return;
+            }
+            ++bucket_iterator_;
+            if (bucket_iterator_ == end_) {
+                bucket_index_++;
+                while (bucket_ptr_[bucket_index_] == nullptr && bucket_index_ <= Size) {
+                    bucket_index_++;
+                }
+                if (bucket_index_ == Size) {
+                    bucket_iterator_ = nullptr;
+                    return;
+                }
+                bucket_iterator_ = bucket_ptr_[bucket_index_]->begin();
+                end_ = bucket_ptr_[bucket_index_]->end();
+            }
+        }
+
+        detail_iterator(list_array_ptr ptr, unsigned bucket_index) : bucket_ptr_(ptr), bucket_index_(bucket_index) {
+            bucket_iterator_ = bucket_ptr_[bucket_index_]->begin();
+            end_ = bucket_ptr_[bucket_index_]->end();
+        }
+
+        detail_iterator(unsigned bucket_index) : bucket_index_(bucket_index) {
+        }
+
+    public:
+
+        detail_iterator() = default;
+
+        detail_iterator &operator++() {
+            advance();
+            return *this;
+        }
+
+        detail_iterator operator++(int) {
+            detail_iterator old = *this;
+            advance();
+            return old;
+        }
+
+        reference operator*() {
+            return *bucket_iterator_;
+        }
+
+        pointer operator->() {
+            return &*bucket_iterator_;
+        }
+
+        bool operator==(const detail_iterator &it) const {
+            return bucket_index_ == it.bucket_index_ && bucket_iterator_ == it.bucket_iterator_;
+        }
+
+        bool operator!=(const detail_iterator &it) const {
+            return not operator==(it);
+        }
+
+        friend hash_map;
+        friend detail_iterator<true>;
+        friend detail_iterator<false>;
+
+    };
+
 public:
+
+    using iterator = detail_iterator<false>;
+    using const_iterator = detail_iterator<true>;
 
     hash_map() {
         for (auto i = 0u; i < Size; ++i) {
@@ -130,8 +146,24 @@ public:
         return iterator(buckets_, 0);
     }
 
+    const_iterator begin() const {
+        return const_iterator(buckets_, 0);
+    }
+
+    const_iterator cbegin() const {
+        return const_iterator(buckets_, 0);
+    }
+
     iterator end() {
         return iterator(Size);
+    }
+
+    const_iterator end() const {
+        return const_iterator(Size);
+    }
+
+    const_iterator cend() const {
+        return const_iterator(Size);
     }
 
     hash_map &insert(const node &kv) {
