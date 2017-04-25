@@ -9,15 +9,17 @@ namespace yacppl {
 template<typename Type>
 class list final {
 
-    struct list_element {
+    class list_element {
 
-        Type data;
-        list_element *prev_ = nullptr, *next_ = nullptr;
+        Type data_;
+        list_element *prev_, *next_;
+
+    public:
 
         list_element() : prev_(this), next_(this) {
         }
 
-        list_element(const Type &e) : data(e), prev_(this), next_(this) {
+        list_element(const Type &e) : data_(e), prev_(this), next_(this) {
         }
 
         auto prev() const {
@@ -37,11 +39,11 @@ class list final {
         }
 
         auto entry() {
-            return &data;
+            return &data_;
         }
 
         auto entry() const {
-            return &data;
+            return &data_;
         }
 
     };
@@ -50,39 +52,39 @@ class list final {
     size_t size_ = 0;
 
     list_element *back_element() const {
-        return head_.prev_;
+        return head_.prev();
     }
 
     list_element *front_element() const {
-        return head_.next_;
+        return head_.next();
     }
 
     void add(list_element *new_elem, list_element *prev, list_element *next) {
-        next->prev_ = new_elem;
-        prev->next_ = new_elem;
-        new_elem->next_ = next;
-        new_elem->prev_ = prev;
+        next->prev() = new_elem;
+        prev->next() = new_elem;
+        new_elem->next() = next;
+        new_elem->prev() = prev;
         ++size_;
     }
 
     void del(list_element *prev, list_element *next) {
-        auto temp = prev->next_;
-        next->prev_ = prev;
-        prev->next_ = next;
+        auto temp = prev->next();
+        next->prev() = prev;
+        prev->next() = next;
         --size_;
         delete temp;
     }
 
     void add_front_element(list_element *new_elem) {
-        add(new_elem, &head_, head_.next_);
+        add(new_elem, &head_, head_.next());
     }
 
     void add_back_element(list_element *new_elem) {
-        add(new_elem, head_.prev_, &head_);
+        add(new_elem, head_.prev(), &head_);
     }
 
     void delete_element(list_element *element) {
-        del(element->prev_, element->next_);
+        del(element->prev(), element->next());
     }
 
     template<typename T>
@@ -100,9 +102,9 @@ class list final {
 
     void erase_elements(list_element *first_elem, const list_element *last_elem) {
         while (first_elem != last_elem) {
-            auto temp = first_elem->prev_;
+            auto temp = first_elem->prev();
             delete_element(first_elem);
-            first_elem = temp->next_;
+            first_elem = temp->next();
         }
     }
 
@@ -145,11 +147,11 @@ public:
     }
 
     const Type &front() const {
-        return front_element()->data;
+        return *front_element()->entry();
     }
 
     const Type &back() const {
-        return back_element()->data;
+        return *back_element()->entry();
     }
 
     iterator begin() {
@@ -165,27 +167,27 @@ public:
     }
 
     iterator end() {
-        return iterator(back_element()->next_);
+        return iterator(back_element()->next());
     }
 
     const_iterator end() const {
-        return const_iterator(back_element()->next_);
+        return const_iterator(back_element()->next());
     }
 
     const_iterator cend() const {
-        return const_iterator(back_element()->next_);
+        return const_iterator(back_element()->next());
     }
 
     void pop_back() {
-        erase_elements(back_element(), back_element()->next_);
+        erase_elements(back_element(), back_element()->next());
     }
 
     void pop_front() {
-        erase_elements(front_element(), front_element()->next_);
+        erase_elements(front_element(), front_element()->next());
     }
 
     void clear() {
-        erase_elements(front_element(), back_element()->next_);
+        erase_elements(front_element(), back_element()->next());
     }
 
     void resize(unsigned long count, Type val = Type()) {
@@ -199,7 +201,7 @@ public:
     }
 
     void erase(iterator position) {
-        erase_elements(position.node(), position.node()->next_);
+        erase_elements(position.node(), position.node()->next());
     }
 
     void erase(const iterator &first, const iterator &last) {
