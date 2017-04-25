@@ -57,7 +57,7 @@ public:
     }
 
     bool empty() const {
-        return (prev_ == this) && (next_ == this);
+        return prev_ == this;
     }
 
     Type *entry() {

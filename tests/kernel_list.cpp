@@ -50,6 +50,7 @@ void test_removing(kernel_list<helper> &head, helper &e, std::vector<int> &comp)
 TEST(kernel_list, can_create_empty) {
     kernel_list<helper> list(&helper::list);
     REQUIRE(list.empty());
+    REQUIRE_EQ(list.next_entry(), nullptr);
 }
 
 TEST(kernel_list, can_acces_element) {
