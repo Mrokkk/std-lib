@@ -16,19 +16,19 @@ struct inherited_list {
         }
 
         node *next() {
-            return next_ == this ? nullptr : next_;
+            return next_;
         }
 
         const node *next() const {
-            return next_ == this ? nullptr : next_;
+            return next_;
         }
 
         node *prev() {
-            return prev_ == this ? nullptr : prev_;
+            return prev_;
         }
 
         const node *prev() const {
-            return prev_ == this ? nullptr : prev_;
+            return prev_;
         }
 
         Type *entry() {
@@ -80,7 +80,7 @@ public:
     }
 
     bool empty() const {
-        return head_.next_ == &head_ && head_.next_ == &head_;
+        return head_.next_ == &head_;
     }
 
     iterator begin() {
