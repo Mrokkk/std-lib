@@ -105,6 +105,16 @@ TEST(hash_map, can_be_cleared) {
     REQUIRE_EQ(map.size(), 0u);
 }
 
+TEST(hash_map, can_iterate) {
+    hash_map<unsigned, int> map;
+    map.insert(make_pair(0u, 91));
+    map.insert(make_pair(91348u, -129));
+    map.insert(make_pair(12u, 1029));
+    auto it = map.begin();
+    REQUIRE_EQ((*it).first, 0u);
+    REQUIRE_EQ((*it).second, 91);
+}
+
 namespace {
 
 template <typename T>

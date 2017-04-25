@@ -17,6 +17,38 @@ struct hash_map final {
 
     using node = pair<Key, Value>;
 
+    struct iterator {
+
+        list<node> *bucket_ptr_ = nullptr;
+        typename list<node>::iterator bucket_iterator_;
+        typename list<node>::iterator end_;
+
+        iterator() = default;
+
+        iterator(list<node> *ptr) : bucket_ptr_(ptr) {
+            bucket_iterator_ = bucket_ptr_->begin();
+            end_ = bucket_ptr_->end();
+        }
+
+        iterator &operator++() {
+            if (bucket_ptr_ == nullptr) {
+                return *this;
+            }
+            ++bucket_iterator_;
+            if (bucket_iterator_ == end_) {
+                bucket_ptr_++;
+                bucket_iterator_ = bucket_ptr_->begin();
+                end_ = bucket_ptr_->end();
+            }
+            return *this;
+        }
+
+        node &operator*() {
+            return *bucket_iterator_;
+        }
+
+    };
+
 private:
 
     list<node> *buckets_[Size + 1];
@@ -56,6 +88,10 @@ public:
 
     ~hash_map() {
         clear();
+    }
+
+    iterator begin() {
+        return iterator(buckets_[0]);
     }
 
     hash_map &insert(const node &kv) {
