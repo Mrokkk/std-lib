@@ -7,15 +7,13 @@ namespace std {
 template <typename Type>
 class initializer_list {
 
-    const Type *array_ = nullptr;
-    size_t size_ = 0;
-
-    initializer_list(const Type *array, size_t length)
-        : array_(array), size_(length) {}
+    const Type *array_;
+    size_t size_;
 
 public:
 
-    constexpr initializer_list() {}
+    initializer_list(const Type *array, size_t length) : array_(array), size_(length) {
+    }
 
     size_t size() const {
         return size_;
