@@ -72,79 +72,98 @@ struct pointer_iterator {
 
     using reference = typename conditional<is_const, const value_type &, value_type &>::type;
     using pointer = typename conditional<is_const, const value_type *, value_type *>::type;
+    using node_pointer = pointer;
 
 private:
 
-    pointer _ptr = nullptr;
+    pointer ptr_ = nullptr;
 
 public:
 
     pointer_iterator() = default;
 
-    pointer_iterator(pointer ptr)
-        : _ptr(ptr) {}
-
-    pointer_iterator(const pointer_iterator<value_type, false> &it) : _ptr(it._ptr) {
+    pointer_iterator(pointer ptr) : ptr_(ptr) {
     }
 
-    pointer_iterator(const pointer_iterator<value_type, true> &it) : _ptr(it._ptr) {
+    pointer_iterator(const pointer_iterator<value_type, false> &it) : ptr_(it.get()) {
+    }
+
+    pointer_iterator(const pointer_iterator<value_type, true> &it) : ptr_(it.get()) {
     }
 
     pointer_iterator &operator++() {
-        ++_ptr;
+        ++ptr_;
         return *this;
     }
 
     pointer_iterator operator+(int i) const {
-        return _ptr + i;
+        return ptr_ + i;
     }
 
     pointer_iterator operator++(int) {
         auto tmp = *this;
-        ++_ptr;
+        ++ptr_;
         return tmp;
     }
 
     pointer_iterator &operator--() {
-        --_ptr;
+        --ptr_;
         return *this;
     }
 
     pointer_iterator operator--(int) {
         auto tmp = *this;
-        --_ptr;
+        --ptr_;
         return tmp;
     }
 
     reference operator*() {
-        return *_ptr;
+        return *ptr_;
     }
 
     pointer operator->() {
-        return _ptr;
+        return ptr_;
     }
 
     pointer get() {
-        return _ptr;
+        return ptr_;
+    }
+
+    const pointer get() const {
+        return ptr_;
     }
 
     size_t operator-(const pointer_iterator &rhs) const {
-        return _ptr - rhs._ptr;
+        return ptr_ - rhs.ptr_;
     }
 
     pointer_iterator operator-(int i) const {
-        return _ptr - i;
+        return ptr_ - i;
     }
 
-    bool operator==(const pointer_iterator &element) const {
-        return element._ptr == _ptr;
+    bool operator==(const pointer &p) const {
+        return ptr_ == const_cast<pointer>(p);
     }
 
-    bool operator!=(const pointer_iterator &element) const {
-        return element._ptr != _ptr;
+    bool operator==(const pointer_iterator<value_type, true> &element) const {
+        return ptr_ == const_cast<pointer>(element.get());
     }
 
-    friend struct pointer_iterator<value_type, true>;
+    bool operator==(const pointer_iterator<value_type, false> &element) const {
+        return ptr_ == const_cast<pointer>(element.get());
+    }
+
+    bool operator!=(const pointer &p) const {
+        return ptr_ != const_cast<pointer>(p);
+    }
+
+    bool operator!=(const pointer_iterator<value_type, true> &element) const {
+        return ptr_ != const_cast<pointer>(element.get());
+    }
+
+    bool operator!=(const pointer_iterator<value_type, false> &element) const {
+        return ptr_ != const_cast<pointer>(element.get());
+    }
 
 };
 
@@ -157,71 +176,86 @@ struct list_iterator {
 
 private:
 
-    node_pointer ptr = nullptr;
+    node_pointer ptr_ = nullptr;
 
 public:
 
     list_iterator() = default;
 
-    list_iterator(node_pointer p) : ptr(p) {
+    list_iterator(node_pointer p) : ptr_(p) {
     }
 
-    list_iterator(const list_iterator<value_type, node_pointer, true> &it) : ptr(it.ptr) {
+    list_iterator(const list_iterator<value_type, node_pointer, true> &it)
+            : ptr_(const_cast<node_pointer>(it.node())) {
     }
 
-    list_iterator(const list_iterator<value_type, node_pointer, false> &it) : ptr(it.ptr) {
+    list_iterator(const list_iterator<value_type, node_pointer, false> &it)
+            : ptr_(const_cast<node_pointer>(it.node())) {
     }
 
     list_iterator &operator++() {
-        ptr = ptr->next();
+        ptr_ = ptr_->next();
         return *this;
     }
 
     list_iterator operator++(int) {
         auto tmp = *this;
-        ptr = ptr->next();
+        ptr_ = ptr_->next();
         return tmp;
     }
 
     list_iterator &operator--() {
-        ptr = ptr->prev();
+        ptr_ = ptr_->prev();
         return *this;
     }
 
     list_iterator operator--(int) {
         auto tmp = *this;
-        ptr = ptr->prev();
+        ptr_ = ptr_->prev();
         return tmp;
     }
 
     reference operator *() {
-        return *ptr->entry();
+        return *ptr_->entry();
     }
 
     pointer operator->() {
-        return ptr->entry();
+        return ptr_->entry();
     }
 
-    bool operator==(const list_iterator &i) const {
-        return i.ptr == ptr;
+    bool operator==(const node_pointer &p) const {
+        return ptr_ == const_cast<const node_type *>(p);
     }
 
-    bool operator!=(const list_iterator &i) const {
-        return i.ptr != ptr;
+    bool operator==(const list_iterator<value_type, node_type, true> &i) const {
+        return ptr_ == const_cast<const node_type *>(i.node());
+    }
+
+    bool operator==(const list_iterator<value_type, node_type, false> &i) const {
+        return ptr_ == const_cast<node_type *>(i.node());
+    }
+
+    bool operator!=(const node_pointer &p) const {
+        return ptr_ != const_cast<const node_type *>(p);
+    }
+
+    bool operator!=(const list_iterator<value_type, node_type, true> &i) const {
+        return ptr_ != const_cast<const node_type *>(i.node());
+    }
+
+    bool operator!=(const list_iterator<value_type, node_type, false> &i) const {
+        return ptr_ != const_cast<node_type *>(i.node());
     }
 
     node_pointer node() {
-        return ptr;
+        return ptr_;
     }
 
     const node_pointer node() const {
-        return ptr;
+        return ptr_;
     }
 
-    friend struct list_iterator<value_type, node_type, true>;
-
 };
-
 
 } // namespace yacppl
 

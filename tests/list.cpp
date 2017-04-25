@@ -163,9 +163,14 @@ TEST(list, can_compare_iterators) {
     list.push_front(10);
     auto it1 = list.begin();
     auto it2 = it1;
-    REQUIRE_EQ(it1 == it2, true);
+    REQUIRE(it1 == it2);
+    REQUIRE(it1 == list.cbegin());
     it2++;
-    REQUIRE_EQ(it1 != it2, true);
+    REQUIRE(it1 != it2);
+    auto const_it = list.cbegin();
+    REQUIRE(const_it == it1);
+    ++const_it;
+    REQUIRE(const_it == it2);
 }
 
 TEST(list, can_be_constructed_by_copy) {
