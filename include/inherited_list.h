@@ -7,15 +7,17 @@ namespace yacppl {
 template <typename Type>
 struct inherited_list {
 
-    struct node {
+    class node {
 
         node *prev_, *next_;
+
+    public:
 
         node() {
             next_ = prev_ = this;
         }
 
-        node *next() {
+        auto &next() {
             return next_;
         }
 
@@ -23,7 +25,7 @@ struct inherited_list {
             return next_;
         }
 
-        node *prev() {
+        auto &prev() {
             return prev_;
         }
 
@@ -46,10 +48,10 @@ private:
     node head_;
 
     void add_element(node &new_element, node &prev, node &next) {
-        next.prev_ = &new_element;
-        prev.next_ = &new_element;
-        new_element.next_ = &next;
-        new_element.prev_ = &prev;
+        next.prev() = &new_element;
+        prev.next() = &new_element;
+        new_element.next() = &next;
+        new_element.prev() = &prev;
     }
 
     template <bool is_const>
@@ -63,32 +65,32 @@ public:
     constexpr inherited_list() = default;
 
     inherited_list &push_back(node *new_element) {
-        add_element(*new_element, *head_.prev_, head_);
+        add_element(*new_element, *head_.prev(), head_);
         return *this;
     }
 
     inherited_list &push_front(node *new_element) {
-        add_element(*new_element, head_, *head_.next_);
+        add_element(*new_element, head_, *head_.next());
         return *this;
     }
 
     inherited_list &erase(node &node) {
-        node.next_->prev_ = node.prev_;
-        node.prev_->next_ = node.next_;
-        node.prev_ = node.next_ = &head_;
+        node.next()->prev() = node.prev();
+        node.prev()->next() = node.next();
+        node.prev() = node.next() = &head_;
         return *this;
     }
 
     bool empty() const {
-        return head_.next_ == &head_;
+        return head_.next() == &head_;
     }
 
     iterator begin() {
-        return iterator(head_.next_);
+        return iterator(head_.next());
     }
 
     const_iterator begin() const {
-        return const_iterator(head_.next_);
+        return const_iterator(head_.next());
     }
 
     iterator end() {
@@ -100,7 +102,7 @@ public:
     }
 
     const_iterator cbegin() const {
-        return const_iterator(head_.next_);
+        return const_iterator(head_.next());
     }
 
     const_iterator cend() const {
