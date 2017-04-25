@@ -68,6 +68,10 @@ public:
         return next_ == this ? nullptr : next_->entry();
     }
 
+    Type *prev_entry() {
+        return prev_ == this ? nullptr : prev_->entry();
+    }
+
     iterator begin() {
         return iterator(next_);
     }
