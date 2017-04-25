@@ -28,11 +28,11 @@ class list final {
             return next_;
         }
 
-        auto prev() {
+        auto &prev() {
             return prev_;
         }
 
-        auto next() {
+        auto &next() {
             return next_;
         }
 
@@ -152,28 +152,28 @@ public:
         return back_element()->data;
     }
 
-    const_iterator cbegin() const {
-        return const_iterator(front_element());
-    }
-
-    const_iterator cend() const {
-        return const_iterator(back_element()->next_);
+    iterator begin() {
+        return iterator(front_element());
     }
 
     const_iterator begin() const {
         return const_iterator(front_element());
     }
 
-    const_iterator end() const {
-        return const_iterator(back_element()->next_);
-    }
-
-    iterator begin() {
-        return iterator(front_element());
+    const_iterator cbegin() const {
+        return const_iterator(front_element());
     }
 
     iterator end() {
         return iterator(back_element()->next_);
+    }
+
+    const_iterator end() const {
+        return const_iterator(back_element()->next_);
+    }
+
+    const_iterator cend() const {
+        return const_iterator(back_element()->next_);
     }
 
     void pop_back() {
