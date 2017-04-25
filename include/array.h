@@ -23,7 +23,7 @@ public:
 
     array(const std::initializer_list<Type> &list) {
         unsigned i = 0;
-        for (auto v : list) {
+        for (const auto &v : list) {
             array_[i++] = v;
         }
     }
@@ -31,7 +31,7 @@ public:
     template <typename Container>
     array(const Container &container) {
         unsigned i = 0;
-        for (auto v : container) {
+        for (const auto &v : container) {
             array_[i++] = v;
         }
     }
