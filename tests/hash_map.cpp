@@ -111,15 +111,22 @@ TEST(hash_map, can_iterate) {
     map.insert(make_pair(91348u, -129));
     map.insert(make_pair(12u, 1029));
     auto it = map.begin();
+    REQUIRE(it == map.begin());
     REQUIRE_EQ((*it).first, 0u);
     REQUIRE_EQ((*it).second, 91);
     ++it;
+    REQUIRE(it != map.begin());
     REQUIRE_EQ((*it).first, 12u);
     REQUIRE_EQ((*it).second, 1029);
     ++it;
-    REQUIRE_EQ((*it).first, 91348u);
-    REQUIRE_EQ((*it).second, -129);
+    REQUIRE_EQ(it->first, 91348u);
+    REQUIRE_EQ(it->second, -129);
+    it++;
+    REQUIRE(it == map.end());
+    REQUIRE_FALSE(it != map.end());
     ++it;
+    REQUIRE(it == map.end());
+    it++;
     REQUIRE(it == map.end());
 }
 

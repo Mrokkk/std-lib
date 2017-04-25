@@ -17,13 +17,34 @@ struct hash_map final {
 
     using node = pair<Key, Value>;
 
-    struct iterator {
+    class iterator {
 
         list<node> **bucket_ptr_ = nullptr;
         list<node> **buckets_end_ = nullptr;
         unsigned bucket_index_ = 0;
         typename list<node>::iterator bucket_iterator_;
         typename list<node>::iterator end_;
+
+        void advance() {
+            if (bucket_index_ == Size) {
+                return;
+            }
+            ++bucket_iterator_;
+            if (bucket_iterator_ == end_) {
+                bucket_index_++;
+                while (bucket_ptr_[bucket_index_] == nullptr && bucket_index_ <= Size) {
+                    bucket_index_++;
+                }
+                if (bucket_index_ == Size) {
+                    bucket_iterator_ = nullptr;
+                    return;
+                }
+                bucket_iterator_ = bucket_ptr_[bucket_index_]->begin();
+                end_ = bucket_ptr_[bucket_index_]->end();
+            }
+        }
+
+    public:
 
         iterator() = default;
 
@@ -36,31 +57,30 @@ struct hash_map final {
         }
 
         iterator &operator++() {
-            if (bucket_ptr_ == nullptr) {
-                return *this;
-            }
-            ++bucket_iterator_;
-            if (bucket_iterator_ == end_) {
-                bucket_index_++;
-                while (bucket_ptr_[bucket_index_] == nullptr && bucket_index_ <= Size) {
-                    bucket_index_++;
-                }
-                if (bucket_index_ == Size) {
-                    bucket_iterator_ = nullptr;
-                    return *this;
-                }
-                bucket_iterator_ = bucket_ptr_[bucket_index_]->begin();
-                end_ = bucket_ptr_[bucket_index_]->end();
-            }
+            advance();
             return *this;
+        }
+
+        iterator operator++(int) {
+            iterator old = *this;
+            advance();
+            return old;
         }
 
         node &operator*() {
             return *bucket_iterator_;
         }
 
+        node *operator->() {
+            return &*bucket_iterator_;
+        }
+
         bool operator==(const iterator &it) const {
             return bucket_index_ == it.bucket_index_ && bucket_iterator_ == it.bucket_iterator_;
+        }
+
+        bool operator!=(const iterator &it) const {
+            return not operator==(it);
         }
 
     };
