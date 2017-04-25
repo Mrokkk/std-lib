@@ -19,15 +19,20 @@ struct hash_map final {
 
     struct iterator {
 
-        list<node> *bucket_ptr_ = nullptr;
+        list<node> **bucket_ptr_ = nullptr;
+        list<node> **buckets_end_ = nullptr;
+        unsigned bucket_index_ = 0;
         typename list<node>::iterator bucket_iterator_;
         typename list<node>::iterator end_;
 
         iterator() = default;
 
-        iterator(list<node> *ptr) : bucket_ptr_(ptr) {
-            bucket_iterator_ = bucket_ptr_->begin();
-            end_ = bucket_ptr_->end();
+        iterator(list<node> **ptr, unsigned bucket_index) : bucket_ptr_(ptr), bucket_index_(bucket_index) {
+            bucket_iterator_ = bucket_ptr_[bucket_index_]->begin();
+            end_ = bucket_ptr_[bucket_index_]->end();
+        }
+
+        iterator(unsigned bucket_index) : bucket_index_(bucket_index) {
         }
 
         iterator &operator++() {
@@ -36,9 +41,16 @@ struct hash_map final {
             }
             ++bucket_iterator_;
             if (bucket_iterator_ == end_) {
-                bucket_ptr_++;
-                bucket_iterator_ = bucket_ptr_->begin();
-                end_ = bucket_ptr_->end();
+                bucket_index_++;
+                while (bucket_ptr_[bucket_index_] == nullptr && bucket_index_ <= Size) {
+                    bucket_index_++;
+                }
+                if (bucket_index_ == Size) {
+                    bucket_iterator_ = nullptr;
+                    return *this;
+                }
+                bucket_iterator_ = bucket_ptr_[bucket_index_]->begin();
+                end_ = bucket_ptr_[bucket_index_]->end();
             }
             return *this;
         }
@@ -47,11 +59,15 @@ struct hash_map final {
             return *bucket_iterator_;
         }
 
+        bool operator==(const iterator &it) const {
+            return bucket_index_ == it.bucket_index_ && bucket_iterator_ == it.bucket_iterator_;
+        }
+
     };
 
 private:
 
-    list<node> *buckets_[Size + 1];
+    list<node> *buckets_[Size];
     size_t size_ = 0u;
 
     void add_to_bucket(unsigned hash, const node &kv) {
@@ -91,7 +107,11 @@ public:
     }
 
     iterator begin() {
-        return iterator(buckets_[0]);
+        return iterator(buckets_, 0);
+    }
+
+    iterator end() {
+        return iterator(Size);
     }
 
     hash_map &insert(const node &kv) {

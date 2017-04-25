@@ -113,6 +113,14 @@ TEST(hash_map, can_iterate) {
     auto it = map.begin();
     REQUIRE_EQ((*it).first, 0u);
     REQUIRE_EQ((*it).second, 91);
+    ++it;
+    REQUIRE_EQ((*it).first, 12u);
+    REQUIRE_EQ((*it).second, 1029);
+    ++it;
+    REQUIRE_EQ((*it).first, 91348u);
+    REQUIRE_EQ((*it).second, -129);
+    ++it;
+    REQUIRE(it == map.end());
 }
 
 namespace {
