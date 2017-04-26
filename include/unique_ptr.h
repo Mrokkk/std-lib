@@ -12,12 +12,19 @@ class unique_ptr final {
 
     Pointer ptr_ = nullptr;
 
+    void release() {
+        if (ptr_) {
+            delete ptr_;
+        }
+        ptr_ = nullptr;
+    }
+
 public:
 
     unique_ptr() = default;
 
-    unique_ptr(Pointer ptr)
-            : ptr_(ptr) {}
+    unique_ptr(Pointer ptr) : ptr_(ptr) {
+    }
 
     unique_ptr(const unique_ptr &) = delete;
 
@@ -29,11 +36,11 @@ public:
     }
 
     ~unique_ptr() {
-        if (ptr_)
-            delete ptr_;
+        release();
     }
 
     unique_ptr &operator=(unique_ptr &&other) {
+        release();
         ptr_ = other.ptr_;
         other.ptr_ = nullptr;
         return *this;

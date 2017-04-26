@@ -56,6 +56,24 @@ struct helper {
     explicit helper(int a) : a(a) {}
 };
 
+template <typename Type>
+void test_with_type() {
+    unique_ptr<Type> ptr1;
+    REQUIRE_FALSE(ptr1);
+    ptr1 = new Type();
+    REQUIRE(ptr1);
+    REQUIRE_EQ(*ptr1, Type());
+    ptr1 = nullptr;
+    REQUIRE_FALSE(ptr1);
+    unique_ptr<Type> ptr2(move(ptr1));
+    REQUIRE_FALSE(ptr1);
+    REQUIRE_FALSE(ptr2);
+    ptr1 = new Type();
+    ptr2 = move(ptr1);
+    REQUIRE_FALSE(ptr1);
+    REQUIRE(ptr2);
+}
+
 } // namespace anon
 
 TEST(unique_ptr, can_work_with_struct) {
@@ -63,5 +81,17 @@ TEST(unique_ptr, can_work_with_struct) {
         auto ptr = make_unique<helper>(i);
         REQUIRE_EQ(ptr->a, i);
     }
+}
+
+TEST(unique_ptr, works_with_simple_types) {
+    test_with_type<char>();
+    test_with_type<signed char>();
+    test_with_type<unsigned char>();
+    test_with_type<short>();
+    test_with_type<unsigned short>();
+    test_with_type<int>();
+    test_with_type<unsigned int>();
+    test_with_type<long>();
+    test_with_type<long long>();
 }
 
