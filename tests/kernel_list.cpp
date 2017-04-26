@@ -119,6 +119,41 @@ TEST(kernel_list, can_iterate) {
     REQUIRE_EQ(const_it->a, 26);
 }
 
+TEST(kernel_list, can_insert) {
+    kernel_list<helper> list(&helper::list);
+    helper e1(2), e2(44), e3(26), e4(94);
+    list.push_back(e1.list);
+    list.push_back(e2.list);
+    list.push_back(e3.list);
+    auto it = list.begin();
+    it++;
+    list.insert(it, e4.list);
+    it = list.begin();
+    REQUIRE_EQ(it->a, 2);
+    it++;
+    REQUIRE_EQ(it->a, 94);
+    it++;
+    REQUIRE_EQ(it->a, 44);
+    it++;
+    REQUIRE_EQ(it->a, 26);
+    it++;
+    REQUIRE(it == list.end());
+    helper e5(-924);
+    list.insert(e1.list, e5.list);
+    it = list.begin();
+    REQUIRE_EQ(it->a, -924);
+    it++;
+    REQUIRE_EQ(it->a, 2);
+    it++;
+    REQUIRE_EQ(it->a, 94);
+    it++;
+    REQUIRE_EQ(it->a, 44);
+    ++it;
+    REQUIRE_EQ(it->a, 26);
+    ++it;
+    REQUIRE(it == list.end());
+}
+
 TEST(kernel_list, can_erase) {
     kernel_list<helper> list(&helper::list);
     helper e1(2), e2(44), e3(26), e4(94);

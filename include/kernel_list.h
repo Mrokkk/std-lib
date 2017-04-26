@@ -62,6 +62,16 @@ public:
         return *this;
     }
 
+    kernel_list &insert(const iterator &pos, kernel_list &node) {
+        add_node(&node, pos.node()->prev_, pos.node());
+        return *this;
+    }
+
+    kernel_list &insert(kernel_list &pos, kernel_list &node) {
+        add_node(&node, pos.prev_, &pos);
+        return *this;
+    }
+
     kernel_list &erase(const iterator &it) {
         remove_node(it.node());
         return *this;
