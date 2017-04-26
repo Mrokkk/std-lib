@@ -14,7 +14,7 @@ class unique_ptr final {
 
 public:
 
-    constexpr unique_ptr() {}
+    unique_ptr() = default;
 
     unique_ptr(Pointer ptr)
             : ptr_(ptr) {}

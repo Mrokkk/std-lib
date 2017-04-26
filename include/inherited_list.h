@@ -17,7 +17,7 @@ struct inherited_list {
             next_ = prev_ = this;
         }
 
-        auto &next() {
+        node *&next() {
             return next_;
         }
 
@@ -25,7 +25,7 @@ struct inherited_list {
             return next_;
         }
 
-        auto &prev() {
+        node *&prev() {
             return prev_;
         }
 

@@ -23,11 +23,11 @@ public:
         list_.pop_front();
     }
 
-    constexpr const Type &front() const {
+    const Type &front() const {
         return list_.front();
     }
 
-    constexpr size_t size() const {
+    size_t size() const {
         return list_.size();
     }
 

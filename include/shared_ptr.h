@@ -26,7 +26,7 @@ class shared_ptr final {
 
 public:
 
-    constexpr shared_ptr() {}
+    shared_ptr() = default;
 
     shared_ptr(Pointer ptr) {
         ptr_ = ptr;

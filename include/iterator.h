@@ -25,11 +25,11 @@ inline auto cend(const Container &c) -> decltype (c.cend()) {
     return c.cend();
 }
 
-inline auto begin(char *c) {
+inline char *begin(char *c) {
     return c;
 }
 
-inline auto cbegin(const char *c) {
+inline const char *cbegin(const char *c) {
     return c;
 }
 
@@ -39,11 +39,11 @@ inline size_t length(const char *string) {
     return temp-string;
 }
 
-inline auto end(char *c) {
+inline char *end(char *c) {
     return begin(c) + length(c);
 }
 
-inline auto cend(const char *c) {
+inline const char *cend(const char *c) {
     return cbegin(c) + length(c);
 }
 
