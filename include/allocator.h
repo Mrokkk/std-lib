@@ -38,7 +38,7 @@ class allocator final {
             auto new_block = reinterpret_cast<memory_block *>(pointer_offset(data(), pivot));
             new_block->size = old_size - _memory_block_size - size;
             new_block->free = true;
-            list_.push_front(new_block->list_);
+            list_.push_front(*new_block);
         }
 
         void try_to_divide(size_t pivot) {
@@ -85,7 +85,7 @@ public:
         }
         auto new_block = create_memory_block(size);
         if (new_block == nullptr) return nullptr;
-        blocks_.push_back(new_block->list_);
+        blocks_.push_back(*new_block);
         return new_block->data();
     }
 
@@ -99,7 +99,7 @@ public:
             if (!next) break;
             if (next->free && temp.free) {
                 temp.size = temp.size + next->size + _memory_block_size;
-                blocks_.erase(next->list_);
+                blocks_.erase(*next);
             }
         }
         return false;

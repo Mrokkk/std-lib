@@ -14,7 +14,7 @@ struct helper {
 
 void test_adding(kernel_list<helper> &head, helper &e, std::vector<int> &comp, int s) {
     auto size = 0;
-    head.push_back(e.list);
+    head.push_back(e);
     for (const auto &h : head) {
         REQUIRE_EQ(comp[size], h.a);
         size++;
@@ -25,7 +25,7 @@ void test_adding(kernel_list<helper> &head, helper &e, std::vector<int> &comp, i
 
 void test_adding_front(kernel_list<helper> &head, helper &e, std::vector<int> &comp, int s) {
     auto size = 0;
-    head.push_front(e.list);
+    head.push_front(e);
     for (const auto &h : head) {
         REQUIRE_EQ(comp[size], h.a);
         size++;
@@ -35,7 +35,7 @@ void test_adding_front(kernel_list<helper> &head, helper &e, std::vector<int> &c
 }
 
 void test_removing(kernel_list<helper> &head, helper &e, std::vector<int> &comp) {
-    head.erase(e.list);
+    head.erase(e);
     size_t size = 0;
     for (const auto &h : head) {
         REQUIRE_EQ(comp[size], h.a);
@@ -93,10 +93,10 @@ TEST(kernel_list, can_delete_elements) {
 TEST(kernel_list, can_iterate) {
     kernel_list<helper> list(&helper::list);
     helper e1(2), e2(44), e3(26), e4(94);
-    list.push_back(e1.list);
-    list.push_back(e2.list);
-    list.push_back(e3.list);
-    list.push_back(e4.list);
+    list.push_back(e1);
+    list.push_back(e2);
+    list.push_back(e3);
+    list.push_back(e4);
     auto it = list.begin();
     REQUIRE_EQ(it->a, 2);
     ++it;
@@ -122,12 +122,12 @@ TEST(kernel_list, can_iterate) {
 TEST(kernel_list, can_insert) {
     kernel_list<helper> list(&helper::list);
     helper e1(2), e2(44), e3(26), e4(94);
-    list.push_back(e1.list);
-    list.push_back(e2.list);
-    list.push_back(e3.list);
+    list.push_back(e1);
+    list.push_back(e2);
+    list.push_back(e3);
     auto it = list.begin();
     it++;
-    list.insert(it, e4.list);
+    list.insert(it, e4);
     it = list.begin();
     REQUIRE_EQ(it->a, 2);
     it++;
@@ -139,7 +139,7 @@ TEST(kernel_list, can_insert) {
     it++;
     REQUIRE(it == list.end());
     helper e5(-924);
-    list.insert(e1.list, e5.list);
+    list.insert(e1, e5);
     it = list.begin();
     REQUIRE_EQ(it->a, -924);
     it++;
@@ -157,10 +157,10 @@ TEST(kernel_list, can_insert) {
 TEST(kernel_list, can_erase) {
     kernel_list<helper> list(&helper::list);
     helper e1(2), e2(44), e3(26), e4(94);
-    list.push_back(e1.list);
-    list.push_back(e2.list);
-    list.push_back(e3.list);
-    list.push_back(e4.list);
+    list.push_back(e1);
+    list.push_back(e2);
+    list.push_back(e3);
+    list.push_back(e4);
     auto it = list.begin();
     list.erase(it);
     REQUIRE_EQ(list.begin()->a, 44);
@@ -174,7 +174,7 @@ TEST(kernel_list, can_erase) {
     REQUIRE_EQ(it->a, 94);
     ++it;
     REQUIRE(it == list.end());
-    list.erase(e4.list);
+    list.erase(e4);
     it = list.begin();
     REQUIRE_EQ(it->a, 44);
     ++it;

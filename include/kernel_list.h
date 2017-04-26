@@ -31,6 +31,10 @@ class kernel_list final {
         return reinterpret_cast<char *>(&(static_cast<T *>(nullptr)->*member)) - static_cast<char *>(nullptr);
     }
 
+    kernel_list *list_member(Type *obj) {
+        return reinterpret_cast<kernel_list *>(reinterpret_cast<char *>(obj) + offset_);
+    }
+
     Type *this_offset(int offset) {
         return reinterpret_cast<Type *>(reinterpret_cast<char *>(this) + offset);
     }
@@ -52,23 +56,24 @@ public:
         offset_ = offset_of(member);
     }
 
-    kernel_list &push_back(kernel_list &new_node) {
-        add_node(&new_node, prev_, this);
+    kernel_list &push_back(Type &new_node) {
+        add_node(list_member(&new_node), prev_, this);
         return *this;
     }
 
-    kernel_list &push_front(kernel_list &new_node) {
-        add_node(&new_node, this, next_);
+    kernel_list &push_front(Type &new_node) {
+        add_node(list_member(&new_node), this, next_);
         return *this;
     }
 
-    kernel_list &insert(const iterator &pos, kernel_list &node) {
-        add_node(&node, pos.node()->prev_, pos.node());
+    kernel_list &insert(const iterator &pos, Type &node) {
+        add_node(list_member(&node), pos.node()->prev_, pos.node());
         return *this;
     }
 
-    kernel_list &insert(kernel_list &pos, kernel_list &node) {
-        add_node(&node, pos.prev_, &pos);
+    kernel_list &insert(Type &pos, Type &node) {
+        auto node_member = list_member(&pos);
+        add_node(list_member(&node), node_member->prev_, node_member);
         return *this;
     }
 
@@ -77,8 +82,8 @@ public:
         return *this;
     }
 
-    kernel_list &erase(kernel_list &node) {
-        remove_node(&node);
+    kernel_list &erase(Type &node) {
+        remove_node(list_member(&node));
         return *this;
     }
 
