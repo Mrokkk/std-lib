@@ -23,16 +23,16 @@ public:
 
     array(const std::initializer_list<Type> &list) {
         unsigned i = 0;
-        for (const auto &v : list) {
-            array_[i++] = v;
+        for (auto it = list.begin(); it != list.end(); ++it) {
+            array_[i++] = *it;
         }
     }
 
     template <typename Container>
     array(const Container &container) {
         unsigned i = 0;
-        for (const auto &v : container) {
-            array_[i++] = v;
+        for (auto it = ::yacppl::cbegin(container); it != ::yacppl::cend(container); ++it) {
+            array_[i++] = *it;
         }
     }
 

@@ -18,27 +18,6 @@ TEST(array, can_create_initialized_array) {
     REQUIRE(array.end() - array.begin() == 5);
 }
 
-TEST(array, can_read_elements_sequentially) {
-    array<int, 5> array{2, 3, 4, 5, 6};
-    int c_array[5] = {0, 0, 0, 0, 0};
-    unsigned i = 0;
-    for (const auto &elem : array)
-        c_array[i++] = elem;
-    REQUIRE_EQ(c_array[0], 2);
-    REQUIRE_EQ(c_array[2], 4);
-    REQUIRE_EQ(c_array[4], 6);
-}
-
-TEST(array, can_modify_elements_sequentially) {
-    array<int, 5> array{2, 3, 4, 5, 6};
-    unsigned i = 10;
-    for (auto &elem : array)
-        elem = i++;
-    REQUIRE_EQ(array[0], 10);
-    REQUIRE_EQ(array[2], 12);
-    REQUIRE_EQ(array[4], 14);
-}
-
 TEST(array, can_modify) {
     array<int, 5> array{2, 3, 4, 5, 6};
     array[0] = 10;

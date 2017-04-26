@@ -89,8 +89,9 @@ class list final {
 
     template<typename T>
     void copy_elements_from(const T &other) {
-        for (const auto &e : other)
-            push_back(e);
+        for (auto it = other.begin(); it != other.end(); ++it) {
+            push_back(*it);
+        }
     }
 
     void move_elements_from(list &other) {
