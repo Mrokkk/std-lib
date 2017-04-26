@@ -23,12 +23,12 @@ class allocator final {
 
     public:
 
-        kernel_list<memory_block> list_;
+        typename kernel_list<memory_block>::node list_;
         uint32_t size;
         bool free = false;
 
         constexpr explicit memory_block(size_t s)
-            : list_(&memory_block::list_), size(s), free(false) {
+            : size(s), free(false) {
         }
 
         void divide(size_t pivot) {
@@ -38,7 +38,7 @@ class allocator final {
             auto new_block = reinterpret_cast<memory_block *>(pointer_offset(data(), pivot));
             new_block->size = old_size - _memory_block_size - size;
             new_block->free = true;
-            list_.push_front(*new_block);
+            list_.insert(&new_block->list_);
         }
 
         void try_to_divide(size_t pivot) {
@@ -56,7 +56,7 @@ class allocator final {
             return address;
         }
 
-    } __attribute__((packed));
+    };
 
     kernel_list<memory_block> blocks_;
     BackendAllocator backend_allocator_;
@@ -95,7 +95,7 @@ public:
                 temp.free = true;
                 return true;
             }
-            auto next = temp.list_.next_entry();
+            auto next = temp.list_.next()->entry();
             if (!next) break;
             if (next->free && temp.free) {
                 temp.size = temp.size + next->size + _memory_block_size;

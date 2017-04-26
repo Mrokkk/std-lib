@@ -8,8 +8,8 @@ namespace {
 
 struct helper {
     int a;
-    kernel_list<helper> list;
-    helper(int x) : a(x), list(&helper::list) {}
+    kernel_list<helper>::node list;
+    helper(int x) : a(x) {}
 };
 
 void test_adding(kernel_list<helper> &head, helper &e, std::vector<int> &comp, int s) {
@@ -45,21 +45,11 @@ void test_removing(kernel_list<helper> &head, helper &e, std::vector<int> &comp)
     REQUIRE_FALSE(head.empty());
 }
 
-} // namespace anon
+} // namespace
 
 TEST(kernel_list, can_create_empty) {
     kernel_list<helper> list(&helper::list);
     REQUIRE(list.empty());
-    REQUIRE_EQ(list.next_entry(), nullptr);
-    REQUIRE_EQ(list.prev_entry(), nullptr);
-}
-
-TEST(kernel_list, can_acces_element) {
-    for (auto i = 0; i < 1024; i++) {
-        helper e(i);
-        auto result = e.list.entry();
-        REQUIRE_EQ(result->a, i);
-    }
 }
 
 TEST(kernel_list, can_add_elements) {
@@ -70,8 +60,6 @@ TEST(kernel_list, can_add_elements) {
     test_adding(list, e2, v, 2);
     test_adding(list, e3, v, 3);
     test_adding(list, e4, v, 4);
-    REQUIRE_EQ(list.next_entry()->a, v.front());
-    REQUIRE_EQ(list.prev_entry()->a, v.back());
     std::vector<int> v2{24, 2, 44, 26, 94};
     test_adding_front(list, e5, v2, 5);
 }
