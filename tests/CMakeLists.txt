@@ -21,7 +21,6 @@ endif()
 add_executable(${PROJECT_NAME}
     main.cpp
     array.cpp
-    kernel_list.cpp
     list.cpp
     mixed.cpp
     optional.cpp
@@ -35,6 +34,7 @@ add_executable(${PROJECT_NAME}
     hash_map.cpp
     function.cpp
     inherited_list.cpp
+    kernel_list.cpp
 )
 
 add_run_target(${PROJECT_NAME} tests-run)

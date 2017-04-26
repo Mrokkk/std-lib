@@ -90,3 +90,54 @@ TEST(kernel_list, can_delete_elements) {
     test_removing(list, e1, v3);
 }
 
+TEST(kernel_list, can_iterate) {
+    kernel_list<helper> list(&helper::list);
+    helper e1(2), e2(44), e3(26), e4(94);
+    list.push_back(e1.list);
+    list.push_back(e2.list);
+    list.push_back(e3.list);
+    list.push_back(e4.list);
+    auto it = list.begin();
+    REQUIRE_EQ(it->a, 2);
+    ++it;
+    REQUIRE_EQ(it->a, 44);
+    it++;
+    REQUIRE_EQ(it->a, 26);
+    it++;
+    REQUIRE_EQ(it->a, 94);
+    ++it;
+    REQUIRE(it == list.end());
+    --it;
+    REQUIRE_EQ(it->a, 94);
+    it--;
+    REQUIRE_EQ(it->a, 26);
+    auto const_it = list.cbegin();
+    REQUIRE_EQ(const_it->a, 2);
+    const_it++;
+    REQUIRE_EQ(const_it->a, 44);
+    ++const_it;
+    REQUIRE_EQ(const_it->a, 26);
+}
+
+TEST(kernel_list, can_erase) {
+    kernel_list<helper> list(&helper::list);
+    helper e1(2), e2(44), e3(26), e4(94);
+    list.push_back(e1.list);
+    list.push_back(e2.list);
+    list.push_back(e3.list);
+    list.push_back(e4.list);
+    auto it = list.begin();
+    list.erase(it);
+    REQUIRE_EQ(list.begin()->a, 44);
+    REQUIRE_FALSE(list.empty());
+    it = list.begin();
+    it++;
+    list.erase(it);
+    it = list.begin();
+    REQUIRE_EQ(it->a, 44);
+    it++;
+    REQUIRE_EQ(it->a, 94);
+    ++it;
+    REQUIRE(it == list.end());
+}
+

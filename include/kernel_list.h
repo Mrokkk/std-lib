@@ -29,6 +29,10 @@ class kernel_list final {
         return reinterpret_cast<Type *>(reinterpret_cast<char *>(this) + offset);
     }
 
+    const Type *this_offset(int offset) const {
+        return reinterpret_cast<const Type *>(reinterpret_cast<const char *>(this) + offset);
+    }
+
     template <bool is_const>
     using detail_iterator = list_iterator<Type, kernel_list, is_const>;
 
@@ -42,12 +46,21 @@ public:
         offset_ = offset_of(member);
     }
 
-    void push_back(kernel_list &new_element) {
+    kernel_list &push_back(kernel_list &new_element) {
         add_element(&new_element, prev_, this);
+        return *this;
     }
 
-    void push_front(kernel_list &new_element) {
+    kernel_list &push_front(kernel_list &new_element) {
         add_element(&new_element, this, next_);
+        return *this;
+    }
+
+    kernel_list &erase(const iterator &it) {
+        it.node()->next_->prev_ = it.node()->prev_;
+        it.node()->prev_->next_ = it.node()->next_;
+        it.node()->prev_ = it.node()->next_ = this;
+        return *this;
     }
 
     void remove() {
@@ -64,6 +77,10 @@ public:
         return this_offset(-offset_);
     }
 
+    const Type *entry() const {
+        return this_offset(-offset_);
+    }
+
     Type *next_entry() {
         return next_ == this ? nullptr : next_->entry();
     }
@@ -76,6 +93,10 @@ public:
         return iterator(next_);
     }
 
+    const_iterator begin() const {
+        return const_iterator(next_);
+    }
+
     const_iterator cbegin() const {
         return const_iterator(next_);
     }
@@ -85,6 +106,10 @@ public:
     }
 
     const_iterator cend() const {
+        return const_iterator(this);
+    }
+
+    const_iterator end() const {
         return const_iterator(this);
     }
 
