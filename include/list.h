@@ -139,6 +139,10 @@ public:
         return size_;
     }
 
+    bool empty() const {
+        return size_ == 0;
+    }
+
     void push_front(const Type &element) {
         add_front_element(new list_element(element));
     }
@@ -193,11 +197,13 @@ public:
 
     void resize(unsigned long count, Type val = Type()) {
         if (size_ < count) {
-            while (size_ != count)
+            while (size_ != count) {
                 push_back(val);
+            }
         } else {
-            while (size_ != count)
+            while (size_ != count) {
                 pop_back();
+            }
         }
     }
 

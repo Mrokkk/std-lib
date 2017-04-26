@@ -42,6 +42,8 @@ TEST(list, can_add_back_two_items) {
 }
 
 TEST(list, can_be_initialized_with_initializer_list) {
+    list<int> empty{};
+    REQUIRE(empty.empty());
     list<int> list{2, 5, 6, 88, 4};
     REQUIRE(list.size() == 5);
     REQUIRE_EQ(list.front(), 2);
@@ -99,15 +101,20 @@ TEST(list, can_pop_front) {
 TEST(list, can_be_resized) {
     list<int> list;
     list.resize(20);
-    REQUIRE(list.size() == 20);
-    for (auto &it : list)
+    REQUIRE_EQ(list.size(), 20u);
+    for (auto &it : list) {
         it = 38;
+    }
     REQUIRE_EQ(list.front(), 38);
     REQUIRE_EQ(list.back(), 38);
     list.resize(2);
     REQUIRE_EQ(list.front(), 38);
     REQUIRE_EQ(list.back(), 38);
-    REQUIRE(list.size() == 2);
+    REQUIRE_EQ(list.size(), 2u);
+    list.resize(0);
+    REQUIRE_EQ(list.size(), 0u);
+    list.resize(100);
+    REQUIRE_EQ(list.size(), 100u);
 }
 
 TEST(list, can_increment_iterator) {
@@ -175,14 +182,18 @@ TEST(list, can_compare_iterators) {
 
 TEST(list, can_be_constructed_by_copy) {
     list<int> list1;
+    list<int> list2;
+    REQUIRE(list2.empty());
     list1.push_back(3);
     list1.push_front(2);
     list1.push_front(1);
     list1.push_front(10);
-    list<int> list2(list1);
+    REQUIRE(list2.empty());
+    list<int> list3(list1);
     REQUIRE_EQ(list1.front(), 10);
-    REQUIRE_EQ(list2.front(), 10);
-    REQUIRE_EQ(list2.back(), 3);
+    REQUIRE_EQ(list3.front(), 10);
+    REQUIRE_EQ(list3.back(), 3);
+    REQUIRE(list2.empty());
 }
 
 TEST(list, can_be_assigned) {
