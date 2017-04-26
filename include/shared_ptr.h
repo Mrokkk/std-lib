@@ -14,13 +14,13 @@ class shared_ptr final {
     unsigned *ref_count_ = nullptr;
 
     void release() {
-        if (ref_count_) {
+        if (ref_count_ != nullptr) {
             if (!--*ref_count_) {
                 delete ptr_;
                 delete ref_count_;
-                ptr_ = nullptr;
-                ref_count_ = nullptr;
             }
+            ptr_ = nullptr;
+            ref_count_ = nullptr;
         }
     }
 
@@ -107,8 +107,9 @@ public:
     }
 
     unsigned get_ref_count() const {
-        if (ref_count_)
+        if (ref_count_) {
             return *ref_count_;
+        }
         return 0;
     }
 
@@ -116,7 +117,7 @@ public:
 
 template<typename Type>
 inline shared_ptr<Type> make_shared() {
-    return shared_ptr<Type>(new Type);
+    return shared_ptr<Type>(new Type());
 }
 
 template<typename Type>

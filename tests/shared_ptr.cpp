@@ -8,6 +8,9 @@ TEST(shared_ptr, can_create_empty_pointer) {
     shared_ptr<int> ptr;
     REQUIRE(ptr.get() ==  nullptr);
     REQUIRE(ptr.get_ref_count() == 0);
+    shared_ptr<char> ptr2(nullptr);
+    REQUIRE(ptr2.get() == nullptr);
+    REQUIRE(ptr2.get_ref_count() == 0);
 }
 
 TEST(shared_ptr, can_create_valid_pointer) {
@@ -120,6 +123,56 @@ struct helper {
     explicit helper(int a) : a(a) {}
 };
 
+template <typename Type>
+void test_with_type() {
+    shared_ptr<Type> ptr1;
+    REQUIRE_FALSE(ptr1);
+    REQUIRE_EQ(ptr1.get_ref_count(), 0u);
+    ptr1 = make_shared<Type>();
+    REQUIRE(ptr1);
+    REQUIRE_EQ(ptr1.get_ref_count(), 1u);
+    shared_ptr<Type> ptr2(ptr1);
+    REQUIRE(ptr2);
+    REQUIRE_EQ(ptr1.get_ref_count(), 2u);
+    REQUIRE_EQ(ptr2.get_ref_count(), 2u);
+    shared_ptr<Type> ptr3;
+    ptr3 = ptr1;
+    REQUIRE_EQ(ptr1.get_ref_count(), 3u);
+    REQUIRE_EQ(ptr2.get_ref_count(), 3u);
+    REQUIRE_EQ(ptr3.get_ref_count(), 3u);
+    ptr3 = ptr2;
+    REQUIRE_EQ(ptr1.get_ref_count(), 3u);
+    REQUIRE_EQ(ptr2.get_ref_count(), 3u);
+    REQUIRE_EQ(ptr3.get_ref_count(), 3u);
+    ptr1 = nullptr;
+    REQUIRE_EQ(ptr1.get_ref_count(), 0u);
+    REQUIRE_EQ(ptr2.get_ref_count(), 2u);
+    REQUIRE_EQ(ptr3.get_ref_count(), 2u);
+    shared_ptr<Type> ptr4;
+    ptr2 = ptr4;
+    REQUIRE_EQ(ptr1.get_ref_count(), 0u);
+    REQUIRE_EQ(ptr2.get_ref_count(), 0u);
+    REQUIRE_EQ(ptr3.get_ref_count(), 1u);
+    REQUIRE_EQ(ptr4.get_ref_count(), 0u);
+    ptr4 = shared_ptr<Type>();
+    REQUIRE_EQ(ptr1.get_ref_count(), 0u);
+    REQUIRE_EQ(ptr2.get_ref_count(), 0u);
+    REQUIRE_EQ(ptr3.get_ref_count(), 1u);
+    REQUIRE_EQ(ptr4.get_ref_count(), 0u);
+    ptr3 = shared_ptr<Type>();
+    REQUIRE_EQ(ptr1.get_ref_count(), 0u);
+    REQUIRE_EQ(ptr2.get_ref_count(), 0u);
+    REQUIRE_EQ(ptr3.get_ref_count(), 0u);
+    REQUIRE_EQ(ptr4.get_ref_count(), 0u);
+    shared_ptr<Type> ptr5(ptr1);
+    REQUIRE_FALSE(ptr5);
+    REQUIRE_EQ(ptr1.get_ref_count(), 0u);
+    REQUIRE_EQ(ptr2.get_ref_count(), 0u);
+    REQUIRE_EQ(ptr3.get_ref_count(), 0u);
+    REQUIRE_EQ(ptr4.get_ref_count(), 0u);
+    REQUIRE_EQ(ptr5.get_ref_count(), 0u);
+}
+
 } // namespace anon
 
 TEST(shared_ptr, can_work_with_struct) {
@@ -127,5 +180,17 @@ TEST(shared_ptr, can_work_with_struct) {
         auto ptr = make_shared<helper>(i);
         REQUIRE_EQ(ptr->a, i);
     }
+}
+
+TEST(shared_ptr, works_with_simple_types) {
+    test_with_type<char>();
+    test_with_type<signed char>();
+    test_with_type<unsigned char>();
+    test_with_type<short>();
+    test_with_type<unsigned short>();
+    test_with_type<int>();
+    test_with_type<unsigned int>();
+    test_with_type<long>();
+    test_with_type<long long>();
 }
 
