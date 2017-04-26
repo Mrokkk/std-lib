@@ -64,3 +64,38 @@ TEST(optional, can_set_value) {
     REQUIRE(optional<int>() != opt);
 }
 
+namespace {
+
+template <typename Type>
+void test_with_type() {
+    {
+        optional<Type> opt;
+        REQUIRE(opt == optional<Type>());
+        REQUIRE(opt != Type());
+        REQUIRE(opt != optional<Type>(Type()));
+        REQUIRE(optional<Type>() != Type());
+        REQUIRE(optional<Type>() == opt);
+        REQUIRE(optional<Type>(Type()) != opt);
+        opt = Type();
+        REQUIRE(opt != optional<Type>());
+        REQUIRE(opt == Type());
+        REQUIRE(optional<Type>() != opt);
+        REQUIRE(opt == optional<Type>(Type()));
+        REQUIRE(optional<Type>(Type()) == opt);
+    }
+}
+
+} // namespace
+
+TEST(optional, works_with_simple_types) {
+    test_with_type<bool>();
+    test_with_type<char>();
+    test_with_type<signed char>();
+    test_with_type<unsigned char>();
+    test_with_type<short>();
+    test_with_type<unsigned short>();
+    test_with_type<int>();
+    test_with_type<unsigned int>();
+    test_with_type<long>();
+    test_with_type<long long>();
+}
