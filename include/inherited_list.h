@@ -62,15 +62,15 @@ public:
     using iterator = detail_iterator<false>;
     using const_iterator = detail_iterator<true>;
 
-    constexpr inherited_list() = default;
+    inherited_list() = default;
 
-    inherited_list &push_back(node *new_element) {
-        add_element(*new_element, *head_.prev(), head_);
+    inherited_list &push_back(node &new_element) {
+        add_element(new_element, *head_.prev(), head_);
         return *this;
     }
 
-    inherited_list &push_front(node *new_element) {
-        add_element(*new_element, head_, *head_.next());
+    inherited_list &push_front(node &new_element) {
+        add_element(new_element, head_, *head_.next());
         return *this;
     }
 

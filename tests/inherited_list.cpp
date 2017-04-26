@@ -31,7 +31,7 @@ void test_adding(inherited_list<helper> &head, int s) {
     auto expected_size = 1;
     for (auto &h : helper_vec) {
         auto size = 0;
-        head.push_back(&h);
+        head.push_back(h);
         for (const auto &h : head) {
             REQUIRE_EQ(v[size], h.a);
             size++;
@@ -50,7 +50,7 @@ void test_adding_front(inherited_list<helper> &head, int s) {
     auto expected_size = 1;
     for (auto &h : helper_vec) {
         auto size = 0;
-        head.push_front(&h);
+        head.push_front(h);
         for (const auto &h : head) {
             REQUIRE_EQ(v[expected_size - 1 - size], h.a);
             size++;
@@ -82,7 +82,7 @@ TEST(inherited_list, can_remove) {
     inherited_list<helper> head;
     std::vector<helper> helper_vec{0, 2, 4};
     for (auto &v : helper_vec) {
-        head.push_back(&v);
+        head.push_back(v);
     }
     head.erase(helper_vec[0]);
     std::vector<int> test_vector;
@@ -100,7 +100,7 @@ TEST(inherited_list, can_use_iterator) {
     inherited_list<helper> head;
     std::vector<helper> helper_vec{0, 2, 4, 9, 30, 109, 938, -231, 3, -29};
     for (auto &v : helper_vec) {
-        head.push_back(&v);
+        head.push_back(v);
     }
     auto it = head.begin();
     REQUIRE_EQ(it->a, 0);
@@ -138,8 +138,8 @@ TEST(inherited_list, can_insert_elements) {
     helper e2(-9323);
     helper e3(32894);
     helper e4(10);
-    head.push_back(&e1);
-    head.push_back(&e2);
+    head.push_back(e1);
+    head.push_back(e2);
     auto it = head.begin();
     ++it;
     head.insert(it, e3);
@@ -149,13 +149,10 @@ TEST(inherited_list, can_insert_elements) {
     REQUIRE_EQ(const_it->a, 32894);
     ++const_it;
     REQUIRE_EQ(const_it->a, -9323);
-    it = head.begin();
-    it++;
-    head.insert(it, e4);
+    head.insert(--head.begin(), e4);
     const_it = head.cbegin();
     REQUIRE_EQ(const_it->a, 32);
-    const_it++;
-    REQUIRE_EQ(const_it->a, 10);
+    REQUIRE_EQ((--head.cend())->a, 10);
 }
 
 void check_const_inherited_list(const inherited_list<helper> &list) {
@@ -168,7 +165,7 @@ TEST(inherited_list, works_with_range_based_for) {
     inherited_list<helper> list1;
     std::vector<helper> helper_vec{1, 2, 4, 9, 30, 109, 938, -231, 3, -29};
     for (auto &v : helper_vec) {
-        list1.push_back(&v);
+        list1.push_back(v);
     }
     auto size = 0u;
     for (auto &i : list1) {
