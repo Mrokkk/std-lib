@@ -74,6 +74,12 @@ public:
         return *this;
     }
 
+    // FIXME: inserting at begin()
+    inherited_list &insert(const iterator &it, node &new_element) {
+        add_element(new_element, *it.node()->prev(), *it.node());
+        return *this;
+    }
+
     inherited_list &erase(node &node) {
         node.next()->prev() = node.prev();
         node.prev()->next() = node.next();

@@ -86,7 +86,7 @@ TEST(inherited_list, can_remove) {
     }
     head.erase(helper_vec[0]);
     std::vector<int> test_vector;
-    int size = 0;;
+    int size = 0;
     for (auto &e : head) {
         test_vector.push_back(e.a);
         size++;
@@ -130,6 +130,32 @@ TEST(inherited_list, can_use_iterator) {
     REQUIRE_EQ(const_it->a, -29);
     --const_it;
     REQUIRE_EQ(const_it->a, 3);
+}
+
+TEST(inherited_list, can_insert_elements) {
+    inherited_list<helper> head;
+    helper e1(32);
+    helper e2(-9323);
+    helper e3(32894);
+    helper e4(10);
+    head.push_back(&e1);
+    head.push_back(&e2);
+    auto it = head.begin();
+    ++it;
+    head.insert(it, e3);
+    auto const_it = head.cbegin();
+    REQUIRE_EQ(const_it->a, 32);
+    ++const_it;
+    REQUIRE_EQ(const_it->a, 32894);
+    ++const_it;
+    REQUIRE_EQ(const_it->a, -9323);
+    it = head.begin();
+    it++;
+    head.insert(it, e4);
+    const_it = head.cbegin();
+    REQUIRE_EQ(const_it->a, 32);
+    const_it++;
+    REQUIRE_EQ(const_it->a, 10);
 }
 
 void check_const_inherited_list(const inherited_list<helper> &list) {
