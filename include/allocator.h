@@ -99,7 +99,7 @@ public:
             if (!next) break;
             if (next->free && temp.free) {
                 temp.size = temp.size + next->size + _memory_block_size;
-                next->list_.remove();
+                blocks_.erase(next->list_);
             }
         }
         return false;

@@ -35,7 +35,7 @@ void test_adding_front(kernel_list<helper> &head, helper &e, std::vector<int> &c
 }
 
 void test_removing(kernel_list<helper> &head, helper &e, std::vector<int> &comp) {
-    e.list.remove();
+    head.erase(e.list);
     size_t size = 0;
     for (const auto &h : head) {
         REQUIRE_EQ(comp[size], h.a);

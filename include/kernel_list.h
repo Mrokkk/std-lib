@@ -13,11 +13,17 @@ class kernel_list final {
     kernel_list *next_ = this, *prev_ = this;
     size_t offset_;
 
-    void add_element(kernel_list *new_element, kernel_list *prev, kernel_list *next) {
-        next->prev_ = new_element;
-        prev->next_ = new_element;
-        new_element->next_ = next;
-        new_element->prev_ = prev;
+    void add_node(kernel_list *new_node, kernel_list *prev, kernel_list *next) {
+        next->prev_ = new_node;
+        prev->next_ = new_node;
+        new_node->next_ = next;
+        new_node->prev_ = prev;
+    }
+
+    void remove_node(kernel_list *node) {
+        node->next_->prev_ = node->prev_;
+        node->prev_->next_ = node->next_;
+        node->prev_ = node->next_ = node;
     }
 
     template <typename T, typename U>
@@ -46,34 +52,24 @@ public:
         offset_ = offset_of(member);
     }
 
-    kernel_list &push_back(kernel_list &new_element) {
-        add_element(&new_element, prev_, this);
+    kernel_list &push_back(kernel_list &new_node) {
+        add_node(&new_node, prev_, this);
         return *this;
     }
 
-    kernel_list &push_front(kernel_list &new_element) {
-        add_element(&new_element, this, next_);
+    kernel_list &push_front(kernel_list &new_node) {
+        add_node(&new_node, this, next_);
         return *this;
     }
 
     kernel_list &erase(const iterator &it) {
-        it.node()->next_->prev_ = it.node()->prev_;
-        it.node()->prev_->next_ = it.node()->next_;
-        it.node()->prev_ = it.node()->next_ = this;
+        remove_node(it.node());
         return *this;
     }
 
     kernel_list &erase(kernel_list &node) {
-        node.next_->prev_ = node.prev_;
-        node.prev_->next_ = node.next_;
-        node.prev_ = node.next_ = this;
+        remove_node(&node);
         return *this;
-    }
-
-    void remove() {
-        next_->prev_ = prev_;
-        prev_->next_ = next_;
-        prev_ = next_ = this;
     }
 
     bool empty() const {
