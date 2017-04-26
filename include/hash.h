@@ -7,6 +7,13 @@ struct hash {
 };
 
 template <>
+struct hash<char> {
+    unsigned operator()(signed char v) {
+        return static_cast<unsigned>(v);
+    }
+};
+
+template <>
 struct hash<signed char> {
     unsigned operator()(signed char v) {
         return static_cast<unsigned>(v);

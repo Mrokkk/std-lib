@@ -170,6 +170,7 @@ void check_type() {
 } // namspace
 
 TEST(hash_map, works_with_simple_types_keys) {
+    check_type<char>();
     check_type<signed char>();
     check_type<unsigned char>();
     check_type<short>();
