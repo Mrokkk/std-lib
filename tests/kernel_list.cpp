@@ -139,5 +139,10 @@ TEST(kernel_list, can_erase) {
     REQUIRE_EQ(it->a, 94);
     ++it;
     REQUIRE(it == list.end());
+    list.erase(e4.list);
+    it = list.begin();
+    REQUIRE_EQ(it->a, 44);
+    ++it;
+    REQUIRE(it == list.end());
 }
 

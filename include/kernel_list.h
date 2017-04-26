@@ -63,6 +63,13 @@ public:
         return *this;
     }
 
+    kernel_list &erase(kernel_list &node) {
+        node.next_->prev_ = node.prev_;
+        node.prev_->next_ = node.next_;
+        node.prev_ = node.next_ = this;
+        return *this;
+    }
+
     void remove() {
         next_->prev_ = prev_;
         prev_->next_ = next_;
