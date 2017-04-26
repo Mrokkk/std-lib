@@ -61,7 +61,7 @@ void test_adding_front(inherited_list<helper> &head, int s) {
     }
 }
 
-} // namespace anon
+} // namespace
 
 TEST(inherited_list, can_create_empty) {
     inherited_list<helper> h;
@@ -153,6 +153,37 @@ TEST(inherited_list, can_insert_elements) {
     const_it = head.cbegin();
     REQUIRE_EQ(const_it->a, 32);
     REQUIRE_EQ((--head.cend())->a, 10);
+}
+
+TEST(inherited_list, can_erase) {
+    inherited_list<helper> head;
+    helper e1(32), e2(-9323), e3(32894), e4(10);
+    head.push_back(e1);
+    head.push_back(e2);
+    head.push_back(e3);
+    head.push_back(e4);
+    head.erase(e3);
+    auto it = head.begin();
+    REQUIRE_EQ(it->a, 32);
+    ++it;
+    REQUIRE_EQ(it->a, -9323);
+    ++it;
+    REQUIRE_EQ(it->a, 10);
+    ++it;
+    REQUIRE(it == head.end());
+    it = ++head.begin();
+    head.erase(it);
+    it = head.begin();
+    REQUIRE_EQ(it->a, 32);
+    ++it;
+    REQUIRE_EQ(it->a, 10);
+    ++it;
+    REQUIRE(it == head.end());
+    head.erase(head.begin());
+    it = head.begin();
+    REQUIRE_EQ(it->a, 10);
+    ++it;
+    REQUIRE(it == head.end());
 }
 
 void check_const_inherited_list(const inherited_list<helper> &list) {

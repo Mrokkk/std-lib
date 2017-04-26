@@ -9,13 +9,11 @@ struct inherited_list {
 
     class node {
 
-        node *prev_, *next_;
+        node *prev_ = this, *next_ = this;
 
     public:
 
-        node() {
-            next_ = prev_ = this;
-        }
+        node() = default;
 
         node *&next() {
             return next_;
@@ -83,7 +81,14 @@ public:
     inherited_list &erase(node &node) {
         node.next()->prev() = node.prev();
         node.prev()->next() = node.next();
-        node.prev() = node.next() = &head_;
+        node.prev() = node.next() = &node;
+        return *this;
+    }
+
+    inherited_list &erase(const iterator &it) {
+        it.node()->next()->prev() = it.node()->prev();
+        it.node()->prev()->next() = it.node()->next();
+        it.node()->prev() = it.node()->next() = it.node();
         return *this;
     }
 
