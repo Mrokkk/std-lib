@@ -42,12 +42,12 @@ public:
         offset_ = offset_of(member);
     }
 
-    void push_back(kernel_list *new_element) {
-        add_element(new_element, prev_, this);
+    void push_back(kernel_list &new_element) {
+        add_element(&new_element, prev_, this);
     }
 
-    void push_front(kernel_list *new_element) {
-        add_element(new_element, this, next_);
+    void push_front(kernel_list &new_element) {
+        add_element(&new_element, this, next_);
     }
 
     void remove() {
