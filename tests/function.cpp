@@ -37,12 +37,25 @@ TEST(function, can_create_from_function_ptr) {
     REQUIRE_EQ(result, 126);
 }
 
+TEST(function, can_create_from_lambda) {
+    function<void(int)> f([](int a){ REQUIRE_EQ(a, 194); });
+    REQUIRE(f);
+    f(194);
+}
+
 TEST(function, can_assign_function_ptr) {
     function<void()> f;
     f = &dummy_function1;
     REQUIRE(f);
     f = nullptr;
     REQUIRE_FALSE(f);
+}
+
+TEST(function, can_assign_lambda) {
+    function<void(int)> f;
+    f = [](int a){ REQUIRE_EQ(a, 194); };
+    REQUIRE(f);
+    f(194);
 }
 
 TEST(function, can_make_function) {

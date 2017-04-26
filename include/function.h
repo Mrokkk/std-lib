@@ -11,13 +11,19 @@ class function {
 
 public:
 
-    constexpr function() = default;
+    function() = default;
 
     function(const Type *ptr) : function_(ptr) {
     }
 
+    template <typename Lambda>
+    function &operator=(Lambda lambda) {
+        function_ = lambda;
+        return *this;
+    }
+
     template <typename ...Types>
-    auto operator()(Types &&... args) {
+    auto operator()(Types &&... args) const {
         return function_(args...);
     }
 
