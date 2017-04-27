@@ -171,6 +171,20 @@ public:
 
 };
 
+namespace detail {
+
+template <typename node_pointer>
+inline void increment(node_pointer &n) {
+    n = n->next();
+}
+
+template <typename node_pointer>
+inline void decrement(node_pointer &n) {
+    n = n->prev();
+}
+
+} // namespace detail
+
 template <typename list_type, typename iterator_tag, typename value_type, typename node_type, bool is_const>
 struct list_iterator {
 
@@ -208,7 +222,7 @@ public:
         is_same<U, forward_iterator_tag>::value || is_same<U, bidirectional_iterator_tag>::value,
         list_iterator
     >::type &operator++() {
-        ptr_ = ptr_->next();
+        detail::increment(ptr_);
         return *this;
     }
 
@@ -218,7 +232,7 @@ public:
         list_iterator
     >::type operator++(int) {
         auto tmp = *this;
-        ptr_ = ptr_->next();
+        detail::increment(ptr_);
         return tmp;
     }
 
@@ -226,7 +240,7 @@ public:
     typename enable_if<
         is_same<U, bidirectional_iterator_tag>::value, list_iterator
     >::type &operator--() {
-        ptr_ = ptr_->prev();
+        detail::decrement(ptr_);
         return *this;
     }
 
@@ -235,7 +249,7 @@ public:
         is_same<U, bidirectional_iterator_tag>::value, list_iterator
     >::type operator--(int) {
         auto tmp = *this;
-        ptr_ = ptr_->prev();
+        detail::decrement(ptr_);
         return tmp;
     }
 
@@ -271,8 +285,8 @@ public:
         return ptr_ != const_cast<node_type *>(i.node());
     }
 
-    friend class list_iterator<list_type, iterator_tag, value_type, node_type, false>;
-    friend class list_iterator<list_type, iterator_tag, value_type, node_type, true>;
+    friend struct list_iterator<list_type, iterator_tag, value_type, node_type, false>;
+    friend struct list_iterator<list_type, iterator_tag, value_type, node_type, true>;
 
 };
 
