@@ -4,10 +4,10 @@
 
 namespace yacppl {
 
-template<typename Type>
+template<typename Type, typename Container = list<Type>>
 class stack final {
 
-    list<Type> list_;
+    Container list_;
 
 public:
 
