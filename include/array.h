@@ -10,7 +10,7 @@ template<typename Type, size_t _size = 0>
 class array {
 
     template <bool is_const>
-    using detail_iterator = pointer_iterator<Type, is_const>;
+    using detail_iterator = detail::iterator<array, random_access_iterator_tag, Type, Type, is_const>;
 
     Type array_[_size];
 

@@ -110,7 +110,7 @@ class list final {
     }
 
     template <bool is_const>
-    using detail_iterator = list_iterator<list, bidirectional_iterator_tag, Type, list_element, is_const>;
+    using detail_iterator = detail::iterator<list, bidirectional_iterator_tag, Type, list_element, is_const>;
 
 public:
 

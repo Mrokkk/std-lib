@@ -97,9 +97,9 @@ TEST(array, const_iterator_works) {
     REQUIRE_EQ(*it, 2);
     it2++;
     REQUIRE_EQ(*it2, 4);
-    it = array.end();
+    it = array.cend();
     --it;
-    REQUIRE_EQ(*it.get(), 6);
+    REQUIRE_EQ(*it, 6);
 }
 
 TEST(array, nonconst_iterator_works) {
@@ -118,7 +118,7 @@ TEST(array, nonconst_iterator_works) {
     REQUIRE_EQ(*it2, 4);
     it = array.end();
     --it;
-    REQUIRE_EQ(*it.get(), 6);
+    REQUIRE_EQ(*it, 6);
 }
 
 void check_const_array(const array<int, 5> &array) {

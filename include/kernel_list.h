@@ -95,7 +95,7 @@ private:
     }
 
     template <bool is_const>
-    using detail_iterator = list_iterator<kernel_list, bidirectional_iterator_tag, Type, node, is_const>;
+    using detail_iterator = detail::iterator<kernel_list, bidirectional_iterator_tag, Type, node, is_const>;
 
 public:
 

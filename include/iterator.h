@@ -71,130 +71,80 @@ struct forward_iterator_tag {};
 struct bidirectional_iterator_tag : forward_iterator_tag {};
 struct random_access_iterator_tag : bidirectional_iterator_tag {};
 
-template <typename value_type, bool is_const>
-struct pointer_iterator {
-
-    using reference = typename conditional<is_const, const value_type &, value_type &>::type;
-    using pointer = typename conditional<is_const, const value_type *, value_type *>::type;
-    using node_pointer = pointer;
-
-private:
-
-    pointer ptr_ = nullptr;
-
-public:
-
-    pointer_iterator() = default;
-
-    pointer_iterator(pointer ptr) : ptr_(ptr) {
-    }
-
-    pointer_iterator(const pointer_iterator<value_type, false> &it) : ptr_(it.get()) {
-    }
-
-    pointer_iterator(const pointer_iterator<value_type, true> &it) : ptr_(it.get()) {
-    }
-
-    pointer_iterator &operator++() {
-        ++ptr_;
-        return *this;
-    }
-
-    pointer_iterator operator+(int i) const {
-        return ptr_ + i;
-    }
-
-    pointer_iterator operator++(int) {
-        auto tmp = *this;
-        ++ptr_;
-        return tmp;
-    }
-
-    pointer_iterator &operator--() {
-        --ptr_;
-        return *this;
-    }
-
-    pointer_iterator operator--(int) {
-        auto tmp = *this;
-        --ptr_;
-        return tmp;
-    }
-
-    reference operator*() {
-        return *ptr_;
-    }
-
-    pointer operator->() {
-        return ptr_;
-    }
-
-    pointer get() {
-        return ptr_;
-    }
-
-    const pointer get() const {
-        return ptr_;
-    }
-
-    size_t operator-(const pointer_iterator &rhs) const {
-        return ptr_ - rhs.ptr_;
-    }
-
-    pointer_iterator operator-(int i) const {
-        return ptr_ - i;
-    }
-
-    bool operator==(const pointer &p) const {
-        return ptr_ == const_cast<pointer>(p);
-    }
-
-    bool operator==(const pointer_iterator<value_type, true> &element) const {
-        return ptr_ == const_cast<pointer>(element.get());
-    }
-
-    bool operator==(const pointer_iterator<value_type, false> &element) const {
-        return ptr_ == const_cast<pointer>(element.get());
-    }
-
-    bool operator!=(const pointer &p) const {
-        return ptr_ != const_cast<pointer>(p);
-    }
-
-    bool operator!=(const pointer_iterator<value_type, true> &element) const {
-        return ptr_ != const_cast<pointer>(element.get());
-    }
-
-    bool operator!=(const pointer_iterator<value_type, false> &element) const {
-        return ptr_ != const_cast<pointer>(element.get());
-    }
-
-};
-
 namespace detail {
 
-template <typename node_pointer>
-inline void increment(node_pointer &n) {
+template <typename node_pointer, typename value_pointer>
+inline typename enable_if<
+    is_same<
+        typename remove_const<value_pointer>::type,
+        typename remove_const<node_pointer>::type
+    >::value
+>::type increment(node_pointer &n) {
+    ++n;
+}
+
+template <typename node_pointer, typename value_pointer>
+inline typename enable_if<
+    is_same<
+        typename remove_const<value_pointer>::type,
+        typename remove_const<node_pointer>::type
+    >::value
+>::type decrement(node_pointer &n) {
+    --n;
+}
+
+template <typename node_pointer, typename value_pointer>
+inline typename enable_if<
+    is_same<
+        typename remove_const<value_pointer>::type,
+        typename remove_const<node_pointer>::type
+    >::value,
+    value_pointer
+>::type entry(node_pointer &n) {
+    return n;
+}
+
+template <typename node_pointer, typename value_pointer>
+inline typename enable_if<
+    !is_same<
+        typename remove_const<value_pointer>::type,
+        typename remove_const<node_pointer>::type
+    >::value
+>::type increment(node_pointer &n) {
     n = n->next();
 }
 
-template <typename node_pointer>
-inline void decrement(node_pointer &n) {
+template <typename node_pointer, typename value_pointer>
+inline typename enable_if<
+    !is_same<
+        typename remove_const<value_pointer>::type,
+        typename remove_const<node_pointer>::type
+    >::value
+>::type decrement(node_pointer &n) {
     n = n->prev();
 }
 
-} // namespace detail
+template <typename node_pointer, typename value_pointer>
+inline typename enable_if<
+    !is_same<
+        typename remove_const<value_pointer>::type,
+        typename remove_const<node_pointer>::type
+    >::value,
+    value_pointer
+>::type entry(node_pointer &n) {
+    return n->entry();
+}
 
-template <typename list_type, typename iterator_tag, typename value_type, typename node_type, bool is_const>
-struct list_iterator {
+template <typename container_type, typename iterator_tag, typename value_type, typename node_type, bool is_const>
+struct iterator {
 
     using node_pointer = typename conditional<is_const, const node_type *, node_type *>::type;
-    using reference = typename conditional<is_const, const value_type &, value_type &>::type;
-    using pointer = typename conditional<is_const, const value_type *, value_type *>::type;
+    using value_reference = typename conditional<is_const, const value_type &, value_type &>::type;
+    using value_pointer = typename conditional<is_const, const value_type *, value_type *>::type;
 
 private:
 
-    friend list_type;
+    friend container_type;
 
     node_pointer ptr_ = nullptr;
 
@@ -208,68 +158,112 @@ private:
 
 public:
 
-    list_iterator() = default;
+    iterator() = default;
 
-    list_iterator(node_pointer p) : ptr_(p) {
+    iterator(node_pointer p) : ptr_(p) {
     }
 
-    list_iterator(const list_iterator<list_type, iterator_tag, value_type, node_pointer, false> &it)
+    iterator(const iterator<container_type, iterator_tag, value_type, node_pointer, false> &it)
             : ptr_(const_cast<node_pointer>(it.node())) {
     }
 
-    template <typename U = iterator_tag>
-    typename enable_if<
-        is_same<U, forward_iterator_tag>::value || is_same<U, bidirectional_iterator_tag>::value,
-        list_iterator
-    >::type &operator++() {
-        detail::increment(ptr_);
+    iterator &operator=(node_pointer p) {
+        ptr_ = p;
+        return *this;
+    }
+
+    iterator &operator=(const iterator &p) {
+        ptr_ = const_cast<node_pointer>(p.node());
+        return *this;
+    }
+
+    iterator &operator=(const iterator<container_type, iterator_tag, value_type, node_pointer, false> &p) {
+        ptr_ = const_cast<node_pointer>(p.node());
         return *this;
     }
 
     template <typename U = iterator_tag>
     typename enable_if<
-        is_same<U, forward_iterator_tag>::value || is_same<U, bidirectional_iterator_tag>::value,
-        list_iterator
+        is_same<U, forward_iterator_tag>::value ||
+        is_same<U, bidirectional_iterator_tag>::value ||
+        is_same<U, random_access_iterator_tag>::value,
+        iterator
+    >::type &operator++() {
+        detail::increment<node_pointer, value_pointer>(ptr_);
+        return *this;
+    }
+
+    template <typename U = iterator_tag>
+    typename enable_if<
+        is_same<U, forward_iterator_tag>::value ||
+        is_same<U, bidirectional_iterator_tag>::value ||
+        is_same<U, random_access_iterator_tag>::value,
+        iterator
     >::type operator++(int) {
         auto tmp = *this;
-        detail::increment(ptr_);
+        detail::increment<node_pointer, value_pointer>(ptr_);
         return tmp;
     }
 
     template <typename U = iterator_tag>
     typename enable_if<
-        is_same<U, bidirectional_iterator_tag>::value, list_iterator
+        is_same<U, bidirectional_iterator_tag>::value ||
+        is_same<U, random_access_iterator_tag>::value,
+        iterator
     >::type &operator--() {
-        detail::decrement(ptr_);
+        detail::decrement<node_pointer, value_pointer>(ptr_);
         return *this;
     }
 
     template <typename U = iterator_tag>
     typename enable_if<
-        is_same<U, bidirectional_iterator_tag>::value, list_iterator
+        is_same<U, bidirectional_iterator_tag>::value ||
+        is_same<U, random_access_iterator_tag>::value,
+        iterator
     >::type operator--(int) {
         auto tmp = *this;
-        detail::decrement(ptr_);
+        detail::decrement<node_pointer, value_pointer>(ptr_);
         return tmp;
     }
 
-    reference operator*() {
-        return *ptr_->entry();
+    template <typename U = iterator_tag>
+    typename enable_if<
+        is_same<U, random_access_iterator_tag>::value, iterator
+    >::type operator+(int i) const {
+        return ptr_ + i;
     }
 
-    pointer operator->() {
-        return ptr_->entry();
+    template <typename U = iterator_tag>
+    typename enable_if<
+        is_same<U, random_access_iterator_tag>::value, iterator
+    >::type operator-(int i) const {
+        return ptr_ - i;
+    }
+
+    template <typename U = iterator_tag>
+    typename enable_if<
+        is_same<U, random_access_iterator_tag>::value, size_t
+    >::type operator-(const iterator &rhs) const {
+        return ptr_ - rhs.ptr_;
+    }
+
+    value_reference operator*() {
+        return *detail::entry<node_pointer, value_pointer>(ptr_);
+    }
+
+    value_pointer operator->() {
+        return detail::entry<node_pointer, value_pointer>(ptr_);
     }
 
     bool operator==(const node_pointer &p) const {
         return ptr_ == const_cast<const node_type *>(p);
     }
 
-    bool operator==(const list_iterator<list_type, iterator_tag, value_type, node_type, true> &i) const {
+    bool operator==(const iterator<container_type, iterator_tag, value_type, node_type, true> &i) const {
         return ptr_ == const_cast<const node_type *>(i.node());
     }
 
-    bool operator==(const list_iterator<list_type, iterator_tag, value_type, node_type, false> &i) const {
+    bool operator==(const iterator<container_type, iterator_tag, value_type, node_type, false> &i) const {
         return ptr_ == const_cast<node_type *>(i.node());
     }
 
@@ -277,18 +271,20 @@ public:
         return ptr_ != const_cast<const node_type *>(p);
     }
 
-    bool operator!=(const list_iterator<list_type, iterator_tag, value_type, node_type, true> &i) const {
+    bool operator!=(const iterator<container_type, iterator_tag, value_type, node_type, true> &i) const {
         return ptr_ != const_cast<const node_type *>(i.node());
     }
 
-    bool operator!=(const list_iterator<list_type, iterator_tag, value_type, node_type, false> &i) const {
+    bool operator!=(const iterator<container_type, iterator_tag, value_type, node_type, false> &i) const {
         return ptr_ != const_cast<node_type *>(i.node());
     }
 
-    friend struct list_iterator<list_type, iterator_tag, value_type, node_type, false>;
-    friend struct list_iterator<list_type, iterator_tag, value_type, node_type, true>;
+    friend struct iterator<container_type, iterator_tag, value_type, node_type, false>;
+    friend struct iterator<container_type, iterator_tag, value_type, node_type, true>;
 
 };
+
+} // namespace detail
 
 } // namespace yacppl
 
