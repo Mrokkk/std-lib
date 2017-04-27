@@ -67,6 +67,10 @@ const Array *cend(const Array (&array)[Size]) {
     return array + Size;
 }
 
+struct forward_iterator_tag {};
+struct bidirectional_iterator_tag : forward_iterator_tag {};
+struct random_access_iterator_tag : bidirectional_iterator_tag {};
+
 template <typename value_type, bool is_const>
 struct pointer_iterator {
 
@@ -167,7 +171,7 @@ public:
 
 };
 
-template <typename value_type, typename node_type, bool is_const>
+template <typename list_type, typename iterator_tag, typename value_type, typename node_type, bool is_const>
 struct list_iterator {
 
     using node_pointer = typename conditional<is_const, const node_type *, node_type *>::type;
@@ -176,7 +180,17 @@ struct list_iterator {
 
 private:
 
+    friend list_type;
+
     node_pointer ptr_ = nullptr;
+
+    node_pointer node() {
+        return ptr_;
+    }
+
+    const node_pointer node() const {
+        return ptr_;
+    }
 
 public:
 
@@ -185,37 +199,47 @@ public:
     list_iterator(node_pointer p) : ptr_(p) {
     }
 
-    list_iterator(const list_iterator<value_type, node_pointer, true> &it)
+    list_iterator(const list_iterator<list_type, iterator_tag, value_type, node_pointer, false> &it)
             : ptr_(const_cast<node_pointer>(it.node())) {
     }
 
-    list_iterator(const list_iterator<value_type, node_pointer, false> &it)
-            : ptr_(const_cast<node_pointer>(it.node())) {
-    }
-
-    list_iterator &operator++() {
+    template <typename U = iterator_tag>
+    typename enable_if<
+        is_same<U, forward_iterator_tag>::value || is_same<U, bidirectional_iterator_tag>::value,
+        list_iterator
+    >::type &operator++() {
         ptr_ = ptr_->next();
         return *this;
     }
 
-    list_iterator operator++(int) {
+    template <typename U = iterator_tag>
+    typename enable_if<
+        is_same<U, forward_iterator_tag>::value || is_same<U, bidirectional_iterator_tag>::value,
+        list_iterator
+    >::type operator++(int) {
         auto tmp = *this;
         ptr_ = ptr_->next();
         return tmp;
     }
 
-    list_iterator &operator--() {
+    template <typename U = iterator_tag>
+    typename enable_if<
+        is_same<U, bidirectional_iterator_tag>::value, list_iterator
+    >::type &operator--() {
         ptr_ = ptr_->prev();
         return *this;
     }
 
-    list_iterator operator--(int) {
+    template <typename U = iterator_tag>
+    typename enable_if<
+        is_same<U, bidirectional_iterator_tag>::value, list_iterator
+    >::type operator--(int) {
         auto tmp = *this;
         ptr_ = ptr_->prev();
         return tmp;
     }
 
-    reference operator *() {
+    reference operator*() {
         return *ptr_->entry();
     }
 
@@ -227,11 +251,11 @@ public:
         return ptr_ == const_cast<const node_type *>(p);
     }
 
-    bool operator==(const list_iterator<value_type, node_type, true> &i) const {
+    bool operator==(const list_iterator<list_type, iterator_tag, value_type, node_type, true> &i) const {
         return ptr_ == const_cast<const node_type *>(i.node());
     }
 
-    bool operator==(const list_iterator<value_type, node_type, false> &i) const {
+    bool operator==(const list_iterator<list_type, iterator_tag, value_type, node_type, false> &i) const {
         return ptr_ == const_cast<node_type *>(i.node());
     }
 
@@ -239,21 +263,16 @@ public:
         return ptr_ != const_cast<const node_type *>(p);
     }
 
-    bool operator!=(const list_iterator<value_type, node_type, true> &i) const {
+    bool operator!=(const list_iterator<list_type, iterator_tag, value_type, node_type, true> &i) const {
         return ptr_ != const_cast<const node_type *>(i.node());
     }
 
-    bool operator!=(const list_iterator<value_type, node_type, false> &i) const {
+    bool operator!=(const list_iterator<list_type, iterator_tag, value_type, node_type, false> &i) const {
         return ptr_ != const_cast<node_type *>(i.node());
     }
 
-    node_pointer node() {
-        return ptr_;
-    }
-
-    const node_pointer node() const {
-        return ptr_;
-    }
+    friend class list_iterator<list_type, iterator_tag, value_type, node_type, false>;
+    friend class list_iterator<list_type, iterator_tag, value_type, node_type, true>;
 
 };
 
