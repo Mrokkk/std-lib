@@ -44,7 +44,6 @@ public:
     }
 
     shared_ptr(shared_ptr &&other) {
-        release();
         ptr_ = other.ptr_;
         other.ptr_ = nullptr;
         ref_count_ = other.ref_count_;
@@ -104,6 +103,14 @@ public:
 
     bool operator==(const Pointer ptr) const {
         return ptr == ptr_;
+    }
+
+    bool operator!=(const shared_ptr &ptr) const {
+        return ptr.ptr_ != ptr_;
+    }
+
+    bool operator!=(const Pointer ptr) const {
+        return ptr != ptr_;
     }
 
     unsigned get_ref_count() const {
