@@ -123,13 +123,26 @@ public:
         path_ = p.path_;
     }
 
+    path(path &&p) {
+        path_ = p;
+        p.path_ = nullptr;
+    }
+
+    path(const char *str) {
+        if (str == nullptr) {
+            return;
+        }
+        cat(str);
+    }
+
     path &operator=(const path &p) {
         path_ = p.path_;
         return *this;
     }
 
-    path(const char *str) {
-        cat(str);
+    path &operator=(path &&p) {
+        path_ = p.path_;
+        return *this;
     }
 
     void append(const char *str) {

@@ -35,6 +35,10 @@ TEST(string, can_be_constructed_from_cstring) {
     }
 }
 
+string get_string() {
+    return "some_string";
+}
+
 TEST(string, can_be_created_from_other_string) {
     string str("test_string");
     {
@@ -55,6 +59,19 @@ TEST(string, can_be_created_from_other_string) {
     REQUIRE(str == "some");
     str = string("some very, very, very long string");
     REQUIRE(str == "some very, very, very long string");
+    str = nullptr;
+    REQUIRE(!str);
+    str = "something";
+    REQUIRE(str == "something");
+    auto str2 = get_string();
+    REQUIRE(str2 == "some_string");
+    str = str2;
+    REQUIRE(str == "some_string");
+    // FIXME
+    str = string();
+    str = string(str2);
+    str = string();
+    str = string(string("some other"));
 }
 
 TEST(string, can_be_iterated) {

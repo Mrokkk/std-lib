@@ -70,6 +70,45 @@ class string final {
         allocation_counter_++;
     }
 
+    void release() {
+        if (string_) {
+            delete [] string_;
+        }
+        string_ = nullptr;
+        end_ = nullptr;
+        size_ = 0;
+        allocation_counter_ = 0;
+    }
+
+    void copy_from(const char *str) {
+        if (str == nullptr) {
+            release();
+            return;
+        }
+        auto len = ::yacppl::length(str);
+        if (string_) {
+            if (len > length()) {
+                reallocate(len);
+            }
+        }
+        else {
+            allocate(len);
+        }
+        copy(str, string_);
+        end_ += len;
+    }
+
+    void move_from(string &s) {
+        string_ = s.string_;
+        end_ = s.end_;
+        size_ = s.size_;
+        allocation_counter_ = s.allocation_counter_;
+        s.string_ = nullptr;
+        s.end_ = nullptr;
+        s.size_ = 0;
+        s.allocation_counter_ = 0;
+    }
+
 public:
 
     using iterator = char *;
@@ -97,24 +136,28 @@ public:
         end_ += size;
     }
 
+    string(string &&s) {
+        move_from(s);
+    }
+
+    string &operator=(const char *str) {
+        copy_from(str);
+        return *this;
+    }
+
     string &operator=(const string &s) {
-        auto len = s.length();
-        if (string_) {
-            if (s.length() > length())
-            reallocate(len);
-        }
-        else {
-            allocate(len);
-        }
-        copy(s.string_, string_);
-        end_ += len;
+        copy_from(s.string_);
+        return *this;
+    }
+
+    string &operator=(string &&s) {
+        release();
+        move_from(s);
         return *this;
     }
 
     ~string() {
-        if (string_) {
-            delete [] string_;
-        }
+        release();
     }
 
     iterator begin() {
