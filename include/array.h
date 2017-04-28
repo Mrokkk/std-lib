@@ -14,6 +14,14 @@ class array {
 
     Type array_[_size];
 
+    template <typename Container>
+    void copy_elements_from(const Container &container) {
+        unsigned i = 0;
+        for (auto it = container.begin(); it != container.end(); ++it) {
+            array_[i++] = *it;
+        }
+    }
+
 public:
 
     using iterator = detail_iterator<false>;
@@ -21,19 +29,13 @@ public:
 
     array() = default;
 
-    array(const std::initializer_list<Type> &list) {
-        unsigned i = 0;
-        for (auto it = list.begin(); it != list.end(); ++it) {
-            array_[i++] = *it;
-        }
+    array(const std::initializer_list<Type> &container) {
+        copy_elements_from(container);
     }
 
     template <typename Container>
     array(const Container &container) {
-        unsigned i = 0;
-        for (auto it = ::yacppl::cbegin(container); it != ::yacppl::cend(container); ++it) {
-            array_[i++] = *it;
-        }
+        copy_elements_from(container);
     }
 
     size_t size() const {

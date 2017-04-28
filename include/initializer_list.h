@@ -27,6 +27,14 @@ public:
         return &array_[size_];
     }
 
+    const Type *cbegin() const {
+        return array_;
+    }
+
+    const Type *cend() const {
+        return &array_[size_];
+    }
+
 };
 
 } // namespace std
