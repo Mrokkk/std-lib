@@ -162,7 +162,7 @@ public:
 
     iterator() = default;
 
-    iterator(node_pointer p) : ptr_(p) {
+    iterator(const node_pointer &p) : ptr_(p) {
     }
 
     iterator(const iterator &it)
@@ -173,7 +173,7 @@ public:
             : ptr_(const_cast<node_pointer>(it.node())) {
     }
 
-    iterator &operator=(node_pointer p) {
+    iterator &operator=(const node_pointer &p) {
         ptr_ = p;
         return *this;
     }
