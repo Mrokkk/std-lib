@@ -41,6 +41,9 @@ struct inherited_list {
 
     };
 
+    using value_type = Type;
+    using node_type = node;
+
 private:
 
     node head_;
@@ -53,7 +56,7 @@ private:
     }
 
     template <bool is_const>
-    using detail_iterator = detail::iterator<inherited_list, bidirectional_iterator_tag, Type, node, is_const>;
+    using detail_iterator = detail::iterator<inherited_list, bidirectional_iterator_tag, is_const>;
 
 public:
 

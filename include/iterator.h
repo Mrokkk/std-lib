@@ -135,10 +135,12 @@ inline typename enable_if<
     return n->entry();
 }
 
-template <typename container_type, typename iterator_tag, typename value_type, typename node_type, bool is_const>
+template <typename container_type, typename iterator_tag, bool is_const>
 struct iterator {
 
+    using node_type = typename container_type::node_type;
     using node_pointer = typename conditional<is_const, const node_type *, node_type *>::type;
+    using value_type = typename container_type::value_type;
     using value_reference = typename conditional<is_const, const value_type &, value_type &>::type;
     using value_pointer = typename conditional<is_const, const value_type *, value_type *>::type;
 
@@ -167,7 +169,7 @@ public:
             : ptr_(const_cast<node_pointer>(it.node())) {
     }
 
-    iterator(const iterator<container_type, iterator_tag, value_type, node_type, !is_const> &it)
+    iterator(const iterator<container_type, iterator_tag, !is_const> &it)
             : ptr_(const_cast<node_pointer>(it.node())) {
     }
 
@@ -181,7 +183,7 @@ public:
         return *this;
     }
 
-    iterator &operator=(const iterator<container_type, iterator_tag, value_type, node_type, !is_const> &p) {
+    iterator &operator=(const iterator<container_type, iterator_tag, !is_const> &p) {
         ptr_ = const_cast<node_pointer>(p.node());
         return *this;
     }
@@ -267,7 +269,7 @@ public:
         return ptr_ == const_cast<const node_type *>(i.node());
     }
 
-    bool operator==(const iterator<container_type, iterator_tag, value_type, node_type, !is_const> &i) const {
+    bool operator==(const iterator<container_type, iterator_tag, !is_const> &i) const {
         return ptr_ == const_cast<node_type *>(i.node());
     }
 
@@ -279,11 +281,11 @@ public:
         return ptr_ != const_cast<const node_type *>(i.node());
     }
 
-    bool operator!=(const iterator<container_type, iterator_tag, value_type, node_type, !is_const> &i) const {
+    bool operator!=(const iterator<container_type, iterator_tag, !is_const> &i) const {
         return ptr_ != const_cast<node_type *>(i.node());
     }
 
-    friend struct iterator<container_type, iterator_tag, value_type, node_type, !is_const>;
+    friend struct iterator<container_type, iterator_tag, !is_const>;
 
 };
 
