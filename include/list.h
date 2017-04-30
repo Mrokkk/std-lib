@@ -87,14 +87,15 @@ class list final {
         del(element->prev(), element->next());
     }
 
-    template<typename T>
+    template <typename T>
     void copy_elements_from(const T &other) {
-        for (auto it = other.begin(); it != other.end(); ++it) {
+        for (auto it = other.cbegin(); it != other.cend(); ++it) {
             push_back(*it);
         }
     }
 
-    void move_elements_from(list &other) {
+    template <typename T>
+    void move_elements_from(T &other) {
         while (other.size_) {
             push_back(other.front());
             other.pop_front();
@@ -125,11 +126,13 @@ public:
         copy_elements_from(list);
     }
 
-    list(const list &list) {
-        copy_elements_from(list);
+    template <typename Container>
+    list(Container &container) {
+        copy_elements_from(container);
     }
 
-    list(list &&list) {
+    template <typename Container>
+    list(Container &&list) {
         move_elements_from(list);
     }
 
