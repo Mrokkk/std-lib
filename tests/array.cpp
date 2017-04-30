@@ -55,16 +55,6 @@ TEST(array, can_decrement_iterator) {
     REQUIRE_EQ(*it, 5);
 }
 
-TEST(array, can_increment_and_decrement_iterator) {
-    array<int, 5> array{2, 3, 4, 5, 6};
-    auto it = array.begin();
-    REQUIRE_EQ(*it, 2);
-    it++;
-    REQUIRE_EQ(*it, 3);
-    it--;
-    REQUIRE_EQ(*it, 2);
-}
-
 TEST(array, can_compare_iterators) {
     array<int, 5> array{2, 3, 4, 5, 6};
     auto it1 = array.begin();
@@ -101,7 +91,13 @@ TEST(array, const_iterator_works) {
     --it;
     REQUIRE_EQ(*it, 6);
     array<int, 5>::const_iterator const_it(array1.begin());
+    REQUIRE_EQ(*const_it, 2);
     const_it = array1.end();
+    const_it--;
+    REQUIRE_EQ(*const_it, 6);
+    const_it = nullptr;
+    const_it = array1.cbegin();
+    REQUIRE_EQ(*const_it, 2);
 }
 
 TEST(array, nonconst_iterator_works) {
