@@ -163,7 +163,11 @@ public:
     iterator(node_pointer p) : ptr_(p) {
     }
 
-    iterator(const iterator<container_type, iterator_tag, value_type, node_pointer, false> &it)
+    iterator(const iterator &it)
+            : ptr_(const_cast<node_pointer>(it.node())) {
+    }
+
+    iterator(const iterator<container_type, iterator_tag, value_type, node_type, !is_const> &it)
             : ptr_(const_cast<node_pointer>(it.node())) {
     }
 
@@ -177,7 +181,7 @@ public:
         return *this;
     }
 
-    iterator &operator=(const iterator<container_type, iterator_tag, value_type, node_pointer, false> &p) {
+    iterator &operator=(const iterator<container_type, iterator_tag, value_type, node_type, !is_const> &p) {
         ptr_ = const_cast<node_pointer>(p.node());
         return *this;
     }
@@ -259,11 +263,11 @@ public:
         return ptr_ == const_cast<const node_type *>(p);
     }
 
-    bool operator==(const iterator<container_type, iterator_tag, value_type, node_type, true> &i) const {
+    bool operator==(const iterator &i) const {
         return ptr_ == const_cast<const node_type *>(i.node());
     }
 
-    bool operator==(const iterator<container_type, iterator_tag, value_type, node_type, false> &i) const {
+    bool operator==(const iterator<container_type, iterator_tag, value_type, node_type, !is_const> &i) const {
         return ptr_ == const_cast<node_type *>(i.node());
     }
 
@@ -271,16 +275,15 @@ public:
         return ptr_ != const_cast<const node_type *>(p);
     }
 
-    bool operator!=(const iterator<container_type, iterator_tag, value_type, node_type, true> &i) const {
+    bool operator!=(const iterator &i) const {
         return ptr_ != const_cast<const node_type *>(i.node());
     }
 
-    bool operator!=(const iterator<container_type, iterator_tag, value_type, node_type, false> &i) const {
+    bool operator!=(const iterator<container_type, iterator_tag, value_type, node_type, !is_const> &i) const {
         return ptr_ != const_cast<node_type *>(i.node());
     }
 
-    friend struct iterator<container_type, iterator_tag, value_type, node_type, false>;
-    friend struct iterator<container_type, iterator_tag, value_type, node_type, true>;
+    friend struct iterator<container_type, iterator_tag, value_type, node_type, !is_const>;
 
 };
 

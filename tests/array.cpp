@@ -87,8 +87,8 @@ TEST(array, can_be_copied) {
 }
 
 TEST(array, const_iterator_works) {
-    array<int, 5> array{2, 3, 4, 5, 6};
-    auto it = array.cbegin();
+    array<int, 5> array1{2, 3, 4, 5, 6};
+    auto it = array1.cbegin();
     REQUIRE_EQ(*it, 2);
     auto it2 = ++it;
     REQUIRE_EQ(*it2, 3);
@@ -97,9 +97,11 @@ TEST(array, const_iterator_works) {
     REQUIRE_EQ(*it, 2);
     it2++;
     REQUIRE_EQ(*it2, 4);
-    it = array.cend();
+    it = array1.cend();
     --it;
     REQUIRE_EQ(*it, 6);
+    array<int, 5>::const_iterator const_it(array1.begin());
+    const_it = array1.end();
 }
 
 TEST(array, nonconst_iterator_works) {
