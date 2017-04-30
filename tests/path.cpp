@@ -8,13 +8,54 @@ TEST(path, empty_path_is_empty_string) {
     REQUIRE(p == "");
 }
 
-TEST(path, path_constructed_from_string_is_valid) {
-    path p("/root/dir");
-    REQUIRE_EQ((const char *)p, "/root/dir");
-    path p2("some_dir/another_dir");
-    REQUIRE_EQ((const char *)p2, "some_dir/another_dir");
-    path p3("/");
-    REQUIRE_EQ((const char *)p3, "/");
+TEST(path, can_be_constructed_from_char_ptr) {
+    path p1(nullptr);
+    REQUIRE_FALSE(p1);
+    const char *str = "/some_path/dir/file";
+    path p2(str);
+    REQUIRE_EQ((const char *)p2, "/some_path/dir/file");
+    path p4("/");
+    REQUIRE_EQ((const char *)p4, "/");
+    path p5("/root/aaa/bbb/ccc");
+    REQUIRE_EQ((const char *)p5, "/root/aaa/bbb/ccc");
+}
+
+TEST(path, can_be_constructed_from_other_path_by_copy) {
+    path p1(nullptr);
+    path p2("/root/dir/aaa/bbb");
+    path p3(p1);
+    REQUIRE(p1.get() == nullptr);
+    REQUIRE(p3.get() == nullptr);
+    path p4(p2);
+    REQUIRE(p2.get() != nullptr);
+    REQUIRE(p4.get() != nullptr);
+    REQUIRE_EQ((const char *)p4, "/root/dir/aaa/bbb");
+}
+
+TEST(path, can_be_constructed_from_other_path_by_move) {
+    path p1(nullptr);
+    path p2("/root/dir/aaa/bbb");
+    path p3(move(p1));
+    REQUIRE(p1.get() == nullptr);
+    REQUIRE(p3.get() == nullptr);
+    path p4(move(p2));
+    REQUIRE(p2.get() == nullptr);
+    REQUIRE(p4.get() != nullptr);
+    REQUIRE_EQ((const char *)p4, "/root/dir/aaa/bbb");
+}
+
+TEST(path, can_be_assigned_to_other_path) {
+    path p1("/some_path");
+    path p2(nullptr);
+    path p3;
+    p3 = p1;
+    REQUIRE_EQ((const char *)p3, "/some_path");
+    p3 = p2;
+    REQUIRE_FALSE(p3);
+    p3 = p1;
+    REQUIRE_EQ((const char *)p1, "/some_path");
+    // FIXME: REQUIRE(p2 == nullptr);
+    REQUIRE_EQ((const char *)p3, "/some_path");
 }
 
 TEST(path, paths_can_be_appended) {
