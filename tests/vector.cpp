@@ -33,6 +33,9 @@ TEST(vector, can_be_created_by_move) {
     REQUIRE_EQ(v2[0], 1);
     REQUIRE_EQ(v2[3], 4);
     REQUIRE_EQ(v2[5], 6);
+    vector<int> v3;
+    vector<int> v4(move(v3));
+    REQUIRE_EQ(v4.size(), 0u);
 }
 
 TEST(vector, can_be_created_by_copy) {
@@ -40,6 +43,9 @@ TEST(vector, can_be_created_by_copy) {
     vector<int> v2(v1);
     REQUIRE_FALSE(v2.empty());
     REQUIRE_EQ(v2.size(), 10u);
+    vector<int> v3;
+    vector<int> v4(v3);
+    REQUIRE_EQ(v4.size(), 0u);
 }
 
 TEST(vector, can_be_copied_by_assignment) {
@@ -51,6 +57,9 @@ TEST(vector, can_be_copied_by_assignment) {
     for (auto it1 = v1.begin(), it2 = v2.begin(); it1 != v1.end(); ++it1, ++it2) {
         REQUIRE_EQ(*it1, *it2);
     }
+    vector<int> v3;
+    v2 = v3;
+    REQUIRE_EQ(v2.size(), 0u);
 }
 
 TEST(vector, can_be_moved_by_assignment) {
@@ -59,6 +68,12 @@ TEST(vector, can_be_moved_by_assignment) {
     v2 = move(v1);
     REQUIRE_EQ(v1.size(), 0u);
     REQUIRE_EQ(v2.size(), 10u);
+    REQUIRE_EQ(v2[0], 9);
+    REQUIRE_EQ(v2[5], 4);
+    REQUIRE_EQ(v2[9], 0);
+    vector<int> v3;
+    v2 = move(v3);
+    REQUIRE_EQ(v2.size(), 0u);
 }
 
 TEST(vector, can_push_back_element) {
@@ -161,30 +176,41 @@ TEST(vector, range_based_for_works) {
 namespace {
 
 template <typename Type>
-void check_type() {
+void test_with_type() {
     vector<Type> v;
-    // TODO: improve
-    v.push_back(Type());
-    v.push_back(Type());
-    v.push_back(Type());
-    v.push_back(Type());
-    v.push_back(Type());
-    v.push_back(Type());
-    v.push_back(Type());
-    v.push_back(Type());
     v.push_back(Type());
     REQUIRE(v.front() == Type());
     REQUIRE(v.back() == Type());
+    v.push_back(Type() + 2);
+    REQUIRE(v.front() == Type());
+    REQUIRE(v.back() == Type() + 2);
+    v.push_back(Type() + 12);
+    REQUIRE(v.front() == Type());
+    REQUIRE(v.back() == Type() + 12);
+    REQUIRE_EQ(v.size(), 3u);
+    v.clear();
+    REQUIRE_EQ(v.size(), 0u);
+    for (int i = 0; i < 1024; ++i) {
+        v.push_back(Type());
+    }
+    REQUIRE_EQ(v.size(), 1024u);
+    for (int i = 0; i < 1024; ++i) {
+        v.pop_back();
+    }
+    REQUIRE_EQ(v.size(), 0u);
 }
 
 } // namespace
 
 TEST(vector, works_with_simple_types) {
-    check_type<char>();
-    check_type<unsigned char>();
-    check_type<short>();
-    check_type<unsigned short>();
-    check_type<int>();
-    check_type<unsigned int>();
+    test_with_type<char>();
+    test_with_type<signed char>();
+    test_with_type<unsigned char>();
+    test_with_type<short>();
+    test_with_type<unsigned short>();
+    test_with_type<int>();
+    test_with_type<unsigned int>();
+    test_with_type<long>();
+    test_with_type<long long>();
 }
 

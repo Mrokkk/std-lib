@@ -95,7 +95,7 @@ public:
 
     vector &push_back(const Type &value) {
         if (data_ == nullptr) {
-            allocate(2u); // FIXME: why 2?
+            allocate(2u);
         }
         else {
             if (size() + 1 > max_size_) {
