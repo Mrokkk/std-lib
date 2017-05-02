@@ -47,6 +47,13 @@ public:
         }
     }
 
+    template <typename Container>
+    vector(Container &container) {
+        for (auto it = container.cbegin(); it != container.cend(); ++it) {
+            push_back(*it);
+        }
+    }
+
     ~vector() {
         if (data_) {
             delete [] data_;
@@ -66,7 +73,15 @@ public:
         return *this;
     }
 
-    const Type &operator[](int index) {
+    const Type &front() const {
+        return data_[0];
+    }
+
+    const Type &back() const {
+        return end_[-1];
+    }
+
+    const Type &operator[](int index) const {
         return data_[index];
     }
 
@@ -74,8 +89,24 @@ public:
         return iterator(data_);
     }
 
+    const_iterator begin() const {
+        return const_iterator(data_);
+    }
+
+    const_iterator cbegin() const {
+        return const_iterator(data_);
+    }
+
     iterator end() {
         return iterator(end_);
+    }
+
+    const_iterator end() const {
+        return const_iterator(end_);
+    }
+
+    const_iterator cend() const {
+        return const_iterator(end_);
     }
 
     bool empty() const {
