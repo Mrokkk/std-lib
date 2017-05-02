@@ -73,6 +73,11 @@ public:
         return *this;
     }
 
+    vector &pop_back() {
+        end_--;
+        return *this;
+    };
+
     const Type &front() const {
         return data_[0];
     }

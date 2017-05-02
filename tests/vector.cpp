@@ -50,6 +50,18 @@ TEST(vector, can_push_back_element) {
     REQUIRE_EQ(v.back(), 932448);
 }
 
+TEST(vector, can_pop_back) {
+    vector<int> v{1, 2, 3, 4, 5, 6, 7};
+    v.pop_back();
+    REQUIRE_EQ(v.size(), 6u);
+    REQUIRE_EQ(v.front(), 1);
+    REQUIRE_EQ(v.back(), 6);
+    v.pop_back();
+    REQUIRE_EQ(v.size(), 5u);
+    REQUIRE_EQ(v.front(), 1);
+    REQUIRE_EQ(v.back(), 5);
+}
+
 TEST(vector, can_iterate) {
     vector<int> v{1, 2, 3, 4, 5, 6, 7};
     auto it = v.begin();
@@ -81,6 +93,8 @@ TEST(vector, const_iterator_works) {
     REQUIRE_EQ(*--const_it, 7);
 }
 
+namespace {
+
 template <typename Type>
 void check_const_vector(const vector<Type> &v, unsigned expected_size) {
     auto size = 0u;
@@ -90,6 +104,8 @@ void check_const_vector(const vector<Type> &v, unsigned expected_size) {
     }
     REQUIRE_EQ(size, expected_size);
 }
+
+} // namespace
 
 TEST(vector, range_based_for_works) {
     vector<int> v{0, 1, 2, 3, 4, 5, 6, 7};
@@ -110,5 +126,35 @@ TEST(vector, range_based_for_works) {
     }
     REQUIRE_EQ(size, 8u);
     check_const_vector(v, 8u);
+}
+
+namespace {
+
+template <typename Type>
+void check_type() {
+    vector<Type> v;
+    // TODO: improve
+    v.push_back(Type());
+    v.push_back(Type());
+    v.push_back(Type());
+    v.push_back(Type());
+    v.push_back(Type());
+    v.push_back(Type());
+    v.push_back(Type());
+    v.push_back(Type());
+    v.push_back(Type());
+    REQUIRE(v.front() == Type());
+    REQUIRE(v.back() == Type());
+}
+
+} // namespace
+
+TEST(vector, works_with_simple_types) {
+    check_type<char>();
+    check_type<unsigned char>();
+    check_type<short>();
+    check_type<unsigned short>();
+    check_type<int>();
+    check_type<unsigned int>();
 }
 
