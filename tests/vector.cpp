@@ -81,6 +81,16 @@ TEST(vector, const_iterator_works) {
     REQUIRE_EQ(*--const_it, 7);
 }
 
+template <typename Type>
+void check_const_vector(const vector<Type> &v, unsigned expected_size) {
+    auto size = 0u;
+    for (const auto &e : v) {
+        (void)e;
+        size++;
+    }
+    REQUIRE_EQ(size, expected_size);
+}
+
 TEST(vector, range_based_for_works) {
     vector<int> v{0, 1, 2, 3, 4, 5, 6, 7};
     int i = 0;
@@ -99,5 +109,6 @@ TEST(vector, range_based_for_works) {
         ++i;
     }
     REQUIRE_EQ(size, 8u);
+    check_const_vector(v, 8u);
 }
 

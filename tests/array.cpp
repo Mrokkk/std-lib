@@ -141,6 +141,7 @@ TEST(array, range_based_for_works) {
         REQUIRE_EQ(i, 3);
     }
     REQUIRE_EQ(size, 5u);
+    check_const_array(array);
 }
 
 #include "list.h"
