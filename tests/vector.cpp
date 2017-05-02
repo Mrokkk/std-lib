@@ -95,6 +95,17 @@ TEST(vector, can_push_back_element) {
     REQUIRE_EQ(v.back(), 932448);
 }
 
+TEST(vector, can_push_back_list_of_elements) {
+    vector<int> v{1, 2, 3, 4, 5, 6, 7};
+    v.push_back({8, 9, 10, 11});
+    REQUIRE_EQ(v.size(), 11u);
+    REQUIRE_EQ(v[6], 7);
+    REQUIRE_EQ(v[7], 8);
+    REQUIRE_EQ(v[8], 9);
+    REQUIRE_EQ(v[9], 10);
+    REQUIRE_EQ(v[10], 11);
+}
+
 TEST(vector, can_pop_back) {
     vector<int> v{1, 2, 3, 4, 5, 6, 7};
     v.pop_back();

@@ -106,6 +106,11 @@ public:
         return *this;
     }
 
+    vector &push_back(const std::initializer_list<Type> &list) {
+        copy_from(list);
+        return *this;
+    }
+
     vector &pop_back() {
         end_--;
         return *this;
