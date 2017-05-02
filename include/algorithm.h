@@ -113,5 +113,13 @@ inline auto copy(Iterator1 begin1, Iterator1 end1, Iterator2 begin2, Iterator2 e
     return begin2;
 }
 
+template <typename Iterator1, typename Iterator2>
+inline auto copy(Iterator1 s1, Iterator2 s2, size_t n) {
+    for (auto i = 0u; i < n; ++i) {
+        *s2++ = *s1++;
+    }
+    return s2;
+}
+
 } // namespace yacppl
 

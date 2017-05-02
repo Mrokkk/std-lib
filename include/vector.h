@@ -1,6 +1,7 @@
 #pragma once
 
 #include "iterator.h"
+#include "algorithm.h"
 #include "initializer_list.h"
 
 namespace yacppl {
@@ -12,7 +13,24 @@ class vector {
     using detail_iterator = detail::iterator<vector, random_access_iterator_tag, is_const>;
 
     Type *data_ = nullptr;
-    size_t size_ = 0u;
+    Type *end_ = nullptr;
+    size_t max_size_ = 0u;
+
+    void allocate(size_t size) {
+        data_ = new Type[size];
+        max_size_ = size;
+        end_ = data_;
+    }
+
+    void reallocate(size_t size) {
+        auto old_size = this->size();
+        auto new_data = new Type[size];
+        copy(data_, new_data, old_size);
+        delete [] data_;
+        data_ = new_data;
+        end_ = data_ + old_size;
+        max_size_ = size;
+    }
 
 public:
 
@@ -29,9 +47,27 @@ public:
         }
     }
 
-    vector &push_back(const Type &) {
-        // TODO
+    ~vector() {
+        if (data_) {
+            delete [] data_;
+        }
+    }
+
+    vector &push_back(const Type &value) {
+        if (data_ == nullptr) {
+            allocate(2u); // FIXME: why 2?
+        }
+        else {
+            if (size() + 1 > max_size_) {
+                reallocate(max_size_ * 2);
+            }
+        }
+        *end_++ = value;
         return *this;
+    }
+
+    const Type &operator[](int index) {
+        return data_[index];
     }
 
     iterator begin() {
@@ -39,15 +75,15 @@ public:
     }
 
     iterator end() {
-        return iterator(data_ + size_);
+        return iterator(end_);
     }
 
     bool empty() const {
-        return true;
+        return end_ - data_ == 0;
     }
 
     size_t size() const {
-        return 0;
+        return end_ - data_;
     }
 
 };
