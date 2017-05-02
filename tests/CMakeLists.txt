@@ -35,6 +35,7 @@ add_executable(${PROJECT_NAME}
     function.cpp
     inherited_list.cpp
     kernel_list.cpp
+    vector.cpp
 )
 
 add_run_target(${PROJECT_NAME} tests-run)
