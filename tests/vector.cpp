@@ -24,10 +24,40 @@ TEST(vector, can_be_created_from_initializer_list) {
     REQUIRE_EQ(v[6], 7);
 }
 
-TEST(vector, can_be_created_from_other_vector) {
+TEST(vector, can_be_created_by_move) {
+    vector<int> v1{1, 2, 3, 4, 5, 6};
+    vector<int> v2(move(v1));
+    REQUIRE_EQ(v1.size(), 0u);
+    REQUIRE(v1.empty());
+    REQUIRE_EQ(v2.size(), 6u);
+    REQUIRE_EQ(v2[0], 1);
+    REQUIRE_EQ(v2[3], 4);
+    REQUIRE_EQ(v2[5], 6);
+}
+
+TEST(vector, can_be_created_by_copy) {
     vector<int> v1{9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
     vector<int> v2(v1);
     REQUIRE_FALSE(v2.empty());
+    REQUIRE_EQ(v2.size(), 10u);
+}
+
+TEST(vector, can_be_copied_by_assignment) {
+    vector<int> v1{9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+    vector<int> v2;
+    v2 = v1;
+    REQUIRE_EQ(v1.size(), 10u);
+    REQUIRE_EQ(v2.size(), 10u);
+    for (auto it1 = v1.begin(), it2 = v2.begin(); it1 != v1.end(); ++it1, ++it2) {
+        REQUIRE_EQ(*it1, *it2);
+    }
+}
+
+TEST(vector, can_be_moved_by_assignment) {
+    vector<int> v1{9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+    vector<int> v2;
+    v2 = move(v1);
+    REQUIRE_EQ(v1.size(), 0u);
     REQUIRE_EQ(v2.size(), 10u);
 }
 

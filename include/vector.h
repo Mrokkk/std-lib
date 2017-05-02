@@ -32,6 +32,19 @@ class vector {
         max_size_ = size;
     }
 
+    template <typename Container>
+    void copy_from(const Container &container) {
+        for (auto it = container.cbegin(); it != container.cend(); ++it) {
+            push_back(*it);
+        }
+    }
+
+    void release() {
+        if (data_ != nullptr) {
+            delete [] data_;
+        }
+    }
+
 public:
 
     using node_type = Type;
@@ -42,22 +55,42 @@ public:
     vector() = default;
 
     vector(const std::initializer_list<Type> &list) {
-        for (auto it = list.begin(); it != list.end(); ++it) {
-            push_back(*it);
-        }
+        copy_from(list);
     }
 
     template <typename Container>
     vector(Container &container) {
-        for (auto it = container.cbegin(); it != container.cend(); ++it) {
-            push_back(*it);
-        }
+        copy_from(container);
+    }
+
+    vector(vector &&v) {
+        data_ = v.data_;
+        end_ = v.end_;
+        max_size_ = v.max_size_;
+        v.data_ = nullptr;
+        v.end_ = nullptr;
+        v.max_size_ = 0;
     }
 
     ~vector() {
-        if (data_) {
-            delete [] data_;
-        }
+        release();
+    }
+
+    vector &operator=(const vector &v) {
+        clear();
+        copy_from(v);
+        return *this;
+    }
+
+    vector &operator=(vector &&v) {
+        release();
+        data_ = v.data_;
+        end_ = v.end_;
+        max_size_ = v.max_size_;
+        v.data_ = nullptr;
+        v.end_ = nullptr;
+        v.max_size_ = 0;
+        return *this;
     }
 
     vector &push_back(const Type &value) {
@@ -88,6 +121,11 @@ public:
 
     const Type &operator[](int index) const {
         return data_[index];
+    }
+
+    vector &clear() {
+        end_ = data_;
+        return *this;
     }
 
     iterator begin() {
