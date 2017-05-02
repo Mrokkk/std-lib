@@ -12,6 +12,7 @@ class vector {
     using detail_iterator = detail::iterator<vector, random_access_iterator_tag, is_const>;
 
     Type *data_ = nullptr;
+    size_t size_ = 0u;
 
 public:
 
@@ -22,12 +23,23 @@ public:
 
     vector() = default;
 
+    vector(const std::initializer_list<Type> &list) {
+        for (auto it = list.begin(); it != list.end(); ++it) {
+            push_back(*it);
+        }
+    }
+
+    vector &push_back(const Type &) {
+        // TODO
+        return *this;
+    }
+
     iterator begin() {
-        return iterator();
+        return iterator(data_);
     }
 
     iterator end() {
-        return iterator();
+        return iterator(data_ + size_);
     }
 
     bool empty() const {

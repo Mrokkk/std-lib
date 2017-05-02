@@ -11,4 +11,8 @@ TEST(vector, can_be_created) {
     REQUIRE(v.end() == nullptr);
 }
 
+TEST(vector, can_be_created_from_initializer_list) {
+    vector<int> v{1, 2, 3, 4, 5, 6, 7};
+    // REQUIRE_EQ(v.size(), 7u);
+}
 
