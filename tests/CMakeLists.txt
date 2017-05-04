@@ -10,7 +10,7 @@ if(SANITIZERS)
     add_sanitizers_flags()
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g${DEBUG_LEVEL} -std=${CPP_STD} ${WARNING_FLAGS} -fdiagnostics-color=always")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g${DEBUG_LEVEL} -std=${CPP_STD} ${WARNING_FLAGS} -fno-exceptions -fdiagnostics-color=always")
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
@@ -38,7 +38,7 @@ add_executable(${PROJECT_NAME}
     vector.cpp
 )
 
-add_run_target(${PROJECT_NAME} tests-run)
+add_run_target(${PROJECT_NAME} tests-run ${TESTS_PARAMS})
 
 if(NOT SANITIZERS)
     add_valgrind_target(${PROJECT_NAME} tests-valgrind)
