@@ -36,6 +36,7 @@ add_executable(${PROJECT_NAME}
     inherited_list.cpp
     kernel_list.cpp
     vector.cpp
+    bitset.cpp
 )
 
 add_run_target(${PROJECT_NAME} tests-run ${TESTS_PARAMS})
