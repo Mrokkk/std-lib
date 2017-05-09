@@ -13,7 +13,8 @@ public:
 
     function() = default;
 
-    function(const Type *ptr) : function_(ptr) {
+    template <typename Lambda>
+    function(Lambda ptr) : function_(ptr) {
     }
 
     template <typename Lambda>
