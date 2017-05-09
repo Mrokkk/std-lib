@@ -1,5 +1,5 @@
 #define YATF_MAIN
-#include "yatf/include/yatf.h"
+#include "yatf/include/yatf.hpp"
 #include <cstdio>
 
 int main(int argc, const char *argv[]) {

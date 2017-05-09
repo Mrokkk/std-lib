@@ -2,7 +2,7 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
-#include "yatf/include/yatf.h"
+#include "yatf/include/yatf.hpp"
 
 using namespace yacppl;
 

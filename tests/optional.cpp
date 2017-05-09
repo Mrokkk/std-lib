@@ -1,5 +1,5 @@
 #include <optional.hpp>
-#include "yatf/include/yatf.h"
+#include "yatf/include/yatf.hpp"
 
 namespace {
 
