@@ -1,7 +1,7 @@
 #pragma once
 
-#include "string.h"
-#include "algorithm.h"
+#include "string.hpp"
+#include "algorithm.hpp"
 
 namespace yacppl {
 

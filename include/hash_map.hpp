@@ -1,10 +1,10 @@
 #pragma once
 
 #include <cstddef>
-#include "pair.h"
-#include "hash.h"
-#include "list.h"
-#include "types.h"
+#include "pair.hpp"
+#include "hash.hpp"
+#include "list.hpp"
+#include "types.hpp"
 
 namespace yacppl {
 

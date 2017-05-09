@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stddef.h>
-#include "iterator.h"
+#include "iterator.hpp"
 
 // Alloc-free double-linked list based on the Linux kernel list implementation
 

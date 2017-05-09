@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstddef>
-#include "iterator.h"
+#include "iterator.hpp"
 
 namespace yacppl {
 

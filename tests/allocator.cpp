@@ -1,4 +1,4 @@
-#include <allocator.h>
+#include <allocator.hpp>
 #include "yatf/include/yatf.h"
 
 class heap_allocator final {

@@ -1,5 +1,5 @@
-#include <unique_ptr.h>
-#include <move.h>
+#include <unique_ptr.hpp>
+#include <move.hpp>
 #include "yatf/include/yatf.h"
 
 using namespace yacppl;

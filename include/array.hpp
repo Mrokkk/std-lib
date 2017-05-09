@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cstddef>
-#include "iterator.h"
-#include "initializer_list.h"
+#include "iterator.hpp"
+#include "initializer_list.hpp"
 
 namespace yacppl {
 

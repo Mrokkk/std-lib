@@ -1,42 +1,38 @@
 #pragma once
 
-#include "list.h"
+#include "list.hpp"
 
 namespace yacppl {
 
 template<typename Type, typename Container = list<Type>>
-class queue final {
+class stack final {
 
     Container list_;
 
 public:
-
-    void push(Type &element) {
-        list_.push_back(element);
-    }
 
     void push(const Type &element) {
         list_.push_back(element);
     }
 
     void pop() {
-        list_.pop_front();
+        list_.pop_back();
     }
 
     const Type &front() const {
-        return list_.front();
+        return list_.back();
     }
 
     size_t size() const {
         return list_.size();
     }
 
-    queue &operator<<(const Type &element) {
+    stack &operator<<(const Type &element) {
         push(element);
         return *this;
     }
 
-    queue &operator>>(Type &element) {
+    stack &operator>>(Type &element) {
         element = front();
         pop();
         return *this;

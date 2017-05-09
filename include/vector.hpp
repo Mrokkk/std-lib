@@ -1,8 +1,8 @@
 #pragma once
 
-#include "iterator.h"
-#include "algorithm.h"
-#include "initializer_list.h"
+#include "iterator.hpp"
+#include "algorithm.hpp"
+#include "initializer_list.hpp"
 
 namespace yacppl {
 

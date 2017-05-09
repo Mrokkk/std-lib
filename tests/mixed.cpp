@@ -1,9 +1,9 @@
-#include <list.h>
-#include <unique_ptr.h>
-#include <shared_ptr.h>
-#include <algorithm.h>
-#include <string.h>
-#include <array.h>
+#include <list.hpp>
+#include <unique_ptr.hpp>
+#include <shared_ptr.hpp>
+#include <algorithm.hpp>
+#include <string.hpp>
+#include <array.hpp>
 #include "yatf/include/yatf.h"
 
 using namespace yacppl;

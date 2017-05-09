@@ -1,5 +1,5 @@
-#include <list.h>
-#include <move.h>
+#include <list.hpp>
+#include <move.hpp>
 #include "yatf/include/yatf.h"
 
 using namespace yacppl;

@@ -1,4 +1,4 @@
-#include <bitset.h>
+#include <bitset.hpp>
 #include "yatf/include/yatf.h"
 
 using namespace yacppl;

@@ -1,4 +1,4 @@
-#include <stack.h>
+#include <stack.hpp>
 #include "yatf/include/yatf.h"
 
 using namespace yacppl;

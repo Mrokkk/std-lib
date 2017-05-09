@@ -1,4 +1,4 @@
-#include <inherited_list.h>
+#include <inherited_list.hpp>
 #include <vector>
 #include <cstdlib>
 #include <ctime>

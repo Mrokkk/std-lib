@@ -1,4 +1,4 @@
-#include <optional.h>
+#include <optional.hpp>
 #include "yatf/include/yatf.h"
 
 namespace {

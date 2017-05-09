@@ -1,4 +1,4 @@
-#include <array.h>
+#include <array.hpp>
 #include "yatf/include/yatf.h"
 
 using namespace yacppl;
@@ -144,7 +144,7 @@ TEST(array, range_based_for_works) {
     check_const_array(array);
 }
 
-#include "list.h"
+#include "list.hpp"
 
 namespace {
 

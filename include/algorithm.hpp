@@ -1,7 +1,7 @@
 #pragma once
 
-#include "move.h"
-#include "iterator.h"
+#include "move.hpp"
+#include "iterator.hpp"
 
 namespace yacppl {
 
