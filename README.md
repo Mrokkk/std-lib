@@ -3,5 +3,4 @@
 [![codecov](https://codecov.io/gh/Mrokkk/yacppl/branch/master/graph/badge.svg)](https://codecov.io/gh/Mrokkk/yacppl)
 
 ### TODOs
-* add vector
 * add variant
