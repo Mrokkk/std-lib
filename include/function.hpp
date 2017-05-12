@@ -13,7 +13,7 @@ template <typename R, typename ...Args>
 class callable {
 public:
     virtual ~callable() {}
-    virtual R operator()(Args ...args) = 0;
+    virtual R operator()(Args ...args) const = 0;
 };
 
 template<typename ClosureType, typename R, typename ...Args>
@@ -29,7 +29,7 @@ public:
     ~closure() {
     }
 
-    R operator()(Args ...args) override {
+    R operator()(Args ...args) const override {
         if (is_void<R>::value)
             func_(forward<Args>(args)...);
         else
@@ -51,7 +51,7 @@ class function : public function<decltype(&FunctionType::operator())> {
 template <typename R, typename ...Args>
 class function<R(Args...)> {
 
-    detail::callable<R, Args...> *func_wrapper_ = nullptr;
+    const detail::callable<R, Args...> *func_wrapper_ = nullptr;
     char data_[2 * sizeof(void *)]; // FIXME: why?
 
 public:
@@ -72,12 +72,12 @@ public:
     }
 
     template <typename T = R>
-    typename enable_if<is_void<T>::value, T>::type operator()(Args ...args) {
+    typename enable_if<is_void<T>::value, T>::type operator()(Args ...args) const {
         (*func_wrapper_)(forward<Args>(args)...);
     }
 
     template <typename T = R>
-    typename enable_if<!is_void<T>::value, T>::type operator()(Args ...args) {
+    typename enable_if<!is_void<T>::value, T>::type operator()(Args ...args) const {
         return (*func_wrapper_)(forward<Args>(args)...);
     }
 
