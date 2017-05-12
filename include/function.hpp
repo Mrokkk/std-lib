@@ -1,10 +1,13 @@
 #pragma once
 
+#include <cstddef>
 #include "move.hpp"
 #include "types.hpp"
 #include "unique_ptr.hpp"
 
 namespace yacppl {
+
+namespace detail {
 
 template <typename R, typename ...Args>
 class callable {
@@ -20,7 +23,7 @@ class closure: public callable<R, Args...> {
 
 public:
 
-    closure(const ClosureType& handler) : func_(handler) {
+    closure(const ClosureType &handler) : func_(handler) {
     }
 
     ~closure() {
@@ -33,7 +36,13 @@ public:
             return func_(forward<Args>(args)...);
     }
 
+    constexpr void *operator new(size_t, void *address) {
+        return address;
+    }
+
 };
+
+} // namespace detail
 
 template <typename FunctionType>
 class function : public function<decltype(&FunctionType::operator())> {
@@ -42,22 +51,23 @@ class function : public function<decltype(&FunctionType::operator())> {
 template <typename R, typename ...Args>
 class function<R(Args...)> {
 
-    unique_ptr<callable<R, Args...>> func_wrapper_;
+    detail::callable<R, Args...> *func_wrapper_ = nullptr;
+    char data_[2 * sizeof(void *)]; // FIXME: why?
 
 public:
 
     function() = default;
 
     template<typename ClosureType>
-    function(const ClosureType& function)
-            : func_wrapper_(new closure<decltype(function), R, Args...>(function)) {
+    function(const ClosureType &function)
+            : func_wrapper_(new (data_) detail::closure<decltype(function), R, Args...>(function)) {
     }
 
     function &operator=(nullptr_t) = delete;
 
     template<typename ClosureType>
-    function &operator=(const ClosureType& function) {
-        func_wrapper_ = new closure<decltype(function), R, Args...>(function);
+    function &operator=(const ClosureType &function) {
+        func_wrapper_ = new (data_) detail::closure<decltype(function), R, Args...>(function);
         return *this;
     }
 
