@@ -1,43 +1,81 @@
 #pragma once
 
+#include "move.hpp"
 #include "types.hpp"
+#include "unique_ptr.hpp"
 
 namespace yacppl {
 
-template <typename Type>
-class function {
+template <typename R, typename ...Args>
+class callable {
+public:
+    virtual ~callable() {}
+    virtual R operator()(Args ...args) = 0;
+};
 
-    Type *function_ = nullptr;
+template<typename ClosureType, typename R, typename ...Args>
+class closure: public callable<R, Args...> {
+
+    const ClosureType func_;
+
+public:
+
+    closure(const ClosureType& handler) : func_(handler) {
+    }
+
+    ~closure() {
+    }
+
+    R operator()(Args ...args) override {
+        if (is_void<R>::value)
+            func_(args...);
+        else
+            return func_(args...);
+    }
+
+};
+
+template <typename FunctionType>
+class function : public function<decltype(&FunctionType::operator())> {
+};
+
+template <typename R, typename ...Args>
+class function<R(Args...)> {
+
+    unique_ptr<callable<R, Args...>> func_wrapper_;
 
 public:
 
     function() = default;
 
-    template <typename Lambda>
-    function(Lambda ptr) : function_(ptr) {
+    template<typename ClosureType>
+    function(const ClosureType& function)
+            : func_wrapper_(new closure<decltype(function), R, Args...>(function)) {
     }
 
-    template <typename Lambda>
-    function &operator=(Lambda lambda) {
-        function_ = lambda;
+    function &operator=(nullptr_t) = delete;
+
+    template<typename ClosureType>
+    function &operator=(const ClosureType& function) {
+        func_wrapper_ = new closure<decltype(function), R, Args...>(function);
         return *this;
     }
 
-    template <typename ...Types>
-    auto operator()(Types &&... args) const {
-        return function_(args...);
+    template <typename T = R>
+    typename enable_if<is_void<T>::value, T>::type operator()(Args &&...args) {
+        (*func_wrapper_)(args...);
+    }
+
+    template <typename T = R>
+    typename enable_if<!is_void<T>::value, T>::type operator()(Args &&...args) {
+        return (*func_wrapper_)(args...);
     }
 
     operator bool() const {
-        return function_ != nullptr;
+        return func_wrapper_ != nullptr;
     }
 
 };
-
-template <typename R, typename ...Args>
-function<R(Args...)> make_function(R (*f)(Args...)) {
-    return function<R(Args...)>(f);
-}
 
 } // namespace yacppl
 

@@ -2,6 +2,8 @@
 
 namespace yacppl {
 
+using nullptr_t = decltype(nullptr);
+
 template <typename T, T v>
 struct integral_constant {
     static constexpr T value = v;
@@ -26,6 +28,16 @@ template <typename T> struct enable_if<true, T> { using type = T; };
 
 template <typename T, class U> struct is_same : false_type {};
 template <typename T> struct is_same<T, T> : true_type {};
+
+template <typename T>
+struct is_void {
+    static const bool value = false;
+};
+
+template<>
+struct is_void<void> {
+    static const bool value = true;
+};
 
 template <bool B, class T, class F>
 struct conditional { typedef T type; };

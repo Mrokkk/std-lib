@@ -43,12 +43,18 @@ TEST(function, can_create_from_lambda) {
     f(194);
 }
 
+TEST(function, can_create_from_capturing_lambda) {
+    int a = 129;
+    function<void(void)> f([&](){ REQUIRE_EQ(a, 129); });
+    REQUIRE(f);
+    f();
+}
+
 TEST(function, can_assign_function_ptr) {
     function<void()> f;
     f = &dummy_function1;
     REQUIRE(f);
-    f = nullptr;
-    REQUIRE_FALSE(f);
+    f();
 }
 
 TEST(function, can_assign_lambda) {
@@ -58,16 +64,11 @@ TEST(function, can_assign_lambda) {
     f(194);
 }
 
-TEST(function, can_make_function) {
-    auto f1 = make_function(&dummy_function1);
-    REQUIRE(f1);
-    f1();
-    auto f2 = make_function(dummy_function2);
-    REQUIRE(f2);
-    f2(198);
-    auto f3 = make_function(dummy_function3);
-    REQUIRE(f3);
-    auto result = f3(192);
-    REQUIRE_EQ(result, 192);
+TEST(function, can_assign_capturing_lambda) {
+    function<void(int)> f;
+    auto i = 9382;
+    f = [&](int a){ REQUIRE_EQ(i, 9382); REQUIRE_EQ(a, 194); };
+    REQUIRE(f);
+    f(194);
 }
 
