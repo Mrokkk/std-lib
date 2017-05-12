@@ -66,7 +66,7 @@ public:
     function &operator=(nullptr_t) = delete;
 
     template<typename ClosureType>
-    function &operator=(const ClosureType &function) {
+    function &operator=(ClosureType function) {
         func_wrapper_ = new (data_) detail::closure<decltype(function), R, Args...>(function);
         return *this;
     }
