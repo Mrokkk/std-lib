@@ -25,7 +25,7 @@ int dummy_function3(int a) {
 } // namespace
 
 TEST(function, can_create_from_function_ptr) {
-    function<void(void)> f1(&dummy_function1);
+    function<void()> f1(&dummy_function1);
     REQUIRE(f1);
     f1();
     function<void(int)> f2(&dummy_function2);
@@ -52,7 +52,7 @@ TEST(function, can_create_from_capturing_lambda) {
 
 TEST(function, can_assign_function_ptr) {
     function<void()> f;
-    f = &dummy_function1;
+    f = dummy_function1;
     REQUIRE(f);
     f();
 }

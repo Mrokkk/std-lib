@@ -28,9 +28,9 @@ public:
 
     R operator()(Args ...args) override {
         if (is_void<R>::value)
-            func_(args...);
+            func_(forward<Args>(args)...);
         else
-            return func_(args...);
+            return func_(forward<Args>(args)...);
     }
 
 };
@@ -62,13 +62,13 @@ public:
     }
 
     template <typename T = R>
-    typename enable_if<is_void<T>::value, T>::type operator()(Args &&...args) {
-        (*func_wrapper_)(args...);
+    typename enable_if<is_void<T>::value, T>::type operator()(Args ...args) {
+        (*func_wrapper_)(forward<Args>(args)...);
     }
 
     template <typename T = R>
-    typename enable_if<!is_void<T>::value, T>::type operator()(Args &&...args) {
-        return (*func_wrapper_)(args...);
+    typename enable_if<!is_void<T>::value, T>::type operator()(Args ...args) {
+        return (*func_wrapper_)(forward<Args>(args)...);
     }
 
     operator bool() const {
