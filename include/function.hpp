@@ -16,7 +16,7 @@ public:
     virtual R operator()(Args ...args) const = 0;
 };
 
-template<typename ClosureType, typename R, typename ...Args>
+template <typename ClosureType, typename R, typename ...Args>
 class closure: public callable<R, Args...> {
 
     const ClosureType func_;
@@ -59,15 +59,15 @@ public:
     function() = default;
 
     template<typename ClosureType>
-    function(const ClosureType &function)
-            : func_wrapper_(new (data_) detail::closure<decltype(function), R, Args...>(function)) {
+    function(ClosureType function)
+            : func_wrapper_(new (data_) detail::closure<ClosureType, R, Args...>(function)) {
     }
 
     function &operator=(nullptr_t) = delete;
 
     template<typename ClosureType>
     function &operator=(ClosureType function) {
-        func_wrapper_ = new (data_) detail::closure<decltype(function), R, Args...>(function);
+        func_wrapper_ = new (data_) detail::closure<ClosureType, R, Args...>(function);
         return *this;
     }
 
