@@ -72,3 +72,27 @@ TEST(function, can_assign_capturing_lambda) {
     f(194);
 }
 
+namespace {
+
+function<int(int)> get_function() {
+    return [](int a){ return a; };
+}
+
+void call_function(function<char(char)> f) {
+    auto result = f('c');
+    REQUIRE_EQ(result, 'c');
+}
+
+} // namespace
+
+TEST(function, can_be_returned_from_function) {
+    function<int(int)> fn;
+    fn = get_function();
+    auto result = fn(201);
+    REQUIRE_EQ(result, 201);
+}
+
+TEST(function, can_be_passed_to_function) {
+    call_function([](char c){ return c; });
+}
+

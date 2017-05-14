@@ -23,7 +23,7 @@ class closure: public callable<R, Args...> {
 
 public:
 
-    closure(const ClosureType &handler) : func_(handler) {
+    closure(ClosureType handler) : func_(handler) {
     }
 
     ~closure() {
@@ -45,8 +45,7 @@ public:
 } // namespace detail
 
 template <typename FunctionType>
-class function : public function<decltype(&FunctionType::operator())> {
-};
+class function {};
 
 template <typename R, typename ...Args>
 class function<R(Args...)> {
