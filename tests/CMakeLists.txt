@@ -20,6 +20,7 @@ endif()
 
 add_executable(${PROJECT_NAME}
     main.cpp
+    atomic.cpp
     array.cpp
     list.cpp
     mixed.cpp

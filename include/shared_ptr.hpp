@@ -1,6 +1,7 @@
 #pragma once
 
 #include "move.hpp"
+#include "atomic.hpp"
 
 namespace yacppl {
 
@@ -15,7 +16,8 @@ class shared_ptr final {
 
     void release() {
         if (ref_count_ != nullptr) {
-            if (!--*ref_count_) {
+            ::atomic_decrement(ref_count_);
+            if (!*ref_count_) {
                 delete ptr_;
                 delete ref_count_;
             }
@@ -39,7 +41,7 @@ public:
         ptr_ = ptr.ptr_;
         if (ptr.ref_count_ != nullptr) {
             ref_count_ = ptr.ref_count_;
-            ++*ref_count_;
+            ::atomic_increment(ref_count_);
         }
     }
 
@@ -59,7 +61,7 @@ public:
         ptr_ = ptr.ptr_;
         if (ptr.ref_count_ != nullptr) {
             ref_count_ = ptr.ref_count_;
-            ++*ref_count_;
+            ::atomic_increment(ref_count_);
         }
         return *this;
     }
