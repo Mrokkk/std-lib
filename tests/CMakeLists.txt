@@ -50,3 +50,4 @@ if(COVERAGE)
     add_coverage_targets(${PROJECT_NAME} tests-run tests ${CMAKE_SOURCE_DIR}/include)
 endif()
 
+add_subdirectory(thread_safe)
