@@ -18,6 +18,10 @@ void thread1() {
         ptr = ptr1;
         ptr1 = nullptr;
     }
+    for (auto i = 0u; i < 1024u; ++i) {
+        auto ptr1 = move(ptr);
+        ptr = move(ptr1);
+    }
 }
 
 void thread2() {
@@ -29,6 +33,10 @@ void thread2() {
         auto ptr1 = ptr;
     }
     ptr = nullptr;
+    for (auto i = 0u; i < 1024u; ++i) {
+        auto ptr1 = move(ptr);
+        ptr = move(ptr1);
+    }
 }
 
 TEST(shared_ptr, is_thread_safe) {
