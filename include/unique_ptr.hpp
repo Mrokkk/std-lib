@@ -1,6 +1,7 @@
 #pragma once
 
 #include "move.hpp"
+#include "spinlock.hpp"
 
 namespace yacppl {
 
@@ -11,6 +12,7 @@ class unique_ptr final {
     using Pointer = Type *;
 
     Pointer ptr_ = nullptr;
+    static spinlock spinlock_;
 
     void release() {
         if (ptr_) {
@@ -36,10 +38,12 @@ public:
     }
 
     ~unique_ptr() {
+        scoped_lock lock(spinlock_);
         release();
     }
 
     unique_ptr &operator=(unique_ptr &&other) {
+        scoped_lock lock(spinlock_);
         release();
         ptr_ = other.ptr_;
         other.ptr_ = nullptr;
@@ -63,6 +67,8 @@ public:
     }
 
 };
+
+template <typename T> spinlock unique_ptr<T>::spinlock_;
 
 template<typename Type>
 inline unique_ptr<Type> make_unique() {

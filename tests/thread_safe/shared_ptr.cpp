@@ -2,6 +2,8 @@
 #include <yatf.hpp>
 #include <shared_ptr.hpp>
 
+namespace {
+
 yacppl::shared_ptr<int> ptr;
 
 void thread1() {
@@ -38,6 +40,8 @@ void thread2() {
         ptr = move(ptr1);
     }
 }
+
+} // namespace
 
 TEST(shared_ptr, is_thread_safe) {
     for (auto i = 0; i < 1024; ++i) {
