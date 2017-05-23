@@ -11,6 +11,26 @@ void atomic_decrement(void *addr) {
     asm volatile("lock decl (%0)" :: "r" (addr));
 }
 
+void spinlock_lock(volatile size_t *lock) {
+    size_t dummy = SPINLOCK_LOCKED;
+    asm volatile(R"(
+        1: lock xchg %0, %1
+        test %1, %1
+        jnz 1b)"
+        : "=m" (*lock)
+        : "r" (dummy)
+        : "memory");
+}
+
+void spinlock_unlock(volatile size_t *lock) {
+    size_t dummy = SPINLOCK_UNLOCKED;
+    asm volatile(
+        "lock xchg %0, %1"
+        : "=m" (*lock)
+        : "r" (dummy)
+        : "memory");
+}
+
 void thread1() {
     for (auto i = 0u; i < 1024u; ++i) {
         auto ptr1 = ptr;
@@ -20,6 +40,11 @@ void thread1() {
         auto ptr1 = ptr;
     }
     ptr = nullptr;
+    for (auto i = 0u; i < 1024u; ++i) {
+        auto ptr1 = yacppl::make_shared<int>(323);
+        ptr = ptr1;
+        ptr1 = nullptr;
+    }
 }
 
 void thread2() {
