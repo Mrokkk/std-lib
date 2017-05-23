@@ -2,6 +2,7 @@
 
 #include "move.hpp"
 #include "atomic.hpp"
+#include "spinlock.hpp"
 
 namespace yacppl {
 
@@ -13,11 +14,11 @@ class shared_ptr final {
 
     Pointer ptr_ = nullptr;
     unsigned *ref_count_ = nullptr;
+    static spinlock spinlock_;
 
     void release() {
         if (ref_count_ != nullptr) {
-            ::atomic_decrement(ref_count_);
-            if (!*ref_count_) {
+            if (!--*ref_count_) {
                 delete ptr_;
                 delete ref_count_;
             }
@@ -38,14 +39,16 @@ public:
     }
 
     shared_ptr(const shared_ptr &ptr) {
+        scoped_lock lock(spinlock_);
         ptr_ = ptr.ptr_;
         if (ptr.ref_count_ != nullptr) {
             ref_count_ = ptr.ref_count_;
-            ::atomic_increment(ref_count_);
+            ++*ref_count_;
         }
     }
 
     shared_ptr(shared_ptr &&other) {
+        scoped_lock lock(spinlock_);
         ptr_ = other.ptr_;
         other.ptr_ = nullptr;
         ref_count_ = other.ref_count_;
@@ -53,20 +56,33 @@ public:
     }
 
     ~shared_ptr() {
+        scoped_lock lock(spinlock_);
         release();
     }
 
+    shared_ptr &operator=(Pointer ptr) {
+        scoped_lock lock(spinlock_);
+        release();
+        ptr_ = ptr;
+        if (ptr_) {
+            ref_count_ = new unsigned(1);
+        }
+        return *this;
+    }
+
     shared_ptr &operator=(const shared_ptr &ptr) {
+        scoped_lock lock(spinlock_);
         release();
         ptr_ = ptr.ptr_;
         if (ptr.ref_count_ != nullptr) {
             ref_count_ = ptr.ref_count_;
-            ::atomic_increment(ref_count_);
+            ++*ref_count_;
         }
         return *this;
     }
 
     shared_ptr &operator=(shared_ptr &&other) {
+        scoped_lock lock(spinlock_);
         release();
         ptr_ = other.ptr_;
         other.ptr_ = nullptr;
@@ -123,6 +139,8 @@ public:
     }
 
 };
+
+template <typename T> spinlock shared_ptr<T>::spinlock_;
 
 template<typename Type>
 inline shared_ptr<Type> make_shared() {

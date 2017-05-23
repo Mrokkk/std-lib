@@ -20,6 +20,9 @@ case "$JOB" in
     "sanitizers")
         cmake -DCI=ON -DSANITIZERS=ON ..
         make tests-run -j$cores ;;
+    "thread_safe")
+        cmake -DCI=ON -DSANITIZERS=ON ..
+        make tests-thread_safe-run -j$cores ;;
     *)
         cmake -DCI=ON ..
         make tests-run -j$cores ;;
