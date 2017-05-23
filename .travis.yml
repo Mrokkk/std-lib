@@ -42,6 +42,18 @@ matrix:
             - COMPILER=clang++
           services:
             - docker
+        - env:
+            - IMAGE=mrokkk/devel
+            - JOB=thread_safe
+            - COMPILER=g++
+          services:
+            - docker
+        - env:
+            - IMAGE=mrokkk/devel
+            - JOB=thread_safe
+            - COMPILER=clang++
+          services:
+            - docker
 
 language: cpp
 
