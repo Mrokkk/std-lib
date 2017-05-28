@@ -38,12 +38,12 @@ public:
     }
 
     ~unique_ptr() {
-        scoped_lock lock(spinlock_);
+        auto _ = make_scoped_lock(spinlock_);
         release();
     }
 
     unique_ptr &operator=(unique_ptr &&other) {
-        scoped_lock lock(spinlock_);
+        auto _ = make_scoped_lock(spinlock_);
         release();
         ptr_ = other.ptr_;
         other.ptr_ = nullptr;

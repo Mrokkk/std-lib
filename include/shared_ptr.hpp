@@ -39,7 +39,7 @@ public:
     }
 
     shared_ptr(const shared_ptr &ptr) {
-        scoped_lock lock(spinlock_);
+        auto _ = make_scoped_lock(spinlock_);
         ptr_ = ptr.ptr_;
         if (ptr.ref_count_ != nullptr) {
             ref_count_ = ptr.ref_count_;
@@ -48,7 +48,7 @@ public:
     }
 
     shared_ptr(shared_ptr &&other) {
-        scoped_lock lock(spinlock_);
+        auto _ = make_scoped_lock(spinlock_);
         ptr_ = other.ptr_;
         other.ptr_ = nullptr;
         ref_count_ = other.ref_count_;
@@ -56,12 +56,12 @@ public:
     }
 
     ~shared_ptr() {
-        scoped_lock lock(spinlock_);
+        auto _ = make_scoped_lock(spinlock_);
         release();
     }
 
     shared_ptr &operator=(Pointer ptr) {
-        scoped_lock lock(spinlock_);
+        auto _ = make_scoped_lock(spinlock_);
         release();
         ptr_ = ptr;
         if (ptr_) {
@@ -71,7 +71,7 @@ public:
     }
 
     shared_ptr &operator=(const shared_ptr &ptr) {
-        scoped_lock lock(spinlock_);
+        auto _ = make_scoped_lock(spinlock_);
         release();
         ptr_ = ptr.ptr_;
         if (ptr.ref_count_ != nullptr) {
@@ -82,7 +82,7 @@ public:
     }
 
     shared_ptr &operator=(shared_ptr &&other) {
-        scoped_lock lock(spinlock_);
+        auto _ = make_scoped_lock(spinlock_);
         release();
         ptr_ = other.ptr_;
         other.ptr_ = nullptr;

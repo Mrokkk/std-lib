@@ -32,6 +32,10 @@ public:
     }
 };
 
+inline scoped_lock make_scoped_lock(spinlock &lock) {
+    return scoped_lock(lock);
+}
+
 namespace detail {
 
 template <int M>

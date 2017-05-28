@@ -79,7 +79,7 @@ public:
 
     void *allocate(size_t size) {
         adapt_size(size);
-        scoped_lock _(spinlock_);
+        auto _ = make_scoped_lock(spinlock_);
         for (auto &temp : blocks_) {
             if (temp.free && temp.size >= size) {
                 temp.try_to_divide(size);
@@ -93,7 +93,7 @@ public:
     }
 
     bool free(void *address) {
-        scoped_lock _(spinlock_);
+        auto _ = make_scoped_lock(spinlock_);
         for (auto &temp : blocks_) {
             if (temp.data() == address) {
                 temp.free = true;
