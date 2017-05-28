@@ -1,8 +1,9 @@
 #pragma once
 
-#include "kernel_list.hpp"
 #include <cstddef>
 #include <cstdint>
+#include "spinlock.hpp"
+#include "kernel_list.hpp"
 
 namespace yacppl {
 
@@ -12,8 +13,8 @@ class allocator final {
     class memory_block {
 
         struct _data {
-            unsigned char data[_memory_block_size];
-            unsigned int block_ptr[0];
+            uint8_t data[_memory_block_size];
+            uint8_t block_ptr[0];
         } __attribute__((packed));
 
         template <typename Ptr>
@@ -60,6 +61,7 @@ class allocator final {
 
     kernel_list<memory_block> blocks_;
     BackendAllocator backend_allocator_;
+    static spinlock spinlock_;
 
     void adapt_size(size_t &size) const {
         if (size % _memory_block_size)
@@ -77,6 +79,7 @@ public:
 
     void *allocate(size_t size) {
         adapt_size(size);
+        scoped_lock _(spinlock_);
         for (auto &temp : blocks_) {
             if (temp.free && temp.size >= size) {
                 temp.try_to_divide(size);
@@ -90,6 +93,7 @@ public:
     }
 
     bool free(void *address) {
+        scoped_lock _(spinlock_);
         for (auto &temp : blocks_) {
             if (temp.data() == address) {
                 temp.free = true;
@@ -106,6 +110,9 @@ public:
     }
 
 };
+
+template <class BackendAllocator, size_t _memory_block_size>
+spinlock allocator<BackendAllocator, _memory_block_size>::spinlock_;
 
 } // namespace yacppl
 
