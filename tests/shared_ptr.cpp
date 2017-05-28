@@ -116,6 +116,16 @@ TEST(shared_ptr, can_have_its_value_modified) {
     REQUIRE(ptr.get_ref_count() == 1);
 }
 
+TEST(shared_ptr, can_be_reset) {
+    auto ptr = make_shared(234);
+    ptr.reset(new int());
+    REQUIRE_EQ(*ptr, int());
+    ptr.reset(nullptr);
+    REQUIRE_FALSE(ptr);
+    ptr.reset(make_shared(943));
+    REQUIRE_EQ(*ptr, 943);
+}
+
 namespace {
 
 struct helper {

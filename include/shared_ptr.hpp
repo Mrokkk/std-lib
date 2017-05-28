@@ -31,8 +31,7 @@ public:
 
     shared_ptr() = default;
 
-    shared_ptr(Pointer ptr) {
-        ptr_ = ptr;
+    shared_ptr(Pointer ptr) : ptr_(ptr) {
         if (ptr_) {
             ref_count_ = new unsigned(1);
         }
@@ -89,6 +88,11 @@ public:
         ref_count_ = other.ref_count_;
         other.ref_count_ = nullptr;
         return *this;
+    }
+
+    template <typename T>
+    void reset(T v) {
+        operator=(v);
     }
 
     Reference operator*() const {
