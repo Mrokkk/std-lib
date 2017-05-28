@@ -49,6 +49,14 @@ TEST(unique_ptr, can_have_its_value_modified) {
     REQUIRE_EQ(*ptr, 39);
 }
 
+TEST(unique_ptr, can_be_reset) {
+    auto ptr = make_unique<int>();
+    ptr.reset(nullptr);
+    REQUIRE_FALSE(ptr);
+    ptr.reset(new int(3));
+    REQUIRE_EQ(*ptr, 3);
+}
+
 namespace {
 
 struct helper {

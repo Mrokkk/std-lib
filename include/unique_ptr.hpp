@@ -50,6 +50,11 @@ public:
         return *this;
     }
 
+    template <typename T>
+    void reset(T v) {
+        operator=(v);
+    }
+
     Pointer get() const {
         return ptr_;
     }
@@ -72,7 +77,7 @@ template <typename T> spinlock unique_ptr<T>::spinlock_;
 
 template<typename Type>
 inline unique_ptr<Type> make_unique() {
-    return unique_ptr<Type>(new Type);
+    return unique_ptr<Type>(new Type());
 }
 
 template<typename Type>
