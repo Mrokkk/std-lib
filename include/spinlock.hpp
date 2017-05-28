@@ -39,12 +39,20 @@ inline scoped_lock make_scoped_lock(spinlock &lock) {
 namespace detail {
 
 template <int M>
-class spinlock_pool {
-    static spinlock pool_[32];
+struct spinlock_pool {
+
+    constexpr static const size_t buckets_size = 41;
+
+private:
+
+    static spinlock pool_[buckets_size];
+
 public:
+
     static spinlock &get(const void *address) {
-        return pool_[reinterpret_cast<size_t>(address) % 32];
+        return pool_[reinterpret_cast<size_t>(address) % buckets_size];
     }
+
     class scoped_lock {
         spinlock &lock_;
     public:
@@ -55,9 +63,10 @@ public:
             lock_.unlock();
         }
     };
+
 };
 
-template <int M> spinlock spinlock_pool<M>::pool_[32];
+template <int M> spinlock spinlock_pool<M>::pool_[spinlock_pool<M>::buckets_size];
 
 } // namespace detail
 
