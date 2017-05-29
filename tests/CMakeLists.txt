@@ -38,6 +38,7 @@ add_executable(${PROJECT_NAME}
     kernel_list.cpp
     vector.cpp
     bitset.cpp
+    maybe.cpp
 )
 
 add_run_target(${PROJECT_NAME} tests-run ${TESTS_PARAMS})
