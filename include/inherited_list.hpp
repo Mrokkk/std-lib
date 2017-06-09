@@ -13,8 +13,6 @@ struct inherited_list {
 
     public:
 
-        node() = default;
-
         node *&next() {
             return next_;
         }
@@ -62,8 +60,6 @@ public:
 
     using iterator = detail_iterator<false>;
     using const_iterator = detail_iterator<true>;
-
-    inherited_list() = default;
 
     inherited_list &push_back(node &new_element) {
         add_element(new_element, *head_.prev(), head_);

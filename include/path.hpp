@@ -116,8 +116,7 @@ private:
 
 public:
 
-    path() {
-    }
+    path() = default;
 
     path(const path &p) {
         path_ = p.path_;

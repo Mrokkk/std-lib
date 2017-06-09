@@ -10,9 +10,7 @@ namespace yacppl {
 namespace detail {
 
 template <typename R, typename ...Args>
-class callable {
-public:
-    virtual ~callable() {}
+struct callable {
     virtual R operator()(Args ...args) const = 0;
 };
 
@@ -24,9 +22,6 @@ class closure: public callable<R, Args...> {
 public:
 
     closure(ClosureType handler) : func_(handler) {
-    }
-
-    ~closure() {
     }
 
     R operator()(Args ...args) const override {

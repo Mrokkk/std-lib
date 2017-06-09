@@ -25,8 +25,6 @@ struct kernel_list final {
 
     public:
 
-        node() = default;
-
         node *&next() {
             return next_;
         }
