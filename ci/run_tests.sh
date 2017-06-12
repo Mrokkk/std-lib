@@ -24,7 +24,7 @@ case "$JOB" in
         cmake -DCI=ON -DSANITIZERS=ON ..
         make tests-thread_safe-run -j$cores ;;
     *)
-        cmake -DCI=ON ..
+        cmake -DCI=ON -DCPP_STD=${CPP_STD} ..
         make tests-run -j$cores ;;
 esac
 
