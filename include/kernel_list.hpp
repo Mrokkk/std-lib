@@ -25,6 +25,11 @@ struct kernel_list final {
 
     public:
 
+        ~node() {
+            if (next_ != this) next()->prev() = prev();
+            if (prev_ != this) prev()->next() = next();
+        }
+
         node *&next() {
             return next_;
         }
@@ -165,6 +170,13 @@ public:
 
     const_iterator end() const {
         return const_iterator(&head_);
+    }
+
+    kernel_list &clear() {
+        while (not empty()) {
+            erase(begin());
+        }
+        return *this;
     }
 
 };

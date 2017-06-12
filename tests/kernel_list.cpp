@@ -169,3 +169,14 @@ TEST(kernel_list, can_erase) {
     REQUIRE(it == list.end());
 }
 
+TEST(kernel_list, can_clear) {
+    kernel_list<helper> list(&helper::list);
+    helper e1(2), e2(44), e3(26), e4(94);
+    list.push_back(e1);
+    list.push_back(e2);
+    list.push_back(e3);
+    list.push_back(e4);
+    list.clear();
+    REQUIRE(list.empty());
+}
+
