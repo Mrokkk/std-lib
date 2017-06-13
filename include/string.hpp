@@ -5,14 +5,14 @@
 
 namespace yacppl {
 
-inline auto memcopy(const char *s, char *d, size_t size) {
+inline char *memcopy(const char *s, char *d, size_t size) {
     while (size--) {
         *d++ = *s++;
     }
     return d;
 }
 
-inline auto copy(const char *s1, char *s2) {
+inline char *copy(const char *s1, char *s2) {
     while (*s1) {
         *s2++ = *s1++;
     }
@@ -21,7 +21,7 @@ inline auto copy(const char *s1, char *s2) {
 }
 
 template <typename F>
-inline auto copy(const char *s1, char *s2, F callback) {
+inline char *copy(const char *s1, char *s2, F callback) {
     while (*s1) {
         if (callback(s1)) {
             *s2++ = *s1++;
@@ -34,7 +34,7 @@ inline auto copy(const char *s1, char *s2, F callback) {
     return s2;
 }
 
-inline auto copy(const char *s1, char *s2, size_t n) {
+inline char *copy(const char *s1, char *s2, size_t n) {
     s2 = memcopy(s1, s2, n);
     *s2 = 0;
     return s2;

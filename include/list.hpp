@@ -22,27 +22,27 @@ class list final {
         list_element(const Type &e) : data_(e), prev_(this), next_(this) {
         }
 
-        auto prev() const {
+        list_element *prev() const {
             return prev_;
         }
 
-        auto next() const {
+        list_element *next() const {
             return next_;
         }
 
-        auto &prev() {
+        list_element *&prev() {
             return prev_;
         }
 
-        auto &next() {
+        list_element *&next() {
             return next_;
         }
 
-        auto entry() {
+        Type *entry() {
             return &data_;
         }
 
-        auto entry() const {
+        const Type *entry() const {
             return &data_;
         }
 

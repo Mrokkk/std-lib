@@ -31,7 +31,9 @@ inline int count(Container &c, Type elem) {
 template<typename Container, typename Lambda>
 inline int count_if(Container &c, Lambda lambda) {
     auto result = 0;
-    for_each(c, [&](const auto &e) { if (lambda(e)) result++; });
+    for (auto it = c.cbegin(); it != c.cend(); ++it) {
+        if (lambda(*it)) result++;
+    }
     return result;
 }
 
@@ -95,7 +97,7 @@ inline auto last_occurrence(Container &container, const Value &v) -> decltype (c
 }
 
 template <typename Iterator, typename Value>
-inline auto last_occurrence(Iterator begin, Iterator end, const Value &v) {
+inline Iterator last_occurrence(Iterator begin, Iterator end, const Value &v) {
     auto last = end;
     for (; begin != end; ++begin) {
         if (*begin == v) {
@@ -106,7 +108,7 @@ inline auto last_occurrence(Iterator begin, Iterator end, const Value &v) {
 }
 
 template <typename Iterator1, typename Iterator2>
-inline auto copy(Iterator1 begin1, Iterator1 end1, Iterator2 begin2, Iterator2 end2) {
+inline Iterator2 copy(Iterator1 begin1, Iterator1 end1, Iterator2 begin2, Iterator2 end2) {
     for (; begin1 != end1 || begin2 != end2; ++begin1, ++begin2) {
         *begin2 = *begin1;
     }
@@ -114,7 +116,7 @@ inline auto copy(Iterator1 begin1, Iterator1 end1, Iterator2 begin2, Iterator2 e
 }
 
 template <typename Iterator1, typename Iterator2>
-inline auto copy(Iterator1 s1, Iterator2 s2, size_t n) {
+inline Iterator2 copy(Iterator1 s1, Iterator2 s2, size_t n) {
     for (auto i = 0u; i < n; ++i) {
         *s2++ = *s1++;
     }

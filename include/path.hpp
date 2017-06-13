@@ -179,19 +179,19 @@ public:
         return path_ == str;
     }
 
-    auto cbegin() const {
+    const_iterator cbegin() const {
         return const_iterator(path_.cbegin());
     }
 
-    auto begin() const {
+    const_iterator begin() const {
         return cbegin();
     }
 
-    auto cend() const {
+    const_iterator cend() const {
         return const_iterator(path_.cend());
     }
 
-    auto end() const {
+    const_iterator end() const {
         return cend();
     }
 

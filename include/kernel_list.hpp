@@ -109,7 +109,7 @@ public:
     using const_iterator = detail_iterator<true>;
 
     template <typename U>
-    constexpr explicit kernel_list(U Type::*member) {
+    explicit kernel_list(U Type::*member) {
         offset_ = offset_of(member);
     }
 

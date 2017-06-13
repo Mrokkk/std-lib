@@ -46,7 +46,7 @@ public:
         return value_;
     }
 
-    auto get_error() {
+    unsigned int get_error() {
         return error_.get();
     }
 
