@@ -209,6 +209,18 @@ void test_with_type() {
         v.pop_back();
     }
     REQUIRE_EQ(v.size(), 0u);
+    v.push_back(Type());
+    {
+        vector<Type> v2;
+        REQUIRE(v2.empty());
+        REQUIRE_EQ(v2.size(), 0u);
+    }
+    {
+        vector<Type> v2;
+        v2 = v;
+        REQUIRE_EQ(v.size(), 1u);
+        REQUIRE_EQ(v2.size(), 1u);
+    }
 }
 
 } // namespace
