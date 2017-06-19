@@ -12,25 +12,27 @@ struct helper {
     helper(int x) : a(x) {}
 };
 
-void test_adding(kernel_list<helper> &head, helper &e, std::vector<int> &comp, int s) {
-    auto size = 0;
+void test_adding(kernel_list<helper> &head, helper &e, std::vector<int> &comp, size_t s) {
+    auto size = 0u;
     head.push_back(e);
     for (const auto &h : head) {
         REQUIRE_EQ(comp[size], h.a);
         size++;
     };
     REQUIRE_EQ(size, s);
+    REQUIRE_EQ(head.size(), s);
     REQUIRE_FALSE(head.empty());
 }
 
-void test_adding_front(kernel_list<helper> &head, helper &e, std::vector<int> &comp, int s) {
-    auto size = 0;
+void test_adding_front(kernel_list<helper> &head, helper &e, std::vector<int> &comp, size_t s) {
+    auto size = 0u;
     head.push_front(e);
     for (const auto &h : head) {
         REQUIRE_EQ(comp[size], h.a);
         size++;
     };
     REQUIRE_EQ(size, s);
+    REQUIRE_EQ(head.size(), s);
     REQUIRE_FALSE(head.empty());
 }
 
@@ -50,6 +52,7 @@ void test_removing(kernel_list<helper> &head, helper &e, std::vector<int> &comp)
 TEST(kernel_list, can_create_empty) {
     kernel_list<helper> list(&helper::list);
     REQUIRE(list.empty());
+    REQUIRE_EQ(list.size(), 0u);
 }
 
 TEST(kernel_list, can_add_elements) {

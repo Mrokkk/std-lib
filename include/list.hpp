@@ -9,17 +9,17 @@ namespace yacppl {
 template<typename Type>
 class list final {
 
-    class list_element {
+    class list_element final {
 
         Type data_;
         list_element *prev_, *next_;
 
     public:
 
-        list_element() : prev_(this), next_(this) {
+        constexpr list_element() : prev_(this), next_(this) {
         }
 
-        list_element(const Type &e) : data_(e), prev_(this), next_(this) {
+        constexpr list_element(const Type &e) : data_(e), prev_(this), next_(this) {
         }
 
         list_element *prev() const {
@@ -120,7 +120,7 @@ public:
     using iterator = detail_iterator<false>;
     using const_iterator = detail_iterator<true>;
 
-    list() = default;
+    constexpr list() = default;
 
     list(const std::initializer_list<Type> &list) {
         copy_elements_from(list);

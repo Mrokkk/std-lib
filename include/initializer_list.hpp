@@ -12,7 +12,7 @@ class initializer_list {
 
 public:
 
-    initializer_list(const Type *array, size_t length) : array_(array), size_(length) {
+    constexpr initializer_list(const Type *array, size_t length) : array_(array), size_(length) {
     }
 
     size_t size() const {

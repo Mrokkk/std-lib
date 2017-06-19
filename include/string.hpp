@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include "move.hpp"
 #include "iterator.hpp"
 
 namespace yacppl {
@@ -125,9 +126,11 @@ public:
 
     string(const string &s) {
         auto len = s.length();
-        allocate(len);
-        copy(s.string_, string_);
-        end_ += len;
+        if (len > 0) {
+            allocate(len);
+            copy(s.string_, string_);
+            end_ += len;
+        }
     }
 
     string(const char *begin, size_t size) {

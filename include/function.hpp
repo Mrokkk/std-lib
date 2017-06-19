@@ -21,7 +21,7 @@ class closure: public callable<R, Args...> {
 
 public:
 
-    closure(ClosureType handler) : func_(handler) {
+    constexpr closure(ClosureType handler) : func_(handler) {
     }
 
     R operator()(Args ...args) const override {
@@ -31,7 +31,7 @@ public:
             return func_(forward<Args>(args)...);
     }
 
-    constexpr void *operator new(size_t, void *address) {
+    constexpr static void *operator new(size_t, void *address) {
         return address;
     }
 
@@ -50,10 +50,10 @@ class function<R(Args...)> {
 
 public:
 
-    function() = default;
+    constexpr function() = default;
 
     template<typename ClosureType>
-    function(ClosureType function)
+    constexpr function(ClosureType function)
             : func_wrapper_(new (data_) detail::closure<ClosureType, R, Args...>(function)) {
     }
 

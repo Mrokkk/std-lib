@@ -23,9 +23,9 @@ class unique_ptr final {
 
 public:
 
-    unique_ptr() = default;
+    constexpr unique_ptr() = default;
 
-    unique_ptr(Pointer ptr) : ptr_(ptr) {
+    constexpr unique_ptr(Pointer ptr) : ptr_(ptr) {
     }
 
     unique_ptr(const unique_ptr &) = delete;

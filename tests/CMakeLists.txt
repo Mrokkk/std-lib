@@ -40,6 +40,7 @@ add_executable(${PROJECT_NAME}
     bitset.cpp
     maybe.cpp
     tuple.cpp
+    pair.cpp
 )
 
 add_run_target(${PROJECT_NAME} tests-run ${TESTS_PARAMS})

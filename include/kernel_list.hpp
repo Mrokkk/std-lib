@@ -58,7 +58,6 @@ struct kernel_list final {
             offset_ = offset;
         }
 
-        // FIXME: remove
         void insert(node *new_node) {
             new_node->set_offset(offset_);
             next_->prev() = new_node;
@@ -109,8 +108,7 @@ public:
     using const_iterator = detail_iterator<true>;
 
     template <typename U>
-    explicit kernel_list(U Type::*member) {
-        offset_ = offset_of(member);
+    constexpr explicit kernel_list(U Type::*member) : offset_(offset_of(member)) {
     }
 
     kernel_list &push_back(Type &new_node) {
@@ -177,6 +175,14 @@ public:
             erase(begin());
         }
         return *this;
+    }
+
+    size_t size() const {
+        size_t s = 0u;
+        for (auto it = this->cbegin(); it != this->cend(); ++it) {
+            ++s;
+        }
+        return s;
     }
 
 };

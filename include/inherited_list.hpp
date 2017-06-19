@@ -71,7 +71,6 @@ public:
         return *this;
     }
 
-    // FIXME: inserting at begin()
     inherited_list &insert(const iterator &it, node &new_element) {
         add_element(new_element, *it.node()->prev(), *it.node());
         return *this;
@@ -93,6 +92,14 @@ public:
 
     bool empty() const {
         return head_.next() == &head_;
+    }
+
+    size_t size() const {
+        size_t size = 0u;
+        for (auto it = this->cbegin(); it != this->cend(); ++it) {
+            ++size;
+        }
+        return size;
     }
 
     iterator begin() {
