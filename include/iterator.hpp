@@ -160,16 +160,16 @@ private:
 
 public:
 
-    iterator() = default;
+    constexpr iterator() = default;
 
-    iterator(const node_pointer &p) : ptr_(p) {
+    constexpr iterator(const node_pointer &p) : ptr_(p) {
     }
 
-    iterator(const iterator &it)
+    constexpr iterator(const iterator &it)
             : ptr_(const_cast<node_pointer>(it.node())) {
     }
 
-    iterator(const iterator<container_type, iterator_tag, !is_const> &it)
+    constexpr iterator(const iterator<container_type, iterator_tag, !is_const> &it)
             : ptr_(const_cast<node_pointer>(it.node())) {
     }
 
