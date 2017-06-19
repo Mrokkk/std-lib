@@ -28,9 +28,9 @@ void test_adding(inherited_list<helper> &head, int s) {
     std::vector<helper> helper_vec;
     init_vectors(v, helper_vec, s);
     REQUIRE(head.empty());
-    auto expected_size = 1;
+    auto expected_size = 1u;
     for (auto &h : helper_vec) {
-        auto size = 0;
+        auto size = 0u;
         head.push_back(h);
         for (const auto &h : head) {
             REQUIRE_EQ(v[size], h.a);
@@ -38,6 +38,7 @@ void test_adding(inherited_list<helper> &head, int s) {
         };
         REQUIRE_FALSE(head.empty());
         REQUIRE_EQ(size, expected_size);
+        REQUIRE_EQ(head.size(), size);
         expected_size++;
     }
 }
@@ -47,9 +48,9 @@ void test_adding_front(inherited_list<helper> &head, int s) {
     std::vector<helper> helper_vec;
     init_vectors(v, helper_vec, s);
     REQUIRE(head.empty());
-    auto expected_size = 1;
+    auto expected_size = 1u;
     for (auto &h : helper_vec) {
-        auto size = 0;
+        auto size = 0u;
         head.push_front(h);
         for (const auto &h : head) {
             REQUIRE_EQ(v[expected_size - 1 - size], h.a);
@@ -57,6 +58,7 @@ void test_adding_front(inherited_list<helper> &head, int s) {
         };
         REQUIRE_FALSE(head.empty());
         REQUIRE_EQ(size, expected_size);
+        REQUIRE_EQ(head.size(), size);
         expected_size++;
     }
 }
@@ -66,6 +68,7 @@ void test_adding_front(inherited_list<helper> &head, int s) {
 TEST(inherited_list, can_create_empty) {
     inherited_list<helper> h;
     REQUIRE(h.empty());
+    REQUIRE_EQ(h.size(), 0u);
 }
 
 TEST(inherited_list, can_add_elements) {
