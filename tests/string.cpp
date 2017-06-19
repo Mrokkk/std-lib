@@ -55,6 +55,17 @@ TEST(string, can_be_created_from_other_string) {
         REQUIRE(str == "test_string");
         REQUIRE(str2 == "test_string");
     }
+    {
+        string str2;
+        string str3(str2);
+        REQUIRE_EQ(str3.operator const char *(), nullptr);
+    }
+    {
+        string str2("some_string");
+        string str3(move(str2));
+        REQUIRE_EQ(str2.operator const char *(), nullptr);
+        REQUIRE(str3 == "some_string");
+    }
     str = string("some");
     REQUIRE(str == "some");
     str = string("some very, very, very long string");

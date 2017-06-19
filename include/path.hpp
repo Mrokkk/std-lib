@@ -15,7 +15,7 @@ public:
 
     public:
 
-        explicit const_iterator(const char *path) : iterator_(path) {
+        constexpr explicit const_iterator(const char *path) : iterator_(path) {
         }
 
         const_iterator(const const_iterator &it) : iterator_(it.iterator_) {
@@ -116,15 +116,12 @@ private:
 
 public:
 
-    path() = default;
+    constexpr path() = default;
 
-    path(const path &p) {
-        path_ = p.path_;
+    path(const path &p) : path_(p.path_) {
     }
 
-    path(path &&p) {
-        path_ = p;
-        p.path_ = nullptr;
+    path(path &&p) : path_(move(p.path_)) {
     }
 
     path(const char *str) {
