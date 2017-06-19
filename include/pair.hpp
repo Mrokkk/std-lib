@@ -8,9 +8,18 @@ struct pair {
     T1 first;
     T2 second;
 
-    pair() = default;
+    constexpr pair() : first(), second() {
+    }
 
-    pair(const T1 &v1, const T2 &v2) : first(v1), second(v2) {
+    constexpr pair(const T1 &v1, const T2 &v2) : first(v1), second(v2) {
+    }
+
+    bool operator==(const pair &p) const {
+        return p.first == first && p.second == second;
+    }
+
+    bool operator!=(const pair &p) const {
+        return !operator==(p);
     }
 
 };
