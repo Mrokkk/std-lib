@@ -4,13 +4,13 @@ namespace yacppl {
 
 class error {
 
-    unsigned int errno_;
+    unsigned int errno_ = 0;
 
 public:
 
-    error() = default;
+    constexpr error() = default;
 
-    explicit error(unsigned int errno) : errno_(errno) {
+    constexpr explicit error(unsigned int errno) : errno_(errno) {
     }
 
     unsigned int get() const {
@@ -28,10 +28,10 @@ class maybe {
 
 public:
 
-    maybe(const error &err) : error_(err), has_error_(true) {
+    constexpr maybe(const error &err) : error_(err), has_error_(true) {
     }
 
-    maybe(const value_type &value) : value_(value), has_error_(false) {
+    constexpr maybe(const value_type &value) : value_(value), has_error_(false) {
     }
 
     operator bool() const {
