@@ -24,9 +24,9 @@ public:
 
     public:
 
-        reference() = default;
+        constexpr reference() = default;
 
-        explicit reference(value_type *ptr, size_t bit) : ptr_(ptr), bit_(bit) {
+        constexpr explicit reference(value_type *ptr, size_t bit) : ptr_(ptr), bit_(bit) {
         }
 
         operator bool() const {
@@ -45,7 +45,7 @@ public:
 
     };
 
-    bitset() : data_{} {
+    constexpr bitset() : data_{} {
     }
 
     bitset &set(size_t index) {
