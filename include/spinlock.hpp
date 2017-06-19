@@ -2,38 +2,42 @@
 
 #include <cstddef>
 
-void spinlock_unlock(volatile size_t *lock);
-void spinlock_lock(volatile size_t *lock);
-
 namespace yacppl {
 
-#define SPINLOCK_UNLOCKED   0
-#define SPINLOCK_LOCKED     1
+struct spinlock {
 
-class spinlock {
-    volatile size_t lock_ = SPINLOCK_UNLOCKED;
-public:
-    void lock() {
-        ::spinlock_lock(&lock_);
-    }
-    void unlock() {
-        ::spinlock_unlock(&lock_);
-    }
+    enum class state : size_t {
+        unlocked = 0,
+        locked = 1
+    };
+
+    void lock();
+    void unlock();
+
+    class scoped {
+
+        spinlock &lock_;
+
+    public:
+
+        scoped(spinlock &lock) : lock_(lock) {
+            lock_.lock();
+        }
+
+        ~scoped() {
+            lock_.unlock();
+        }
+
+    };
+
+private:
+
+    volatile state lock_ = state::unlocked;
+
 };
 
-class scoped_lock {
-    spinlock &lock_;
-public:
-    scoped_lock(spinlock &lock) : lock_(lock) {
-        lock_.lock();
-    }
-    ~scoped_lock() {
-        lock_.unlock();
-    }
-};
-
-inline scoped_lock make_scoped_lock(spinlock &lock) {
-    return scoped_lock(lock);
+inline spinlock::scoped make_scoped_lock(spinlock &lock) {
+    return spinlock::scoped(lock);
 }
 
 namespace detail {

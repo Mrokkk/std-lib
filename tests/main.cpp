@@ -3,25 +3,29 @@
 #include <cstdio>
 #include <spinlock.hpp>
 
-void spinlock_lock(volatile size_t *lock) {
-    size_t dummy = SPINLOCK_LOCKED;
+namespace yacppl {
+
+void spinlock::lock() {
+    auto dummy = static_cast<size_t>(state::locked);
     asm volatile(R"(
         1: lock xchg %0, %1
         test %1, %1
         jnz 1b)"
-        : "=m" (*lock)
+        : "=m" (lock_)
         : "r" (dummy)
         : "memory");
 }
 
-void spinlock_unlock(volatile size_t *lock) {
-    size_t dummy = SPINLOCK_UNLOCKED;
+void spinlock::unlock() {
+    auto dummy = static_cast<size_t>(state::unlocked);
     asm volatile(
         "lock xchg %0, %1"
-        : "=m" (*lock)
+        : "=m" (lock_)
         : "r" (dummy)
         : "memory");
 }
+
+} // namespace yacppl
 
 int main(int argc, const char *argv[]) {
     return yatf::main(printf, argc, argv);
