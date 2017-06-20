@@ -19,9 +19,15 @@ struct max_sizeof<T> {
     static constexpr const auto value = sizeof(T);
 };
 
-template <typename T, typename ...Rest>
-struct max_sizeof<T, Rest...> {
-    static constexpr const auto value = sizeof(T) | max_sizeof<Rest...>::value;
+template <typename T1, typename T2>
+struct max_sizeof<T1, T2> {
+    static constexpr const auto value = sizeof(T1) > sizeof(T2) ? sizeof(T1) : sizeof(T2);
+};
+
+template <typename T1, typename T2, typename ...Rest>
+struct max_sizeof<T1, T2, Rest...> {
+    static constexpr const auto value = max_sizeof<T1, T2>::value > max_sizeof<Rest...>::value ?
+        max_sizeof<T1, T2>::value : max_sizeof<Rest...>::value;
 };
 
 } // namespace detail
