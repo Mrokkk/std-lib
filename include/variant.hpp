@@ -6,8 +6,43 @@ namespace detail {
 
 template <typename T>
 struct type {
+
+    constexpr explicit type() = default;
+
+    constexpr explicit type(const T &val, char *data) : ptr_(new(data) T(val)) {
+    }
+
     void visit() const {
     }
+
+    void set(const T &val, char *data) {
+        release();
+        ptr_ = new(data) T(val);
+    }
+
+    void reset() {
+        release();
+    }
+
+    operator bool() const {
+        return ptr_ != nullptr;
+    }
+
+    ~type() {
+        release();
+    }
+
+private:
+
+    void release() {
+        if (ptr_ != nullptr) {
+            ptr_->~T();
+            ptr_ = nullptr;
+        }
+    }
+
+    T *ptr_ = nullptr;
+
 };
 
 template <typename ...Types>
@@ -39,14 +74,14 @@ struct variant : detail::type<Types>... {
     }
 
     template <typename T>
-    explicit variant(const T &v) {
-        set<T>(v);
+    constexpr explicit variant(const T &v) : detail::type<T>(v, data_) {
     }
 
     template <typename T>
     void set(const T &value) {
-        detail::type<T>::visit();
-        new(data_) T(value);
+        int list[] = {(detail::type<Types>::reset(), 0)...};
+        (void)list;
+        detail::type<T>::set(value, data_);
     }
 
     template <typename T>
@@ -59,6 +94,22 @@ struct variant : detail::type<Types>... {
     const T &get() const {
         detail::type<T>::visit();
         return *reinterpret_cast<const T *>(data_);
+    }
+
+    template <typename T>
+    T *safe_get() {
+        if (detail::type<T>::operator bool()) {
+            return reinterpret_cast<T *>(data_);
+        }
+        return nullptr;
+    }
+
+    template <typename T>
+    const T *safe_get() const {
+        if (detail::type<T>::operator bool()) {
+            return reinterpret_cast<const T *>(data_);
+        }
+        return nullptr;
     }
 
     template <typename T>
