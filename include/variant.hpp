@@ -6,7 +6,7 @@ namespace detail {
 
 template <typename T>
 struct type {
-    void set() {
+    void visit() const {
     }
 };
 
@@ -39,14 +39,26 @@ struct variant : detail::type<Types>... {
     }
 
     template <typename T>
+    explicit variant(const T &v) {
+        set<T>(v);
+    }
+
+    template <typename T>
     void set(const T &value) {
-        detail::type<T>::set();
+        detail::type<T>::visit();
         new(data_) T(value);
     }
 
     template <typename T>
     T &get() {
+        detail::type<T>::visit();
         return *reinterpret_cast<T *>(data_);
+    }
+
+    template <typename T>
+    const T &get() const {
+        detail::type<T>::visit();
+        return *reinterpret_cast<const T *>(data_);
     }
 
     template <typename T>
