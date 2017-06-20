@@ -49,6 +49,12 @@ struct variant : detail::type<Types>... {
         return *reinterpret_cast<T *>(data_);
     }
 
+    template <typename T>
+    variant &operator=(const T &val) {
+        set<T>(val);
+        return *this;
+    }
+
 private:
 
     char data_[detail::max_sizeof<Types...>::value];
