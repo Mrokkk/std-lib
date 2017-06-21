@@ -41,6 +41,7 @@ add_executable(${PROJECT_NAME}
     maybe.cpp
     tuple.cpp
     pair.cpp
+    variant.cpp
 )
 
 add_run_target(${PROJECT_NAME} tests-run ${TESTS_PARAMS})
