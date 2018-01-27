@@ -42,6 +42,7 @@ add_executable(${PROJECT_NAME}
     tuple.cpp
     pair.cpp
     variant.cpp
+    lazy_instance.cpp
 )
 
 add_run_target(${PROJECT_NAME} tests-run ${TESTS_PARAMS})
