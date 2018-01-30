@@ -31,13 +31,23 @@ public:
 
     shared_ptr() = default;
 
-    shared_ptr(Pointer ptr) : ptr_(ptr) {
+    explicit shared_ptr(Pointer ptr) : ptr_(ptr) {
         if (ptr_) {
             ref_count_ = new unsigned(1);
         }
     }
 
     shared_ptr(const shared_ptr &ptr) {
+        auto _ = make_scoped_lock(spinlock_);
+        ptr_ = ptr.ptr_;
+        if (ptr.ref_count_ != nullptr) {
+            ref_count_ = ptr.ref_count_;
+            ++*ref_count_;
+        }
+    }
+
+    template <typename U>
+    shared_ptr(const shared_ptr<U> &ptr) {
         auto _ = make_scoped_lock(spinlock_);
         ptr_ = ptr.ptr_;
         if (ptr.ref_count_ != nullptr) {
@@ -70,6 +80,18 @@ public:
     }
 
     shared_ptr &operator=(const shared_ptr &ptr) {
+        auto _ = make_scoped_lock(spinlock_);
+        release();
+        ptr_ = ptr.ptr_;
+        if (ptr.ref_count_ != nullptr) {
+            ref_count_ = ptr.ref_count_;
+            ++*ref_count_;
+        }
+        return *this;
+    }
+
+    template <typename U>
+    shared_ptr &operator=(const shared_ptr<U> &ptr) {
         auto _ = make_scoped_lock(spinlock_);
         release();
         ptr_ = ptr.ptr_;
@@ -142,6 +164,8 @@ public:
         return 0;
     }
 
+    template <class U>
+    friend class shared_ptr;
 };
 
 template <typename T> spinlock shared_ptr<T>::spinlock_;
