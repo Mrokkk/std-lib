@@ -1,4 +1,4 @@
-sudo: required
+sudo: true
 
 before_install:
   - docker pull mrokkk/devel
