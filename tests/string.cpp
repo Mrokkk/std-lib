@@ -165,3 +165,68 @@ TEST(string, can_reserve_size) {
     REQUIRE_EQ(str.size(), 4096u);
 }
 
+TEST(string, split_on_empty_string_should_return_empty_vec) {
+    string str;
+    const auto splitted = str.split();
+    REQUIRE_EQ(splitted.size(), 0u);
+}
+
+TEST(string, can_split) {
+    {
+        string str("some");
+        const auto splitted = str.split();
+        REQUIRE_EQ(splitted.size(), 1u);
+        REQUIRE_EQ((const char *)splitted[0], "some");
+    }
+    {
+        string str("some string");
+        const auto splitted = str.split();
+        REQUIRE_EQ(splitted.size(), 2u);
+        REQUIRE_EQ((const char *)splitted[0], "some");
+        REQUIRE_EQ((const char *)splitted[1], "string");
+    }
+    {
+        string str("some string ");
+        const auto splitted = str.split();
+        REQUIRE_EQ(splitted.size(), 2u);
+        REQUIRE_EQ((const char *)splitted[0], "some");
+        REQUIRE_EQ((const char *)splitted[1], "string");
+    }
+    {
+        string str("some string  ");
+        const auto splitted = str.split();
+        REQUIRE_EQ(splitted.size(), 2u);
+        REQUIRE_EQ((const char *)splitted[0], "some");
+        REQUIRE_EQ((const char *)splitted[1], "string");
+    }
+    {
+        string str("  some string  ");
+        const auto splitted = str.split();
+        REQUIRE_EQ(splitted.size(), 2u);
+        REQUIRE_EQ((const char *)splitted[0], "some");
+        REQUIRE_EQ((const char *)splitted[1], "string");
+    }
+    {
+        string str(" some string  ");
+        const auto splitted = str.split();
+        REQUIRE_EQ(splitted.size(), 2u);
+        REQUIRE_EQ((const char *)splitted[0], "some");
+        REQUIRE_EQ((const char *)splitted[1], "string");
+    }
+    {
+        string str(" some   string  ");
+        const auto splitted = str.split();
+        REQUIRE_EQ(splitted.size(), 2u);
+        REQUIRE_EQ((const char *)splitted[0], "some");
+        REQUIRE_EQ((const char *)splitted[1], "string");
+    }
+    {
+        string str(" some   other string  ");
+        const auto splitted = str.split();
+        REQUIRE_EQ(splitted.size(), 3u);
+        REQUIRE_EQ((const char *)splitted[0], "some");
+        REQUIRE_EQ((const char *)splitted[1], "other");
+        REQUIRE_EQ((const char *)splitted[2], "string");
+    }
+}
+

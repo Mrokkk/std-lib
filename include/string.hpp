@@ -1,8 +1,9 @@
 #pragma once
 
 #include <cstddef>
-#include "move.hpp"
 #include "iterator.hpp"
+#include "move.hpp"
+#include "vector.hpp"
 
 namespace yacppl {
 
@@ -47,70 +48,7 @@ inline int compare(const char *s1, const char *s2) {
     return *(const unsigned char*)s1 - *(const unsigned char*)s2;
 }
 
-class string final {
-
-    char *string_ = nullptr;
-    char *end_ = nullptr;
-    size_t size_ = 0;
-    size_t allocation_counter_ = 0;
-
-    void allocate(size_t size) {
-        string_ = new char[size + 1];
-        end_ = string_;
-        allocation_counter_++;
-        size_ = size;
-    }
-
-    void reallocate(size_t size) {
-        auto new_string = new char[size + 1];
-        copy(string_, new_string);
-        delete [] string_;
-        string_ = new_string;
-        size_ = size;
-        end_ = string_ + ::yacppl::length(string_);
-        allocation_counter_++;
-    }
-
-    void release() {
-        if (string_) {
-            delete [] string_;
-        }
-        string_ = nullptr;
-        end_ = nullptr;
-        size_ = 0;
-        allocation_counter_ = 0;
-    }
-
-    void copy_from(const char *str) {
-        if (str == nullptr) {
-            release();
-            return;
-        }
-        auto len = ::yacppl::length(str);
-        if (string_) {
-            if (len > length()) {
-                reallocate(len);
-            }
-        }
-        else {
-            allocate(len);
-        }
-        copy(str, string_);
-        end_ += len;
-    }
-
-    void move_from(string &s) {
-        string_ = s.string_;
-        end_ = s.end_;
-        size_ = s.size_;
-        allocation_counter_ = s.allocation_counter_;
-        s.string_ = nullptr;
-        s.end_ = nullptr;
-        s.size_ = 0;
-        s.allocation_counter_ = 0;
-    }
-
-public:
+struct string final {
 
     using iterator = char *;
     using const_iterator = const char *;
@@ -143,6 +81,10 @@ public:
         move_from(s);
     }
 
+    ~string() {
+        release();
+    }
+
     string &operator=(const char *str) {
         copy_from(str);
         return *this;
@@ -157,10 +99,6 @@ public:
         release();
         move_from(s);
         return *this;
-    }
-
-    ~string() {
-        release();
     }
 
     iterator begin() {
@@ -238,6 +176,45 @@ public:
         *end_ = 0;
     }
 
+    const_iterator find(const char c) const {
+        for (auto i = 0u; i < size_; ++i) {
+            if (string_[i] == c) return const_iterator(string_) + i;
+        }
+        return cend();
+    }
+
+    iterator find(const char c) {
+        for (auto i = 0u; i < size_; ++i) {
+            if (string_[i] == c) return iterator(string_) + i;
+        }
+        return end();
+    }
+
+    vector<string> split(const char c = ' ') const {
+        vector<string> res;
+        const_iterator it = cbegin();
+        const_iterator last_it = cbegin();
+        while (1) {
+            if (it == cend()) {
+                if (it == cbegin()) break;
+                res.push_back(substring(last_it - cbegin(), it - last_it));
+                break;
+            }
+            if (*it == c) {
+                if (*last_it != c) {
+                    res.push_back(substring(last_it - cbegin(), it - last_it));
+                }
+                while (*it == c) {
+                    ++it;
+                }
+                if (it == cend()) break;
+                last_it = it;
+            }
+            ++it;
+        }
+        return res;
+    }
+
     size_t length() const {
         return end_ - string_;
     }
@@ -259,6 +236,67 @@ public:
         }
     }
 
+private:
+    char *string_ = nullptr;
+    char *end_ = nullptr;
+    size_t size_ = 0;
+    size_t allocation_counter_ = 0;
+
+    void allocate(size_t size) {
+        string_ = new char[size + 1];
+        end_ = string_;
+        allocation_counter_++;
+        size_ = size;
+    }
+
+    void reallocate(size_t size) {
+        auto new_string = new char[size + 1];
+        copy(string_, new_string);
+        delete [] string_;
+        string_ = new_string;
+        size_ = size;
+        end_ = string_ + ::yacppl::length(string_);
+        allocation_counter_++;
+    }
+
+    void release() {
+        if (string_) {
+            delete [] string_;
+        }
+        string_ = nullptr;
+        end_ = nullptr;
+        size_ = 0;
+        allocation_counter_ = 0;
+    }
+
+    void copy_from(const char *str) {
+        if (str == nullptr) {
+            release();
+            return;
+        }
+        auto len = ::yacppl::length(str);
+        if (string_) {
+            if (len > length()) {
+                reallocate(len);
+            }
+        }
+        else {
+            allocate(len);
+        }
+        copy(str, string_);
+        end_ += len;
+    }
+
+    void move_from(string &s) {
+        string_ = s.string_;
+        end_ = s.end_;
+        size_ = s.size_;
+        allocation_counter_ = s.allocation_counter_;
+        s.string_ = nullptr;
+        s.end_ = nullptr;
+        s.size_ = 0;
+        s.allocation_counter_ = 0;
+    }
 };
 
 } // namespace yacppl

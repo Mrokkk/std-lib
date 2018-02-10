@@ -31,7 +31,6 @@ add_executable(${PROJECT_NAME}
     unique_ptr.cpp
     allocator.cpp
     path.cpp
-    string.cpp
     hash_map.cpp
     function.cpp
     inherited_list.cpp
@@ -43,6 +42,7 @@ add_executable(${PROJECT_NAME}
     pair.cpp
     variant.cpp
     lazy_instance.cpp
+    string.cpp
 )
 
 add_run_target(${PROJECT_NAME} tests-run ${TESTS_PARAMS})
