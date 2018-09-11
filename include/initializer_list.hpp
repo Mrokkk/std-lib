@@ -2,40 +2,49 @@
 
 #include <stddef.h>
 
-namespace std {
+namespace std
+{
 
 template <typename Type>
-class initializer_list {
-
-    const Type *array_;
-    size_t size_;
-
+class initializer_list
+{
 public:
-
-    constexpr initializer_list(const Type *array, size_t length) : array_(array), size_(length) {
+    constexpr initializer_list(
+        const Type* array,
+        size_t length)
+        : array_(array)
+        , size_(length)
+    {
     }
 
-    size_t size() const {
+    size_t size() const
+    {
         return size_;
     }
 
-    const Type *begin() const {
+    const Type* begin() const
+    {
         return array_;
     }
 
-    const Type *end() const {
+    const Type* end() const
+    {
         return &array_[size_];
     }
 
-    const Type *cbegin() const {
+    const Type* cbegin() const
+    {
         return array_;
     }
 
-    const Type *cend() const {
+    const Type* cend() const
+    {
         return &array_[size_];
     }
 
+private:
+    const Type* array_;
+    size_t size_;
 };
 
 } // namespace std
-

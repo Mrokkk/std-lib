@@ -1,49 +1,61 @@
 #pragma once
 
-namespace yacppl {
+namespace yacppl
+{
 
 template <typename T>
-struct lazy_instance {
-
-    ~lazy_instance() {
-        if (instance_) instance_->~T();
+struct lazy_instance
+{
+    ~lazy_instance()
+    {
+        if (instance_)
+        {
+            instance_->~T();
+        }
     }
 
     template <typename ...Args>
-    void initialize(const Args &...args) {
+    void initialize(const Args&... args)
+    {
         instance_ = new(data_) T(args...);
     }
 
-    operator bool() const {
+    operator bool() const
+    {
         return instance_ != nullptr;
     }
 
-    T *operator->() {
-        if (instance_ == nullptr) {
-            return reinterpret_cast<T *>(const_cast<char *>(data_));
+    T* operator->()
+    {
+        if (instance_ == nullptr)
+        {
+            return reinterpret_cast<T*>(const_cast<char*>(data_));
         }
         return instance_;
     }
 
-    const T *operator->() const {
-        if (instance_ == nullptr) {
-            return reinterpret_cast<T *>(const_cast<char *>(data_));
+    const T* operator->() const
+    {
+        if (instance_ == nullptr)
+        {
+            return reinterpret_cast<T*>(const_cast<char*>(data_));
         }
         return instance_;
     }
 
-    T *get() {
+    T* get()
+    {
         return instance_;
     }
 
-    const T *get() const {
+    const T* get() const
+    {
         return instance_;
     }
 
 private:
     char data_[sizeof(T)];
-    T *instance_ = nullptr;
+    T* instance_ = nullptr;
 };
 
-} // namespace utils
-
+} // namespace yacppl

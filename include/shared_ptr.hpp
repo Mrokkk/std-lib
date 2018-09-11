@@ -4,59 +4,52 @@
 #include "atomic.hpp"
 #include "spinlock.hpp"
 
-namespace yacppl {
+namespace yacppl
+{
 
 template<typename Type>
-class shared_ptr final {
-
-    using Reference = Type &;
-    using Pointer = Type *;
-
-    Pointer ptr_ = nullptr;
-    unsigned *ref_count_ = nullptr;
-    static spinlock spinlock_;
-
-    void release() {
-        if (ref_count_ != nullptr) {
-            if (!--*ref_count_) {
-                delete ptr_;
-                delete ref_count_;
-            }
-            ptr_ = nullptr;
-            ref_count_ = nullptr;
-        }
-    }
+class shared_ptr final
+{
+    using reference = Type&;
+    using pointer = Type*;
 
 public:
-
     shared_ptr() = default;
 
-    explicit shared_ptr(Pointer ptr) : ptr_(ptr) {
-        if (ptr_) {
-            ref_count_ = new unsigned(1);
+    explicit shared_ptr(pointer ptr)
+        : ptr_(ptr)
+    {
+        if (ptr_)
+        {
+            ref_count_ = new size_t(1u);
         }
     }
 
-    shared_ptr(const shared_ptr &ptr) {
+    shared_ptr(const shared_ptr& ptr)
+    {
         auto _ = make_scoped_lock(spinlock_);
         ptr_ = ptr.ptr_;
-        if (ptr.ref_count_ != nullptr) {
+        if (ptr.ref_count_ != nullptr)
+        {
             ref_count_ = ptr.ref_count_;
             ++*ref_count_;
         }
     }
 
     template <typename U>
-    shared_ptr(const shared_ptr<U> &ptr) {
+    shared_ptr(const shared_ptr<U>& ptr)
+    {
         auto _ = make_scoped_lock(spinlock_);
         ptr_ = ptr.ptr_;
-        if (ptr.ref_count_ != nullptr) {
+        if (ptr.ref_count_ != nullptr)
+        {
             ref_count_ = ptr.ref_count_;
             ++*ref_count_;
         }
     }
 
-    shared_ptr(shared_ptr &&other) {
+    shared_ptr(shared_ptr&& other)
+    {
         auto _ = make_scoped_lock(spinlock_);
         ptr_ = other.ptr_;
         other.ptr_ = nullptr;
@@ -64,26 +57,31 @@ public:
         other.ref_count_ = nullptr;
     }
 
-    ~shared_ptr() {
+    ~shared_ptr()
+    {
         auto _ = make_scoped_lock(spinlock_);
         release();
     }
 
-    shared_ptr &operator=(Pointer ptr) {
+    shared_ptr& operator=(pointer ptr)
+    {
         auto _ = make_scoped_lock(spinlock_);
         release();
         ptr_ = ptr;
-        if (ptr_) {
-            ref_count_ = new unsigned(1);
+        if (ptr_)
+        {
+            ref_count_ = new size_t(1u);
         }
         return *this;
     }
 
-    shared_ptr &operator=(const shared_ptr &ptr) {
+    shared_ptr& operator=(const shared_ptr& ptr)
+    {
         auto _ = make_scoped_lock(spinlock_);
         release();
         ptr_ = ptr.ptr_;
-        if (ptr.ref_count_ != nullptr) {
+        if (ptr.ref_count_ != nullptr)
+        {
             ref_count_ = ptr.ref_count_;
             ++*ref_count_;
         }
@@ -91,18 +89,21 @@ public:
     }
 
     template <typename U>
-    shared_ptr &operator=(const shared_ptr<U> &ptr) {
+    shared_ptr& operator=(const shared_ptr<U>& ptr)
+    {
         auto _ = make_scoped_lock(spinlock_);
         release();
         ptr_ = ptr.ptr_;
-        if (ptr.ref_count_ != nullptr) {
+        if (ptr.ref_count_ != nullptr)
+        {
             ref_count_ = ptr.ref_count_;
             ++*ref_count_;
         }
         return *this;
     }
 
-    shared_ptr &operator=(shared_ptr &&other) {
+    shared_ptr& operator=(shared_ptr&& other)
+    {
         auto _ = make_scoped_lock(spinlock_);
         release();
         ptr_ = other.ptr_;
@@ -113,52 +114,65 @@ public:
     }
 
     template <typename T>
-    void reset(T v) {
+    void reset(T v)
+    {
         operator=(v);
     }
 
-    Reference operator*() const {
+    reference operator*() const
+    {
         return *ptr_;
     }
 
-    Pointer operator->() const {
+    pointer operator->() const
+    {
         return ptr_;
     }
 
-    operator Pointer() const {
+    operator pointer() const
+    {
         return ptr_;
     }
 
-    Pointer get() const {
+    pointer get() const
+    {
         return ptr_;
     }
 
-    Pointer get() {
+    pointer get()
+    {
         return ptr_;
     }
 
-    operator bool() const {
+    operator bool() const
+    {
         return ptr_ != nullptr;
     }
 
-    bool operator==(const shared_ptr &ptr) const {
+    bool operator==(const shared_ptr& ptr) const
+    {
         return ptr.ptr_ == ptr_;
     }
 
-    bool operator==(const Pointer ptr) const {
+    bool operator==(const pointer ptr) const
+    {
         return ptr == ptr_;
     }
 
-    bool operator!=(const shared_ptr &ptr) const {
+    bool operator!=(const shared_ptr& ptr) const
+    {
         return ptr.ptr_ != ptr_;
     }
 
-    bool operator!=(const Pointer ptr) const {
+    bool operator!=(const pointer ptr) const
+    {
         return ptr != ptr_;
     }
 
-    unsigned get_ref_count() const {
-        if (ref_count_) {
+    unsigned get_ref_count() const
+    {
+        if (ref_count_)
+        {
             return *ref_count_;
         }
         return 0;
@@ -166,22 +180,44 @@ public:
 
     template <class U>
     friend class shared_ptr;
+
+private:
+    void release()
+    {
+        if (ref_count_ != nullptr)
+        {
+            if (!--*ref_count_)
+            {
+                delete ptr_;
+                delete ref_count_;
+            }
+            ptr_ = nullptr;
+            ref_count_ = nullptr;
+        }
+    }
+
+    pointer ptr_ = nullptr;
+    size_t* ref_count_ = nullptr;
+    static spinlock spinlock_;
 };
 
 template <typename T> spinlock shared_ptr<T>::spinlock_;
 
 template<typename Type>
-inline shared_ptr<Type> make_shared() {
+inline shared_ptr<Type> make_shared()
+{
     return shared_ptr<Type>(new Type());
 }
 
 template<typename Type>
-inline shared_ptr<Type> make_shared(Type &&a) {
+inline shared_ptr<Type> make_shared(Type&& a)
+{
     return shared_ptr<Type>(new Type(forward<Type>(a)));
 }
 
 template<typename T, typename... Args>
-shared_ptr<T> make_shared(Args&&... args) {
+shared_ptr<T> make_shared(Args&&... args)
+{
     return shared_ptr<T>(new T(forward<Args>(args)...));
 }
 

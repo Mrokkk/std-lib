@@ -32,30 +32,32 @@ template <typename T> struct is_same<T, T> : true_type {};
 template <typename T>
 struct is_integral : integral_constant<
      bool,
-     is_same<bool, typename remove_const<T>::type>::value ||
-     is_same<char, typename remove_const<T>::type>::value ||
-     is_same<signed char, typename remove_const<T>::type>::value ||
-     is_same<unsigned char, typename remove_const<T>::type>::value ||
-     is_same<short, typename remove_const<T>::type>::value ||
-     is_same<unsigned short, typename remove_const<T>::type>::value ||
-     is_same<int, typename remove_const<T>::type>::value ||
-     is_same<unsigned int, typename remove_const<T>::type>::value ||
-     is_same<long, typename remove_const<T>::type>::value ||
-     is_same<unsigned long, typename remove_const<T>::type>::value ||
+     is_same<bool, typename remove_const<T>::type>::value or
+     is_same<char, typename remove_const<T>::type>::value or
+     is_same<signed char, typename remove_const<T>::type>::value or
+     is_same<unsigned char, typename remove_const<T>::type>::value or
+     is_same<short, typename remove_const<T>::type>::value or
+     is_same<unsigned short, typename remove_const<T>::type>::value or
+     is_same<int, typename remove_const<T>::type>::value or
+     is_same<unsigned int, typename remove_const<T>::type>::value or
+     is_same<long, typename remove_const<T>::type>::value or
+     is_same<unsigned long, typename remove_const<T>::type>::value or
      is_same<long long, typename remove_const<T>::type>::value> {
 };
 
 template <typename T>
 struct is_floating_point : integral_constant<
      bool,
-     is_same<float, typename remove_const<T>::type>::value ||
-     is_same<double, typename remove_const<T>::type>::value ||
-     is_same<long double, typename remove_const<T>::type>::value> {
+     is_same<float, typename remove_const<T>::type>::value or
+     is_same<double, typename remove_const<T>::type>::value or
+     is_same<long double, typename remove_const<T>::type>::value>
+{
 };
 
 template <typename T>
 struct is_arithmetic : integral_constant<
-    bool, is_integral<T>::value || is_floating_point<T>::value> {
+    bool, is_integral<T>::value or is_floating_point<T>::value>
+{
 };
 
 namespace detail {

@@ -2,47 +2,52 @@
 
 #include "list.hpp"
 
-namespace yacppl {
+namespace yacppl
+{
 
 template<typename Type, typename Container = list<Type>>
-class queue final {
-
-    Container list_;
-
-public:
-
-    void push(Type &element) {
+struct queue final
+{
+    void push(Type& element)
+    {
         list_.push_back(element);
     }
 
-    void push(const Type &element) {
+    void push(const Type& element)
+    {
         list_.push_back(element);
     }
 
-    void pop() {
+    void pop()
+    {
         list_.pop_front();
     }
 
-    const Type &front() const {
+    const Type& front() const
+    {
         return list_.front();
     }
 
-    size_t size() const {
+    size_t size() const
+    {
         return list_.size();
     }
 
-    queue &operator<<(const Type &element) {
+    queue& operator<<(const Type& element)
+    {
         push(element);
         return *this;
     }
 
-    queue &operator>>(Type &element) {
+    queue& operator>>(Type& element)
+    {
         element = front();
         pop();
         return *this;
     }
 
+private:
+    Container list_;
 };
 
 } // namespace yacppl
-

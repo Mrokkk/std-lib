@@ -115,4 +115,3 @@ template <class BackendAllocator, size_t _memory_block_size>
 spinlock allocator<BackendAllocator, _memory_block_size>::spinlock_;
 
 } // namespace yacppl
-

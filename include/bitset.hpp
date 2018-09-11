@@ -3,79 +3,94 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace yacppl {
+namespace yacppl
+{
 
 template <size_t Size>
-class bitset {
-
-    constexpr static size_t value_type_bits() {
-        return sizeof(value_type) * 8;
-    }
-
-    using value_type = size_t;
-    value_type data_[(Size + value_type_bits() - 1) / value_type_bits()];
-
+class bitset
+{
 public:
+    using value_type = size_t;
 
-    class reference {
-
-        value_type *ptr_ = nullptr;
-        size_t bit_ = 0u;
-
+    class reference
+    {
     public:
-
         constexpr reference() = default;
 
-        constexpr explicit reference(value_type *ptr, size_t bit) : ptr_(ptr), bit_(bit) {
+        constexpr explicit reference(value_type* ptr, const size_t bit)
+            : ptr_(ptr)
+            , bit_(bit)
+        {
         }
 
-        operator bool() const {
+        operator bool() const
+        {
             return *ptr_ & (1 << bit_);
         }
 
-        reference &operator=(bool v) {
-            if (v) {
+        reference& operator=(const bool v)
+        {
+            if (v)
+            {
                 *ptr_ |= (1 << bit_);
             }
-            else {
+            else
+            {
                 *ptr_ &= ~(1 << bit_);
             }
             return *this;
         }
 
+    private:
+        value_type* ptr_ = nullptr;
+        size_t bit_ = 0u;
     };
 
-    constexpr bitset() : data_{} {
+    constexpr bitset()
+        : data_{}
+    {
     }
 
-    bitset &set(size_t index) {
+    bitset& set(const size_t index)
+    {
         data_[index / value_type_bits()] |= (1 << index % value_type_bits());
         return *this;
     }
 
-    bitset &reset(size_t index) {
+    bitset& reset(const size_t index)
+    {
         data_[index / value_type_bits()] &= ~(1 << index % value_type_bits());
         return *this;
     }
 
-    bitset &flip(size_t index) {
+    bitset& flip(const size_t index)
+    {
         data_[index / value_type_bits()] ^= (1 << index % value_type_bits());
         return *this;
     }
 
-    reference operator[](size_t index) {
+    reference operator[](const size_t index)
+    {
         return reference(&data_[index / value_type_bits()], index % value_type_bits());
     }
 
-    constexpr bool operator[](size_t index) const {
+    constexpr bool operator[](const size_t index) const
+    {
         return data_[index / value_type_bits()] & (1 << index % value_type_bits());
     }
 
-    size_t size() const {
+    size_t size() const
+    {
         return Size;
     }
 
+private:
+    constexpr static size_t value_type_bits()
+    {
+        return sizeof(value_type) * 8;
+    }
+
+    value_type data_[(Size + value_type_bits() - 1) / value_type_bits()];
 };
 
 } // namespace yacppl
-

@@ -2,43 +2,47 @@
 
 #include "list.hpp"
 
-namespace yacppl {
+namespace yacppl
+{
 
 template<typename Type, typename Container = list<Type>>
-class stack final {
-
-    Container list_;
-
-public:
-
-    void push(const Type &element) {
+struct stack final
+{
+    void push(const Type& element)
+    {
         list_.push_back(element);
     }
 
-    void pop() {
+    void pop()
+    {
         list_.pop_back();
     }
 
-    const Type &front() const {
+    const Type& front() const
+    {
         return list_.back();
     }
 
-    size_t size() const {
+    size_t size() const
+    {
         return list_.size();
     }
 
-    stack &operator<<(const Type &element) {
+    stack& operator<<(const Type& element)
+    {
         push(element);
         return *this;
     }
 
-    stack &operator>>(Type &element) {
+    stack& operator>>(Type& element)
+    {
         element = front();
         pop();
         return *this;
     }
 
+private:
+    Container list_;
 };
 
 } // namespace yacppl
-
