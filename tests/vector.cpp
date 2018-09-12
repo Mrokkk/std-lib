@@ -3,7 +3,8 @@
 
 using namespace yacppl;
 
-TEST(vector, can_be_created) {
+TEST(vector, can_be_created)
+{
     vector<int> v;
     REQUIRE(v.empty());
     REQUIRE_EQ(v.size(), 0u);
@@ -11,7 +12,8 @@ TEST(vector, can_be_created) {
     REQUIRE(v.end() == nullptr);
 }
 
-TEST(vector, can_be_created_from_initializer_list) {
+TEST(vector, can_be_created_from_initializer_list)
+{
     vector<int> v{1, 2, 3, 4, 5, 6, 7};
     REQUIRE_FALSE(v.empty());
     REQUIRE_EQ(v.size(), 7u);
@@ -24,7 +26,8 @@ TEST(vector, can_be_created_from_initializer_list) {
     REQUIRE_EQ(v[6], 7);
 }
 
-TEST(vector, can_be_created_by_move) {
+TEST(vector, can_be_created_by_move)
+{
     vector<int> v1{1, 2, 3, 4, 5, 6};
     vector<int> v2(move(v1));
     REQUIRE_EQ(v1.size(), 0u);
@@ -38,7 +41,8 @@ TEST(vector, can_be_created_by_move) {
     REQUIRE_EQ(v4.size(), 0u);
 }
 
-TEST(vector, can_be_created_by_copy) {
+TEST(vector, can_be_created_by_copy)
+{
     vector<int> v1{9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
     vector<int> v2(v1);
     REQUIRE_FALSE(v2.empty());
@@ -48,13 +52,15 @@ TEST(vector, can_be_created_by_copy) {
     REQUIRE_EQ(v4.size(), 0u);
 }
 
-TEST(vector, can_be_copied_by_assignment) {
+TEST(vector, can_be_copied_by_assignment)
+{
     vector<int> v1{9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
     vector<int> v2;
     v2 = v1;
     REQUIRE_EQ(v1.size(), 10u);
     REQUIRE_EQ(v2.size(), 10u);
-    for (auto it1 = v1.begin(), it2 = v2.begin(); it1 != v1.end(); ++it1, ++it2) {
+    for (auto it1 = v1.begin(), it2 = v2.begin(); it1 != v1.end(); ++it1, ++it2)
+    {
         REQUIRE_EQ(*it1, *it2);
     }
     vector<int> v3;
@@ -62,7 +68,8 @@ TEST(vector, can_be_copied_by_assignment) {
     REQUIRE_EQ(v2.size(), 0u);
 }
 
-TEST(vector, can_be_moved_by_assignment) {
+TEST(vector, can_be_moved_by_assignment)
+{
     vector<int> v1{9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
     vector<int> v2;
     v2 = move(v1);
@@ -76,7 +83,8 @@ TEST(vector, can_be_moved_by_assignment) {
     REQUIRE_EQ(v2.size(), 0u);
 }
 
-TEST(vector, can_push_back_element) {
+TEST(vector, can_push_back_element)
+{
     vector<int> v;
     v.push_back(-934);
     REQUIRE_FALSE(v.empty());
@@ -95,7 +103,8 @@ TEST(vector, can_push_back_element) {
     REQUIRE_EQ(v.back(), 932448);
 }
 
-TEST(vector, can_push_back_list_of_elements) {
+TEST(vector, can_push_back_list_of_elements)
+{
     vector<int> v{1, 2, 3, 4, 5, 6, 7};
     v.push_back({8, 9, 10, 11});
     REQUIRE_EQ(v.size(), 11u);
@@ -106,7 +115,8 @@ TEST(vector, can_push_back_list_of_elements) {
     REQUIRE_EQ(v[10], 11);
 }
 
-TEST(vector, can_pop_back) {
+TEST(vector, can_pop_back)
+{
     vector<int> v{1, 2, 3, 4, 5, 6, 7};
     v.pop_back();
     REQUIRE_EQ(v.size(), 6u);
@@ -118,7 +128,8 @@ TEST(vector, can_pop_back) {
     REQUIRE_EQ(v.back(), 5);
 }
 
-TEST(vector, can_iterate) {
+TEST(vector, can_iterate)
+{
     vector<int> v{1, 2, 3, 4, 5, 6, 7};
     auto it = v.begin();
     REQUIRE(it != nullptr);
@@ -136,7 +147,8 @@ TEST(vector, can_iterate) {
     REQUIRE_EQ(*it--, 3);
 }
 
-TEST(vector, const_iterator_works) {
+TEST(vector, const_iterator_works)
+{
     vector<int> v{1, 2, 3, 4, 5, 6, 7};
     auto const_it = v.cbegin();
     REQUIRE_FALSE(const_it == v.end());
@@ -149,12 +161,15 @@ TEST(vector, const_iterator_works) {
     REQUIRE_EQ(*--const_it, 7);
 }
 
-namespace {
+namespace
+{
 
 template <typename Type>
-void check_const_vector(const vector<Type> &v, unsigned expected_size) {
+void check_const_vector(const vector<Type> &v, unsigned expected_size)
+{
     auto size = 0u;
-    for (const auto &e : v) {
+    for (const auto& e : v)
+    {
         (void)e;
         size++;
     }
@@ -163,11 +178,13 @@ void check_const_vector(const vector<Type> &v, unsigned expected_size) {
 
 } // namespace
 
-TEST(vector, range_based_for_works) {
+TEST(vector, range_based_for_works)
+{
     vector<int> v{0, 1, 2, 3, 4, 5, 6, 7};
     int i = 0;
     auto size = 0u;
-    for (const auto &e : v) {
+    for (const auto& e : v)
+    {
         REQUIRE_EQ(e, i);
         ++size;
         ++i;
@@ -175,7 +192,8 @@ TEST(vector, range_based_for_works) {
     REQUIRE_EQ(size, 8u);
     i = 0;
     size = 0u;
-    for (auto &e : v) {
+    for (auto& e : v)
+    {
         REQUIRE_EQ(e, i);
         ++size;
         ++i;
@@ -184,10 +202,12 @@ TEST(vector, range_based_for_works) {
     check_const_vector(v, 8u);
 }
 
-namespace {
+namespace
+{
 
 template <typename Type>
-void test_with_type() {
+void test_with_type()
+{
     vector<Type> v;
     v.push_back(Type());
     REQUIRE(v.front() == Type());
@@ -201,20 +221,24 @@ void test_with_type() {
     REQUIRE_EQ(v.size(), 3u);
     v.clear();
     REQUIRE_EQ(v.size(), 0u);
-    for (int i = 0; i < 1024; ++i) {
+    for (int i = 0; i < 1024; ++i)
+    {
         v.push_back(Type());
     }
     REQUIRE_EQ(v.size(), 1024u);
-    for (int i = 0; i < 1024; ++i) {
+    for (int i = 0; i < 1024; ++i)
+    {
         v.pop_back();
     }
     REQUIRE_EQ(v.size(), 0u);
     v.push_back(Type());
+
     {
         vector<Type> v2;
         REQUIRE(v2.empty());
         REQUIRE_EQ(v2.size(), 0u);
     }
+
     {
         vector<Type> v2;
         v2 = v;
@@ -225,7 +249,8 @@ void test_with_type() {
 
 } // namespace
 
-TEST(vector, works_with_simple_types) {
+TEST(vector, works_with_simple_types)
+{
     test_with_type<char>();
     test_with_type<signed char>();
     test_with_type<unsigned char>();

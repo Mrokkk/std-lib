@@ -1,6 +1,7 @@
 #include <stddef.h>
 
-inline constexpr void *operator new(size_t, void *address) {
+inline constexpr void* operator new(size_t, void* address)
+{
     return address;
 }
 
@@ -9,12 +10,14 @@ inline constexpr void *operator new(size_t, void *address) {
 
 using namespace yacppl;
 
-TEST(lazy_instance, can_create_empty_instance) {
+TEST(lazy_instance, can_create_empty_instance)
+{
     lazy_instance<int> instance;
     REQUIRE_FALSE(instance);
 }
 
-TEST(lazy_instance, can_be_initialized) {
+TEST(lazy_instance, can_be_initialized)
+{
     lazy_instance<int> instance;
     instance.initialize(2);
     REQUIRE(instance);

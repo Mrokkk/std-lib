@@ -1,30 +1,37 @@
 #include <function.hpp>
+
 #include "yatf/include/yatf.hpp"
 
 using namespace yacppl;
 
-TEST(function, can_create_empty) {
+TEST(function, can_create_empty)
+{
     function<void()> f;
     REQUIRE_FALSE(f);
 }
 
-namespace {
+namespace
+{
 
-void dummy_function1() {
+void dummy_function1()
+{
     REQUIRE(true);
 }
 
-void dummy_function2(int a) {
+void dummy_function2(int a)
+{
     REQUIRE_EQ(a, 198);
 }
 
-int dummy_function3(int a) {
+int dummy_function3(int a)
+{
     return a;
 }
 
 } // namespace
 
-TEST(function, can_create_from_function_ptr) {
+TEST(function, can_create_from_function_ptr)
+{
     function<void()> f1(&dummy_function1);
     REQUIRE(f1);
     f1();
@@ -37,34 +44,39 @@ TEST(function, can_create_from_function_ptr) {
     REQUIRE_EQ(result, 126);
 }
 
-TEST(function, can_create_from_lambda) {
+TEST(function, can_create_from_lambda)
+{
     function<void(int)> f([](int a){ REQUIRE_EQ(a, 194); });
     REQUIRE(f);
     f(194);
 }
 
-TEST(function, can_create_from_capturing_lambda) {
+TEST(function, can_create_from_capturing_lambda)
+{
     int a = 129;
     function<void(void)> f([&](){ REQUIRE_EQ(a, 129); });
     REQUIRE(f);
     f();
 }
 
-TEST(function, can_assign_function_ptr) {
+TEST(function, can_assign_function_ptr)
+{
     function<void()> f;
     f = dummy_function1;
     REQUIRE(f);
     f();
 }
 
-TEST(function, can_assign_lambda) {
+TEST(function, can_assign_lambda)
+{
     function<void(int)> f;
     f = [](int a){ REQUIRE_EQ(a, 194); };
     REQUIRE(f);
     f(194);
 }
 
-TEST(function, can_assign_capturing_lambda) {
+TEST(function, can_assign_capturing_lambda)
+{
     function<void(int)> f;
     auto i = 9382;
     f = [&](int a){ REQUIRE_EQ(i, 9382); REQUIRE_EQ(a, 194); };
@@ -72,27 +84,32 @@ TEST(function, can_assign_capturing_lambda) {
     f(194);
 }
 
-namespace {
+namespace
+{
 
-function<int(int)> get_function() {
+function<int(int)> get_function()
+{
     return [](int a){ return a; };
 }
 
-void call_function(function<char(char)> f) {
+void call_function(function<char(char)> f)
+{
     auto result = f('c');
     REQUIRE_EQ(result, 'c');
 }
 
 } // namespace
 
-TEST(function, can_be_returned_from_function) {
+TEST(function, can_be_returned_from_function)
+{
     function<int(int)> fn;
     fn = get_function();
     auto result = fn(201);
     REQUIRE_EQ(result, 201);
 }
 
-TEST(function, can_be_passed_to_function) {
+TEST(function, can_be_passed_to_function)
+{
     call_function([](char c){ return c; });
 }
 

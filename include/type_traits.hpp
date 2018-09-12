@@ -42,7 +42,8 @@ struct is_integral : integral_constant<
      is_same<unsigned int, typename remove_const<T>::type>::value or
      is_same<long, typename remove_const<T>::type>::value or
      is_same<unsigned long, typename remove_const<T>::type>::value or
-     is_same<long long, typename remove_const<T>::type>::value> {
+     is_same<long long, typename remove_const<T>::type>::value>
+{
 };
 
 template <typename T>
@@ -87,20 +88,27 @@ template <typename T> struct is_pointer_helper<T*> : true_type {};
 template <typename T> struct is_pointer : is_pointer_helper<typename remove_const<T>::type> {};
 
 template <typename T>
-struct is_void {
+struct is_void
+{
     static const bool value = false;
 };
 
 template<>
-struct is_void<void> {
+struct is_void<void>
+{
     static const bool value = true;
 };
 
 template <bool B, class T, class F>
-struct conditional { typedef T type; };
+struct conditional
+{
+    typedef T type;
+};
 
 template <class T, class F>
-struct conditional<false, T, F> { typedef F type; };
+struct conditional<false, T, F>
+{
+    typedef F type;
+};
 
 } // namespace yacppl
-

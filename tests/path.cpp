@@ -3,12 +3,14 @@
 
 using namespace yacppl;
 
-TEST(path, empty_path_is_empty_string) {
+TEST(path, empty_path_is_empty_string)
+{
     path p;
     REQUIRE(p == "");
 }
 
-TEST(path, can_be_constructed_from_char_ptr) {
+TEST(path, can_be_constructed_from_char_ptr)
+{
     path p1(nullptr);
     REQUIRE_FALSE(p1);
     const char *str = "/some_path/dir/file";
@@ -20,7 +22,8 @@ TEST(path, can_be_constructed_from_char_ptr) {
     REQUIRE_EQ((const char *)p5, "/root/aaa/bbb/ccc");
 }
 
-TEST(path, can_be_constructed_from_other_path_by_copy) {
+TEST(path, can_be_constructed_from_other_path_by_copy)
+{
     path p1(nullptr);
     path p2("/root/dir/aaa/bbb");
     path p3(p1);
@@ -32,7 +35,8 @@ TEST(path, can_be_constructed_from_other_path_by_copy) {
     REQUIRE_EQ((const char *)p4, "/root/dir/aaa/bbb");
 }
 
-TEST(path, can_be_constructed_from_other_path_by_move) {
+TEST(path, can_be_constructed_from_other_path_by_move)
+{
     path p1(nullptr);
     path p2("/root/dir/aaa/bbb");
     path p3(move(p1));
@@ -44,7 +48,8 @@ TEST(path, can_be_constructed_from_other_path_by_move) {
     REQUIRE_EQ((const char *)p4, "/root/dir/aaa/bbb");
 }
 
-TEST(path, can_be_assigned_to_other_path) {
+TEST(path, can_be_assigned_to_other_path)
+{
     path p1("/some_path");
     path p2(nullptr);
     path p3;
@@ -58,7 +63,8 @@ TEST(path, can_be_assigned_to_other_path) {
     REQUIRE_EQ((const char *)p3, "/some_path");
 }
 
-TEST(path, paths_can_be_appended) {
+TEST(path, paths_can_be_appended)
+{
     path p1("home");
     path p2("user");
     path p3(p1 / p2);
@@ -72,7 +78,8 @@ TEST(path, paths_can_be_appended) {
     REQUIRE(p4 == "home/user/dir/next_dir/test");
 }
 
-TEST(path, paths_are_normalized) {
+TEST(path, paths_are_normalized)
+{
     path p;
     p = p / "root" / "////test//" / "/dir////";
     REQUIRE_EQ((const char *)p, "/root/test/dir");
@@ -84,7 +91,8 @@ TEST(path, paths_are_normalized) {
     REQUIRE_EQ((const char *)p3, "/dir");
 }
 
-TEST(path, can_get_basename) {
+TEST(path, can_get_basename)
+{
     path p("/root/dir1/dir2//dir3/");
     REQUIRE_EQ((const char *)p.basename(), "dir3");
     path p2("some_dir");
@@ -95,7 +103,8 @@ TEST(path, can_get_basename) {
     REQUIRE_EQ((const char *)p5.basename(), "path");
 }
 
-TEST(path, can_get_dirname) {
+TEST(path, can_get_dirname)
+{
     path p("/");
     REQUIRE_EQ((const char *)p.dirname(), "/");
     path p2("/root/dir1/dir2//dir3/");
@@ -108,7 +117,8 @@ TEST(path, can_get_dirname) {
     REQUIRE_EQ((const char *)p5.dirname(), "/");
 }
 
-TEST(path, can_be_iterated) {
+TEST(path, can_be_iterated)
+{
     {
         path p("/root/dir");
         auto it = p.cbegin();
@@ -121,6 +131,7 @@ TEST(path, can_be_iterated) {
         ++it;
         REQUIRE(it == p.cend());
     }
+
     {
         path p("root/dir");
         auto it = p.begin();
@@ -130,9 +141,11 @@ TEST(path, can_be_iterated) {
         it++;
         REQUIRE(it == p.end());
     }
+
     {
         path p("/dir1/dir2/dir3/dir4/other_dir");
-        string paths[6] = {
+        string paths[6] =
+        {
             "/",
             "dir1",
             "dir2",
@@ -141,11 +154,13 @@ TEST(path, can_be_iterated) {
             "other_dir"
         };
         auto i = 0u;
-        for (const auto &it : p) {
+        for (const auto& it : p)
+        {
             REQUIRE_EQ((const char *)it, (const char *)paths[i]);
             ++i;
         }
     }
+
     {
         path p("/dir1/dir2/dir3/dir4/other_dir");
         auto it = p.begin();

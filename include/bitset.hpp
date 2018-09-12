@@ -7,14 +7,12 @@ namespace yacppl
 {
 
 template <size_t Size>
-class bitset
+struct bitset final
 {
-public:
     using value_type = size_t;
 
-    class reference
+    struct reference final
     {
-    public:
         constexpr reference() = default;
 
         constexpr explicit reference(value_type* ptr, const size_t bit)

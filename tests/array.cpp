@@ -3,14 +3,16 @@
 
 using namespace yacppl;
 
-TEST(array, can_create_empty_string) {
+TEST(array, can_create_empty_string)
+{
     array<int, 0> array;
     unsigned result = array.size();
     REQUIRE(result == 0);
     REQUIRE(array.end() - array.begin() == 0);
 }
 
-TEST(array, can_create_initialized_array) {
+TEST(array, can_create_initialized_array)
+{
     array<int, 5> array{2, 3, 4, 5, 6};
     REQUIRE_EQ(array[0], 2);
     REQUIRE_EQ(array[4], 6);
@@ -18,7 +20,8 @@ TEST(array, can_create_initialized_array) {
     REQUIRE(array.end() - array.begin() == 5);
 }
 
-TEST(array, can_modify) {
+TEST(array, can_modify)
+{
     array<int, 5> array{2, 3, 4, 5, 6};
     array[0] = 10;
     array[1] = 11;
@@ -28,7 +31,8 @@ TEST(array, can_modify) {
     REQUIRE_EQ(array[4], 14);
 }
 
-TEST(array, can_access_underlying_data) {
+TEST(array, can_access_underlying_data)
+{
     array<int, 5> array{2, 12149, -3293, 4340, -1};
     auto data = array.data();
     REQUIRE(data);
@@ -36,7 +40,8 @@ TEST(array, can_access_underlying_data) {
     REQUIRE_EQ(data[4], -1);
 }
 
-TEST(array, can_increment_iterator) {
+TEST(array, can_increment_iterator)
+{
     array<int, 5> array{2, 3, 4, 5, 6};
     auto it = array.begin();
     REQUIRE_EQ(*it, 2);
@@ -46,7 +51,8 @@ TEST(array, can_increment_iterator) {
     REQUIRE_EQ(*it, 4);
 }
 
-TEST(array, can_decrement_iterator) {
+TEST(array, can_decrement_iterator)
+{
     array<int, 5> array{2, 3, 4, 5, 6};
     auto it = array.end();
     it--;
@@ -55,7 +61,8 @@ TEST(array, can_decrement_iterator) {
     REQUIRE_EQ(*it, 5);
 }
 
-TEST(array, can_compare_iterators) {
+TEST(array, can_compare_iterators)
+{
     array<int, 5> array{2, 3, 4, 5, 6};
     auto it1 = array.begin();
     auto it2 = array.begin();
@@ -64,7 +71,8 @@ TEST(array, can_compare_iterators) {
     REQUIRE(it1 != it2);
 }
 
-TEST(array, can_be_copied) {
+TEST(array, can_be_copied)
+{
     array<int, 5> array{2, 3, 4, 5, 6};
     auto array2 = array;
     REQUIRE_EQ(2, array2[0]);
@@ -76,7 +84,8 @@ TEST(array, can_be_copied) {
     REQUIRE(array2.end() - it == 3);
 }
 
-TEST(array, const_iterator_works) {
+TEST(array, const_iterator_works)
+{
     array<int, 5> array1{2, 3, 4, 5, 6};
     auto it = array1.cbegin();
     REQUIRE_EQ(*it, 2);
@@ -100,7 +109,8 @@ TEST(array, const_iterator_works) {
     REQUIRE_EQ(*const_it, 2);
 }
 
-TEST(array, nonconst_iterator_works) {
+TEST(array, nonconst_iterator_works)
+{
     array<int, 5>::iterator it;
     array<int, 5> array{2, 3, 4, 5, 6};
     it = array.begin();
@@ -119,24 +129,29 @@ TEST(array, nonconst_iterator_works) {
     REQUIRE_EQ(*it, 6);
 }
 
-void check_const_array(const array<int, 5> &array) {
+void check_const_array(const array<int, 5> &array)
+{
     auto size = 0u;
-    for (const auto &i : array) {
+    for (const auto &i : array)
+    {
         size++;
         REQUIRE_EQ(i, 3);
     }
 }
 
-TEST(array, range_based_for_works) {
+TEST(array, range_based_for_works)
+{
     array<int, 5> array{2, 3, 4, 5, 6};
     size_t size = 0;
-    for (auto &i : array) {
+    for (auto &i : array)
+    {
         size++;
         i = 3;
     }
     REQUIRE_EQ(size, 5u);
     size = 0u;
-    for (const auto &i : array) {
+    for (const auto &i : array)
+    {
         size++;
         REQUIRE_EQ(i, 3);
     }
@@ -146,10 +161,12 @@ TEST(array, range_based_for_works) {
 
 #include "list.hpp"
 
-namespace {
+namespace
+{
 
 template <typename Container, typename Type>
-void check_container() {
+void check_container()
+{
     Container c{1, 2, 4, 7, 9};
     array<Type, 5> a(c);
     REQUIRE_EQ(a[0], 1);
@@ -161,7 +178,8 @@ void check_container() {
 
 } // namespace
 
-TEST(array, can_be_created_from_other_containers) {
+TEST(array, can_be_created_from_other_containers)
+{
     check_container<list<int>, int>();
 }
 

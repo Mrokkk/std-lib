@@ -3,17 +3,21 @@
 #include <yatf.hpp>
 #include <spinlock.hpp>
 
-void atomic_increment(void *addr) {
+void atomic_increment(void* addr)
+{
     asm volatile("lock incl (%0)" :: "r" (addr));
 }
 
-void atomic_decrement(void *addr) {
+void atomic_decrement(void* addr)
+{
     asm volatile("lock decl (%0)" :: "r" (addr));
 }
 
-namespace yacppl {
+namespace yacppl
+{
 
-void spinlock::lock() {
+void spinlock::lock()
+{
     auto dummy = static_cast<size_t>(state::locked);
     asm volatile(R"(
         1: lock xchg %0, %1
@@ -24,7 +28,8 @@ void spinlock::lock() {
         : "memory");
 }
 
-void spinlock::unlock() {
+void spinlock::unlock()
+{
     auto dummy = static_cast<size_t>(state::unlocked);
     asm volatile(
         "lock xchg %0, %1"
@@ -35,7 +40,8 @@ void spinlock::unlock() {
 
 } // namespace yacppl
 
-int main(int argc, const char *argv[]) {
+int main(int argc, const char* argv[])
+{
     return yatf::main(printf, argc, argv);
 }
 

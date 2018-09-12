@@ -6,11 +6,13 @@
 
 using namespace yacppl;
 
-struct helper {
+struct helper
+{
     int a, b, c;
 };
 
-TEST(variant, can_be_created_empty) {
+TEST(variant, can_be_created_empty)
+{
     variant<int> v1;
     REQUIRE_EQ(v1.safe_get<int>(), nullptr);
     variant<int, char> v2;
@@ -22,7 +24,8 @@ TEST(variant, can_be_created_empty) {
     REQUIRE_EQ(v3.safe_get<helper>(), nullptr);
 }
 
-TEST(variant, can_be_created_from_value) {
+TEST(variant, can_be_created_from_value)
+{
     variant<int, char, helper> v1(32);
     REQUIRE_EQ(v1.get<int>(), 32);
     REQUIRE(v1.safe_get<int>() != nullptr);
@@ -42,7 +45,8 @@ TEST(variant, can_be_created_from_value) {
     REQUIRE(v3.safe_get<helper>() != nullptr);
 }
 
-TEST(variant, can_be_set) {
+TEST(variant, can_be_set)
+{
     variant<int, char, helper> v;
     v.set<int>(-921);
     REQUIRE_EQ(v.get<int>(), -921);
@@ -63,7 +67,8 @@ TEST(variant, can_be_set) {
     REQUIRE(v.safe_get<helper>() != nullptr);
 }
 
-TEST(variant, can_be_assigned) {
+TEST(variant, can_be_assigned)
+{
     variant<int, char, helper> v;
     v = -921;
     REQUIRE_EQ(v.get<int>(), -921);
@@ -84,28 +89,34 @@ TEST(variant, can_be_assigned) {
     REQUIRE(v.safe_get<helper>() != nullptr);
 }
 
-struct allocating_helper {
-
-    allocating_helper() : data(new int()) {
+struct allocating_helper
+{
+    allocating_helper()
+        : data(new int())
+    {
     }
 
-    ~allocating_helper() {
-        if (data != nullptr) {
+    ~allocating_helper()
+    {
+        if (data != nullptr)
+        {
             delete data;
         }
     }
 
-    allocating_helper(const allocating_helper &) : data(new int()) {
+    allocating_helper(const allocating_helper&) : data(new int())
+    {
     }
 
-    allocating_helper(allocating_helper &&h) : data(h.data) {
+    allocating_helper(allocating_helper&& h) : data(h.data)
+    {
     }
 
     int *data;
-
 };
 
-TEST(variant, does_not_leak_memory) {
+TEST(variant, does_not_leak_memory)
+{
     variant<int, allocating_helper> v(allocating_helper{});
     v = allocating_helper{};
     v = allocating_helper{};

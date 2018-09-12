@@ -3,20 +3,23 @@
 
 using namespace yacppl;
 
-TEST(queue, can_create_empty_queue) {
+TEST(queue, can_create_empty_queue)
+{
     queue<int> queue;
     auto size = queue.size();
     REQUIRE(size == 0);
 }
 
-TEST(queue, can_push_temp_element) {
+TEST(queue, can_push_temp_element)
+{
     queue<int> queue;
     queue.push(439);
     REQUIRE(queue.size() == 1);
     REQUIRE_EQ(queue.front(), 439);
 }
 
-TEST(queue, can_push_element) {
+TEST(queue, can_push_element)
+{
     queue<int> queue;
     auto element = 5423;
     queue.push(element);
@@ -24,7 +27,8 @@ TEST(queue, can_push_element) {
     REQUIRE_EQ(queue.front(), 5423);
 }
 
-TEST(queue, can_push_more_elements) {
+TEST(queue, can_push_more_elements)
+{
     queue<int> queue;
     queue.push(33);
     REQUIRE(queue.size() == 1);
@@ -40,14 +44,16 @@ TEST(queue, can_push_more_elements) {
     REQUIRE_EQ(queue.front(), 33);
 }
 
-TEST(queue, can_push_and_pop_element) {
+TEST(queue, can_push_and_pop_element)
+{
     queue<int> queue;
     queue.push(439);
     queue.pop();
     REQUIRE(queue.size() == 0);
 }
 
-TEST(queue, can_push_and_pop_more_elements) {
+TEST(queue, can_push_and_pop_more_elements)
+{
     queue<int> queue;
     queue.push(439);
     queue.push(599);
@@ -72,7 +78,8 @@ TEST(queue, can_push_and_pop_more_elements) {
     REQUIRE(queue.size() == 0);
 }
 
-TEST(queue, can_push_and_pop_by_shift_operators) {
+TEST(queue, can_push_and_pop_by_shift_operators)
+{
     queue<int> queue;
     int temp = -4;
     queue << temp;

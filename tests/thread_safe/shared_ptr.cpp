@@ -2,40 +2,50 @@
 #include <yatf.hpp>
 #include <shared_ptr.hpp>
 
-namespace {
+namespace
+{
 
 yacppl::shared_ptr<int> ptr;
 
-void thread1() {
-    for (auto i = 0u; i < 1024u; ++i) {
+void thread1()
+{
+    for (auto i = 0u; i < 1024u; ++i)
+    {
         auto ptr1 = ptr;
     }
     ptr = nullptr;
-    for (auto i = 0u; i < 1024u; ++i) {
+    for (auto i = 0u; i < 1024u; ++i)
+    {
         auto ptr1 = ptr;
     }
     ptr = nullptr;
-    for (auto i = 0u; i < 1024u; ++i) {
+    for (auto i = 0u; i < 1024u; ++i)
+    {
         auto ptr1 = yacppl::make_shared<int>(323);
         ptr = ptr1;
         ptr1 = nullptr;
     }
-    for (auto i = 0u; i < 1024u; ++i) {
+    for (auto i = 0u; i < 1024u; ++i)
+    {
         auto ptr1 = move(ptr);
         ptr = move(ptr1);
     }
 }
 
-void thread2() {
-    for (auto i = 0u; i < 2048u; ++i) {
+void thread2()
+{
+    for (auto i = 0u; i < 2048u; ++i)
+    {
         auto ptr1 = ptr;
     }
     ptr = new int(4);
-    for (auto i = 0u; i < 2048u; ++i) {
+    for (auto i = 0u; i < 2048u; ++i)
+    {
         auto ptr1 = ptr;
     }
     ptr = nullptr;
-    for (auto i = 0u; i < 1024u; ++i) {
+    for (auto i = 0u; i < 1024u; ++i)
+    {
         auto ptr1 = move(ptr);
         ptr = move(ptr1);
     }
@@ -43,8 +53,10 @@ void thread2() {
 
 } // namespace
 
-TEST(shared_ptr, is_thread_safe) {
-    for (auto i = 0; i < 1024; ++i) {
+TEST(shared_ptr, is_thread_safe)
+{
+    for (auto i = 0; i < 1024; ++i)
+    {
         ptr = yacppl::make_shared(2);
         std::thread t1(thread1);
         std::thread t2(thread2);

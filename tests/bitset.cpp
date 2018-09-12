@@ -3,15 +3,18 @@
 
 using namespace yacppl;
 
-TEST(bitset, can_be_created) {
+TEST(bitset, can_be_created)
+{
     bitset<32> bs;
     REQUIRE_EQ(bs.size(), 32u);
-    for (auto i = 0u; i < 32u; ++i) {
+    for (auto i = 0u; i < 32u; ++i)
+    {
         REQUIRE_FALSE(bs[i]);
     }
 }
 
-TEST(bitset, can_assign_value_to_bit) {
+TEST(bitset, can_assign_value_to_bit)
+{
     bitset<32> bs;
     bs[12] = true;
     REQUIRE(bs[12]);
@@ -24,7 +27,8 @@ TEST(bitset, can_assign_value_to_bit) {
     REQUIRE(bs[12] == false);
 }
 
-TEST(bitset, can_set_reset_and_flip_bits) {
+TEST(bitset, can_set_reset_and_flip_bits)
+{
     bitset<128> bs;
     bs.set(124);
     REQUIRE(bs[124]);

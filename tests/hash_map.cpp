@@ -1,18 +1,20 @@
+#include <limits>
+
 #include <hash_map.hpp>
 #include "yatf/include/yatf.hpp"
 
-#include <limits>
-
 using namespace yacppl;
 
-TEST(hash_map, can_create_empty) {
+TEST(hash_map, can_create_empty)
+{
     hash_map<int, int, 32u> map;
     REQUIRE_EQ(map.size(), 0u);
     REQUIRE_EQ(map.bucket_count(), 0u);
     REQUIRE_EQ(map.max_bucket_count(), 32u);
 }
 
-TEST(hash_map, can_add_elements) {
+TEST(hash_map, can_add_elements)
+{
     hash_map<unsigned, int, 32> map;
     map.insert(make_pair(23u, 43));
     REQUIRE_EQ(map.bucket_count(), 1u);
@@ -37,20 +39,24 @@ TEST(hash_map, can_add_elements) {
     }
 }
 
-TEST(hash_map, cannot_get_nonexistent_element) {
+TEST(hash_map, cannot_get_nonexistent_element)
+{
     hash_map<unsigned, int> map;
-    for (auto i = 0u; i < 1024u; ++i) {
+    for (auto i = 0u; i < 1024u; ++i)
+    {
         auto pair = map[i];
         REQUIRE_FALSE(pair);
     }
     map.insert(make_pair(23u, 43));
-    for (auto i = 0u; i < 23u; ++i) {
+    for (auto i = 0u; i < 23u; ++i)
+    {
         auto pair = map[i];
         REQUIRE_FALSE(pair);
     }
 }
 
-TEST(hash_map, can_erase) {
+TEST(hash_map, can_erase)
+{
     hash_map<unsigned, int> map;
     map.insert(make_pair(914324u, 32));
     REQUIRE_EQ(map.size(), 1u);
@@ -81,31 +87,37 @@ TEST(hash_map, can_erase) {
     REQUIRE_FALSE(map[923482455u]);
 }
 
-TEST(hash_map, cannot_erase_nonexisting_keys) {
+TEST(hash_map, cannot_erase_nonexisting_keys)
+{
     hash_map<unsigned, int> map;
-    for (auto i = 0u; i < 1024u; ++i) {
+    for (auto i = 0u; i < 1024u; ++i)
+    {
         map.erase(i);
         REQUIRE_EQ(map.size(), 0u);
     }
     map.insert(make_pair(23u, 43));
-    for (auto i = 0u; i < 23u; ++i) {
+    for (auto i = 0u; i < 23u; ++i)
+    {
         map.erase(i);
         REQUIRE_EQ(map.size(), 1u);
     }
 }
 
-TEST(hash_map, can_be_cleared) {
+TEST(hash_map, can_be_cleared)
+{
     hash_map<unsigned, int> map;
     map.clear();
     REQUIRE_EQ(map.size(), 0u);
-    for (auto i = 0u; i < 1024; ++i) {
+    for (auto i = 0u; i < 1024; ++i)
+    {
         map.insert(make_pair(i, 91));
     }
     map.clear();
     REQUIRE_EQ(map.size(), 0u);
 }
 
-TEST(hash_map, can_iterate) {
+TEST(hash_map, can_iterate)
+{
     hash_map<unsigned, int> map;
     map.insert(make_pair(0u, 91));
     map.insert(make_pair(91348u, -129));
@@ -132,10 +144,12 @@ TEST(hash_map, can_iterate) {
     REQUIRE(const_it == map.cbegin());
 }
 
-namespace {
+namespace
+{
 
 template <typename T>
-void check_type() {
+void check_type()
+{
     hash_map<T, char> map;
     REQUIRE_EQ(map.size(), 0u);
     REQUIRE_EQ(map.bucket_count(), 0u);
@@ -159,17 +173,20 @@ void check_type() {
     REQUIRE_EQ(map.size(), 1u);
     map.erase(std::numeric_limits<T>::max());
     REQUIRE_EQ(map.size(), 0u);
-    for (auto i = 0; i < 255; ++i) {
+    for (auto i = 0; i < 255; ++i)
+    {
         REQUIRE_FALSE(map[i]);
     }
-    for (auto i = std::numeric_limits<T>::max(); i >= (std::numeric_limits<T>::max() - 254); --i) {
+    for (auto i = std::numeric_limits<T>::max(); i >= (std::numeric_limits<T>::max() - 254); --i)
+    {
         REQUIRE_FALSE(map[i]);
     }
 }
 
 } // namspace
 
-TEST(hash_map, works_with_simple_types_keys) {
+TEST(hash_map, works_with_simple_types_keys)
+{
     check_type<char>();
     check_type<signed char>();
     check_type<unsigned char>();

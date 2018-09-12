@@ -8,7 +8,6 @@ namespace yacppl
 template <typename Type>
 struct inherited_list
 {
-
     struct node
     {
         node*& next()

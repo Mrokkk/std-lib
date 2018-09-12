@@ -1,58 +1,67 @@
 #include <allocator.hpp>
 #include "yatf/include/yatf.hpp"
 
-class heap_allocator final {
-
-    char *_heap = nullptr;
-
-public:
-
-    explicit heap_allocator(char *heap_start)
-        : _heap(heap_start) {
+struct heap_allocator final
+{
+    explicit heap_allocator(char* heap_start)
+        : _heap(heap_start)
+        {
     }
 
-    void *grow_heap(size_t value) {
+    void* grow_heap(size_t value)
+    {
         auto prev_heap = _heap;
         _heap += value;
         return prev_heap;
     }
 
+private:
+    char* _heap = nullptr;
 };
 
-char allocator_test_map[1024*1024];
+char allocator_test_map[1024 * 1024];
 
 using namespace yacppl;
 
-TEST(allocator, can_allocate) {
+TEST(allocator, can_allocate)
+{
     constexpr size_t memory_block_size = 32;
     auto expected = allocator_test_map + memory_block_size;
     allocator<heap_allocator, memory_block_size> test_allocator(allocator_test_map);
-    for (auto i = 1; i < 1025; ++i) {
+    for (auto i = 1; i < 1025; ++i)
+    {
         auto result = test_allocator.allocate(i);
         REQUIRE(result == expected);
-        *static_cast<unsigned int *>(result) = i;
+        *static_cast<unsigned int*>(result) = i;
         expected += memory_block_size * (2 + (i - 1) / memory_block_size);
     }
-    for (unsigned int i = 1024; i > 0; --i) {
+    for (unsigned int i = 1024; i > 0; --i)
+    {
         expected -= memory_block_size * (2 + (i - 1) / memory_block_size);
-        REQUIRE(*reinterpret_cast<unsigned int *>(expected) == i);
+        REQUIRE(*reinterpret_cast<unsigned int*>(expected) == i);
     }
 }
 
-TEST(allocator, cannot_free_invalid_ptr) {
+TEST(allocator, cannot_free_invalid_ptr)
+{
     constexpr size_t memory_block_size = 32;
     allocator<heap_allocator, memory_block_size> test_allocator(allocator_test_map);
-    for (auto i = 0; i < 4096; ++i) {
-        REQUIRE_FALSE(test_allocator.free(reinterpret_cast<void *>(i)));
+    for (auto i = 0; i < 4096; ++i)
+    {
+        REQUIRE_FALSE(test_allocator.free(reinterpret_cast<void*>(i)));
     }
     for (auto i = 0; i < 100; ++i)
+    {
         test_allocator.allocate(i);
-    for (auto i = 0; i < 4096; ++i) {
-        REQUIRE_FALSE(test_allocator.free(reinterpret_cast<void *>(i)));
+    }
+    for (auto i = 0; i < 4096; ++i)
+    {
+        REQUIRE_FALSE(test_allocator.free(reinterpret_cast<void*>(i)));
     }
 }
 
-TEST(allocator, can_divide_blocks) {
+TEST(allocator, can_divide_blocks)
+{
     constexpr size_t memory_block_size = 32;
     allocator<heap_allocator, memory_block_size> test_allocator(allocator_test_map);
     auto data1 = test_allocator.allocate(120);
@@ -75,7 +84,8 @@ TEST(allocator, can_divide_blocks) {
     REQUIRE(data6 == expected);
 }
 
-TEST(allocator, can_merge_blocks) {
+TEST(allocator, can_merge_blocks)
+{
     constexpr size_t memory_block_size = 32;
     allocator<heap_allocator, memory_block_size> alloc(allocator_test_map);
     auto data1 = alloc.allocate(1024);

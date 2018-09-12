@@ -4,19 +4,22 @@
 
 using namespace yacppl;
 
-TEST(list, can_create_empty_list) {
+TEST(list, can_create_empty_list)
+{
     list<int> list;
     REQUIRE(list.size() == 0);
 }
 
-TEST(list, can_add_front_item) {
+TEST(list, can_add_front_item)
+{
     list<int> list;
     list.push_front(2);
     REQUIRE(list.size() == 1);
     REQUIRE_EQ(list.front(), 2);
 }
 
-TEST(list, can_add_two_front_items) {
+TEST(list, can_add_two_front_items)
+{
     list<int> list;
     list.push_front(2);
     list.push_front(1);
@@ -25,14 +28,16 @@ TEST(list, can_add_two_front_items) {
     REQUIRE_EQ(list.back(), 2);
 }
 
-TEST(list, can_add_back_item) {
+TEST(list, can_add_back_item)
+{
     list<int> list;
     list.push_back(4);
     REQUIRE(list.size() == 1);
     REQUIRE_EQ(list.back(), 4);
 }
 
-TEST(list, can_add_back_two_items) {
+TEST(list, can_add_back_two_items)
+{
     list<int> list;
     list.push_back(8);
     list.push_back(3);
@@ -41,7 +46,8 @@ TEST(list, can_add_back_two_items) {
     REQUIRE_EQ(list.back(), 3);
 }
 
-TEST(list, can_be_initialized_with_initializer_list) {
+TEST(list, can_be_initialized_with_initializer_list)
+{
     list<int> empty{};
     REQUIRE(empty.empty());
     list<int> list{2, 5, 6, 88, 4};
@@ -50,7 +56,7 @@ TEST(list, can_be_initialized_with_initializer_list) {
     REQUIRE_EQ(list.back(), 4);
     int result[5];
     int i = 0;
-    for (auto &it : list)
+    for (auto& it : list)
         result[i++] = it;
     REQUIRE_EQ(result[0], 2);
     REQUIRE_EQ(result[1], 5);
@@ -59,21 +65,23 @@ TEST(list, can_be_initialized_with_initializer_list) {
     REQUIRE_EQ(result[4], 4);
 }
 
-TEST(list, can_access_elements) {
+TEST(list, can_access_elements)
+{
     list<int> list;
     list.push_back(3);
     list.push_front(2);
     list.push_front(1);
     int result[3];
     int i = 0;
-    for (const auto &it : list)
+    for (const auto& it : list)
         result[i++] = it;
     REQUIRE_EQ(result[0], 1);
     REQUIRE_EQ(result[1], 2);
     REQUIRE_EQ(result[2], 3);
 }
 
-TEST(list, can_pop_back) {
+TEST(list, can_pop_back)
+{
     list<int> list;
     list.push_back(3);
     list.push_front(2);
@@ -85,7 +93,8 @@ TEST(list, can_pop_back) {
     REQUIRE_EQ(list.front(), 1);
 }
 
-TEST(list, can_pop_front) {
+TEST(list, can_pop_front)
+{
     list<int> list;
     list.push_back(3);
     list.push_front(2);
@@ -98,11 +107,13 @@ TEST(list, can_pop_front) {
     REQUIRE_EQ(list.front(), 1);
 }
 
-TEST(list, can_be_resized) {
+TEST(list, can_be_resized)
+{
     list<int> list;
     list.resize(20);
     REQUIRE_EQ(list.size(), 20u);
-    for (auto &it : list) {
+    for (auto& it : list)
+    {
         it = 38;
     }
     REQUIRE_EQ(list.front(), 38);
@@ -117,7 +128,8 @@ TEST(list, can_be_resized) {
     REQUIRE_EQ(list.size(), 100u);
 }
 
-TEST(list, can_increment_iterator) {
+TEST(list, can_increment_iterator)
+{
     list<int> list;
     list.push_back(3);
     list.push_front(2);
@@ -135,7 +147,8 @@ TEST(list, can_increment_iterator) {
     REQUIRE_EQ(list.front(), 34);
 }
 
-TEST(list, can_decrement_iterator) {
+TEST(list, can_decrement_iterator)
+{
     list<int> list;
     list.push_back(3);
     list.push_front(2);
@@ -148,7 +161,8 @@ TEST(list, can_decrement_iterator) {
     REQUIRE_EQ(*it, 2);
 }
 
-TEST(list, can_increment_and_decrement_iterator) {
+TEST(list, can_increment_and_decrement_iterator)
+{
     list<int> list;
     list.push_back(3);
     list.push_front(2);
@@ -162,7 +176,8 @@ TEST(list, can_increment_and_decrement_iterator) {
     REQUIRE_EQ(*it, 10);
 }
 
-TEST(list, can_compare_iterators) {
+TEST(list, can_compare_iterators)
+{
     list<int> list;
     list.push_back(3);
     list.push_front(2);
@@ -180,7 +195,8 @@ TEST(list, can_compare_iterators) {
     REQUIRE(const_it == it2);
 }
 
-TEST(list, can_be_constructed_by_copy) {
+TEST(list, can_be_constructed_by_copy)
+{
     list<int> list1;
     list<int> list2;
     REQUIRE(list2.empty());
@@ -196,7 +212,8 @@ TEST(list, can_be_constructed_by_copy) {
     REQUIRE(list2.empty());
 }
 
-TEST(list, can_be_assigned) {
+TEST(list, can_be_assigned)
+{
     list<int> list1;
     list1.push_back(3);
     list1.push_front(2);
@@ -213,7 +230,8 @@ TEST(list, can_be_assigned) {
     REQUIRE_EQ(list2.back(), 3);
 }
 
-TEST(list, can_be_constructed_by_move) {
+TEST(list, can_be_constructed_by_move)
+{
     list<int> list1;
     list1.push_back(3);
     list1.push_front(2);
@@ -222,7 +240,7 @@ TEST(list, can_be_constructed_by_move) {
     list<int> list2(move(list1));
     int result[4];
     int i = 0;
-    for (const auto &it : list2)
+    for (const auto& it : list2)
         result[i++] = it;
     REQUIRE(list1.size() == 0);
     REQUIRE(list2.size() == 4);
@@ -234,7 +252,8 @@ TEST(list, can_be_constructed_by_move) {
     REQUIRE_EQ(result[3], 3);
 }
 
-TEST(list, can_be_moved) {
+TEST(list, can_be_moved)
+{
     list<int> list1;
     list1.push_back(3);
     list1.push_front(2);
@@ -246,7 +265,7 @@ TEST(list, can_be_moved) {
     list2 = move(list1);
     int result[4];
     int i = 0;
-    for (const auto &it : list2)
+    for (const auto& it : list2)
         result[i++] = it;
     REQUIRE(list1.size() == 0);
     REQUIRE(list2.size() == 4);
@@ -258,7 +277,8 @@ TEST(list, can_be_moved) {
     REQUIRE_EQ(result[3], 3);
 }
 
-TEST(list, can_erase_single_element) {
+TEST(list, can_erase_single_element)
+{
     list<int> list;
     list.push_front(43);
     list.push_front(-59);
@@ -279,7 +299,8 @@ TEST(list, can_erase_single_element) {
     REQUIRE(list.size() == 0);
 }
 
-TEST(list, can_erase_elements) {
+TEST(list, can_erase_elements)
+{
     list<int> list;
     list.push_front(43);
     list.push_front(-59);
@@ -293,27 +314,32 @@ TEST(list, can_erase_elements) {
     REQUIRE(list.size() == 0);
 }
 
-void check_const_list(const list<int> &list) {
-    for (const auto &i : list) {
+void check_const_list(const list<int> &list)
+{
+    for (const auto& i : list)
+    {
         REQUIRE_EQ(i, 4);
     }
 }
 
-TEST(list, works_with_range_based_for) {
+TEST(list, works_with_range_based_for)
+{
     list<int> list1;
     list1.push_back(3);
     list1.push_front(2);
     list1.push_front(1);
     list1.push_front(10);
     auto size = 0u;
-    for (auto &i : list1) {
+    for (auto& i : list1)
+    {
         REQUIRE(i != 0);
         i = 4;
         size++;
     }
     REQUIRE_EQ(size, 4u);
     size = 0u;
-    for (const auto &i : list1) {
+    for (const auto& i : list1)
+    {
         REQUIRE_EQ(i, 4);
         size++;
     }

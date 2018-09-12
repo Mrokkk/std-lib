@@ -9,15 +9,12 @@ namespace yacppl {
 template<typename Type, size_t Size = 0>
 class array final
 {
-public:
-    using value_type = Type;
-    using node_type = Type;
-
-private:
     template <bool is_const>
     using detail_iterator = detail::iterator<array, random_access_iterator_tag, is_const>;
 
 public:
+    using value_type = Type;
+    using node_type = Type;
     using iterator = detail_iterator<false>;
     using const_iterator = detail_iterator<true>;
 

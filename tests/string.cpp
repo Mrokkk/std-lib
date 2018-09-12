@@ -3,7 +3,8 @@
 
 using namespace yacppl;
 
-TEST(string, can_be_created) {
+TEST(string, can_be_created)
+{
     string str;
     REQUIRE(str == "");
     REQUIRE(str.empty());
@@ -12,7 +13,8 @@ TEST(string, can_be_created) {
     REQUIRE_FALSE(str == "abc");
 }
 
-TEST(string, can_be_constructed_from_cstring) {
+TEST(string, can_be_constructed_from_cstring)
+{
     {
         string str("test_string");
         REQUIRE(str == "test_string");
@@ -23,6 +25,7 @@ TEST(string, can_be_constructed_from_cstring) {
         REQUIRE_EQ(*(str.cbegin()), 't');
         REQUIRE_EQ(*(str.begin()), 't');
     }
+
     {
         string str("test_string", 4);
         REQUIRE(str == "test");
@@ -35,12 +38,15 @@ TEST(string, can_be_constructed_from_cstring) {
     }
 }
 
-string get_string() {
+string get_string()
+{
     return "some_string";
 }
 
-TEST(string, can_be_created_from_other_string) {
+TEST(string, can_be_created_from_other_string)
+{
     string str("test_string");
+
     {
         auto str2 = str;
         REQUIRE(not str.empty());
@@ -48,6 +54,7 @@ TEST(string, can_be_created_from_other_string) {
         REQUIRE(str == "test_string");
         REQUIRE(str2 == "test_string");
     }
+
     {
         string str2(str);
         REQUIRE(not str.empty());
@@ -55,11 +62,13 @@ TEST(string, can_be_created_from_other_string) {
         REQUIRE(str == "test_string");
         REQUIRE(str2 == "test_string");
     }
+
     {
         string str2;
         string str3(str2);
         REQUIRE_EQ(str3.operator const char *(), nullptr);
     }
+
     {
         string str2("some_string");
         string str3(move(str2));
@@ -85,20 +94,24 @@ TEST(string, can_be_created_from_other_string) {
     str = string(string("some other"));
 }
 
-TEST(string, can_be_iterated) {
+TEST(string, can_be_iterated)
+{
     string str("test_string");
     size_t i = 0;
-    for (auto c : str) {
+    for (auto c : str)
+    {
         REQUIRE_EQ(c, "test_string"[i++]);
     }
 }
 
-TEST(string, can_be_appended) {
+TEST(string, can_be_appended)
+{
     {
         string str("hello ");
         str.append("world");
         REQUIRE_EQ((const char *)str, "hello world");
     }
+
     {
         string str;
         str.append("world");
@@ -112,7 +125,8 @@ TEST(string, can_be_appended) {
     }
 }
 
-TEST(string, can_get_substring) {
+TEST(string, can_get_substring)
+{
     string str("hello world");
     auto str2 = str.substring(6, 5);
     REQUIRE_EQ((const char *)str2, "world");
@@ -122,7 +136,8 @@ TEST(string, can_get_substring) {
     REQUIRE_EQ((const char *)str4, "");
 }
 
-TEST(string, can_be_erased) {
+TEST(string, can_be_erased)
+{
     string str("hello world");
     str.erase(str.begin() + 5, str.end());
     REQUIRE_EQ((const char *)str, "hello");
@@ -136,25 +151,30 @@ TEST(string, can_be_erased) {
     REQUIRE(not str.empty());
 }
 
-TEST(string, cannot_be_erased_if_begin_after_end) {
+TEST(string, cannot_be_erased_if_begin_after_end)
+{
     string str("hello world");
     str.erase(str.end(), str.begin());
     REQUIRE_EQ((const char *)str, "hello world");
 }
 
-TEST(string, can_append_chars) {
+TEST(string, can_append_chars)
+{
     string str;
-    for (auto i = 0u; i < 1024u; ++i) {
+    for (auto i = 0u; i < 1024u; ++i)
+    {
         str.append('a');
         REQUIRE_EQ(str.length(), i + 1);
     }
 }
 
-TEST(string, can_reserve_size) {
+TEST(string, can_reserve_size)
+{
     string str;
     str.reserve(1024);
     REQUIRE_EQ(str.size(), 1024u);
-    for (auto i = 0u; i < 1023u; ++i) {
+    for (auto i = 0u; i < 1023u; ++i)
+    {
         str.append('a');
         REQUIRE_EQ(str.length(), i + 1);
         REQUIRE_EQ(str.size(), 1024u);

@@ -8,7 +8,8 @@
 
 using namespace yacppl;
 
-TEST(mixed, can_create_shared_pointer_list) {
+TEST(mixed, can_create_shared_pointer_list)
+{
     list<shared_ptr<int>> list;
     auto ptr1 = make_shared<int>(5);
     list.push_front(ptr1);
@@ -21,7 +22,8 @@ TEST(mixed, can_create_shared_pointer_list) {
     REQUIRE(it->get_ref_count() == 2);
 }
 
-TEST(mixed, can_use_for_each_on_list) {
+TEST(mixed, can_use_for_each_on_list)
+{
     list<int> list;
     int result[3];
     list.push_front(3);
@@ -41,7 +43,8 @@ TEST(mixed, can_use_for_each_on_list) {
     REQUIRE_EQ(result[2], 22);
 }
 
-TEST(mixed, can_use_count_on_list) {
+TEST(mixed, can_use_count_on_list)
+{
     list<int> list{3, 7, 8, 6, 5, 3, 7, 9, 60, 55, 8, 6};
     REQUIRE_EQ(count(list, 3), 2);
     REQUIRE_EQ(count(list, 9), 1);
@@ -50,17 +53,20 @@ TEST(mixed, can_use_count_on_list) {
     REQUIRE_EQ(result1, 10);
     auto result2 = count_if(list, [](const int &e) { return e < 3; });
     REQUIRE_EQ(result2, 0);
-    auto result3 = count_if(list, [](const int &) {
-        return 1;
-    });
+    auto result3 = count_if(list, [](const int &)
+        {
+            return 1;
+        });
     REQUIRE_EQ(result3, 12);
-    auto result4 = count_if(list, [](const int &) {
-        return 0;
-    });
+    auto result4 = count_if(list, [](const int &)
+        {
+            return 0;
+        });
     REQUIRE_EQ(result4, 0);
 }
 
-TEST(mixed, can_swap_same_size_lists) {
+TEST(mixed, can_swap_same_size_lists)
+{
     list<int> list1{3, 7, 8, 6};
     list<int> list2{9, 15, -3, 21};
     swap(list1, list2);
@@ -79,7 +85,8 @@ TEST(mixed, can_swap_same_size_lists) {
     REQUIRE_EQ(list1.back(), 6);
 }
 
-TEST(mixed, can_swap_different_size_lists) {
+TEST(mixed, can_swap_different_size_lists)
+{
     list<int> list1{3, 7, 8, 6, 8, 4};
     list<int> list2{9, 15, -3, 21};
     swap(list1, list2);
@@ -98,7 +105,8 @@ TEST(mixed, can_swap_different_size_lists) {
     REQUIRE_EQ(list1.back(), 4);
 }
 
-TEST(mixed, can_fill_list) {
+TEST(mixed, can_fill_list)
+{
     {
         list<int> list;
         list.resize(30);
@@ -112,24 +120,29 @@ TEST(mixed, can_fill_list) {
         REQUIRE_EQ(list.front(), 3);
         REQUIRE_EQ(list.back(), 3);
     }
+
     {
         list<char> list;
         list.resize(100);
         fill(list.begin(), list.end(), 43);
-        for (auto it = list.begin(); it != list.end(); ++it) {
+        for (auto it = list.begin(); it != list.end(); ++it)
+        {
             REQUIRE_EQ(*it, 43);
         }
     }
+
     {
         array<unsigned, 10> array;
         fill(array.begin(), 10, 21);
-        for (auto it = array.begin(); it != array.end(); ++it) {
+        for (auto it = array.begin(); it != array.end(); ++it)
+        {
             REQUIRE_EQ(*it, 21u);
         }
     }
 }
 
-TEST(mixed, can_find_first_occurrence_in_array) {
+TEST(mixed, can_find_first_occurrence_in_array)
+{
     array<char, 4> string{'t', 'e', 's', 't'};
     REQUIRE(first_occurrence(string, 't') == cbegin(string));
     REQUIRE(first_occurrence(string, 'e') == cbegin(string) + 1);
@@ -141,7 +154,8 @@ TEST(mixed, can_find_first_occurrence_in_array) {
     REQUIRE(first_occurrence(string.begin(), string.begin() + 2, 'z') == string.begin() + 2);
 }
 
-TEST(mixed, can_find_last_occurrence_in_array) {
+TEST(mixed, can_find_last_occurrence_in_array)
+{
     array<char, 4> string{'t', 'e', 's', 't'};
     REQUIRE(last_occurrence(string, 't') == cend(string) - 1);
     REQUIRE(*last_occurrence(string, 't') == 't');
@@ -154,7 +168,8 @@ TEST(mixed, can_find_last_occurrence_in_array) {
     REQUIRE(last_occurrence(string.begin(), string.begin() + 2, 'z') == string.begin() + 2);
 }
 
-TEST(mixed, can_copy_from_list_to_array) {
+TEST(mixed, can_copy_from_list_to_array)
+{
     list<int> list{1, 2, 4, 6, 8};
     array<int, 5> array;
     copy(list.begin(), list.end(), array.begin(), array.end());
@@ -168,7 +183,8 @@ TEST(mixed, can_copy_from_list_to_array) {
     REQUIRE_EQ(*it++, 8);
 }
 
-TEST(mixed, iterators_on_carrays_work) {
+TEST(mixed, iterators_on_carrays_work)
+{
     int data[] = {2, 4, 6, 10, 210, 4345};
     auto it = ::begin(data);
     REQUIRE_EQ(*it, 2);

@@ -3,10 +3,12 @@
 
 using namespace yacppl;
 
-namespace {
+namespace
+{
 
 template <typename T>
-void test_no_value() {
+void test_no_value()
+{
     optional<T> opt;
     REQUIRE_FALSE(opt);
     REQUIRE_FALSE(opt.has_value());
@@ -22,13 +24,15 @@ void test_no_value() {
 
 } // namespace anon
 
-TEST(optional, can_have_no_value) {
+TEST(optional, can_have_no_value)
+{
     test_no_value<int>();
     test_no_value<char>();
     test_no_value<float>();
     test_no_value<double>();
     optional<int> opt;
-    for (signed char i = -127; i < 127; i++) {
+    for (signed char i = -127; i < 127; i++)
+    {
         REQUIRE_FALSE(opt == (signed char)3);
         REQUIRE(opt != (signed char)3);
         REQUIRE_FALSE(opt > i);
@@ -38,7 +42,8 @@ TEST(optional, can_have_no_value) {
     }
 }
 
-TEST(optional, can_set_value) {
+TEST(optional, can_set_value)
+{
     optional<int> opt;
     opt = 4;
     REQUIRE(opt);
@@ -66,10 +71,12 @@ TEST(optional, can_set_value) {
     REQUIRE(optional<int>() != opt);
 }
 
-namespace {
+namespace
+{
 
 template <typename Type>
-void test_with_type() {
+void test_with_type()
+{
     {
         optional<Type> opt;
         REQUIRE(opt == optional<Type>());
@@ -89,7 +96,8 @@ void test_with_type() {
 
 } // namespace
 
-TEST(optional, works_with_simple_types) {
+TEST(optional, works_with_simple_types)
+{
     test_with_type<bool>();
     test_with_type<char>();
     test_with_type<signed char>();
