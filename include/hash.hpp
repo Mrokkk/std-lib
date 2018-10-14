@@ -1,70 +1,90 @@
 #pragma once
 
-namespace yacppl {
+namespace yacppl
+{
 
 template <typename Type>
-struct hash {
+struct hash
+{
 };
 
 template <>
-struct hash<char> {
-    unsigned operator()(signed char v) {
+struct hash<char>
+{
+    unsigned operator()(signed char v)
+    {
         return static_cast<unsigned>(v);
     }
 };
 
 template <>
-struct hash<signed char> {
-    unsigned operator()(signed char v) {
+struct hash<signed char>
+{
+    unsigned operator()(signed char v)
+    {
         return static_cast<unsigned>(v);
     }
 };
 
 template <>
-struct hash<unsigned char> {
-    unsigned operator()(unsigned char v) {
+struct hash<unsigned char>
+{
+    unsigned operator()(unsigned char v)
+    {
         return static_cast<unsigned>(v);
     }
 };
 
 template <>
-struct hash<short> {
-    unsigned operator()(short v) {
+struct hash<short>
+{
+    unsigned operator()(short v)
+    {
         return static_cast<unsigned>(v);
     }
 };
 
 template <>
-struct hash<unsigned short> {
-    unsigned operator()(short v) {
+struct hash<unsigned short>
+{
+    unsigned operator()(short v)
+    {
         return static_cast<unsigned>(v);
     }
 };
 
 template <>
-struct hash<int> {
-    unsigned operator()(int v) {
+struct hash<int>
+{
+    unsigned operator()(int v)
+    {
         return static_cast<unsigned>(v);
     }
 };
 
 template <>
-struct hash<unsigned int> {
-    unsigned operator()(unsigned int v) {
+struct hash<unsigned int>
+{
+    unsigned operator()(unsigned int v)
+    {
         return static_cast<unsigned>(v);
     }
 };
 
 template <>
-struct hash<long> {
-    unsigned operator()(long v) {
+struct hash<long>
+{
+    unsigned operator()(long v)
+    {
         return static_cast<unsigned>(v);
     }
 };
 
 template <>
-struct hash<long long> {
-    unsigned operator()(long long v) {
+struct hash<long long>
+{
+    unsigned operator()(long long v)
+    {
         return static_cast<unsigned>(v);
     }
 };
