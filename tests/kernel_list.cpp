@@ -4,18 +4,23 @@
 
 using namespace yacppl;
 
-namespace {
+namespace
+{
 
-struct helper {
+struct helper
+{
     int a;
     kernel_list<helper>::node list;
-    helper(int x) : a(x) {}
+    helper(int x) : a(x)
+    {}
 };
 
-void test_adding(kernel_list<helper> &head, helper &e, std::vector<int> &comp, size_t s) {
+void test_adding(kernel_list<helper>& head, helper& e, std::vector<int>& comp, size_t s)
+{
     auto size = 0u;
     head.push_back(e);
-    for (const auto &h : head) {
+    for (const auto& h : head)
+    {
         REQUIRE_EQ(comp[size], h.a);
         size++;
     };
@@ -24,10 +29,12 @@ void test_adding(kernel_list<helper> &head, helper &e, std::vector<int> &comp, s
     REQUIRE_FALSE(head.empty());
 }
 
-void test_adding_front(kernel_list<helper> &head, helper &e, std::vector<int> &comp, size_t s) {
+void test_adding_front(kernel_list<helper>& head, helper& e, std::vector<int>& comp, size_t s)
+{
     auto size = 0u;
     head.push_front(e);
-    for (const auto &h : head) {
+    for (const auto& h : head)
+    {
         REQUIRE_EQ(comp[size], h.a);
         size++;
     };
@@ -36,10 +43,12 @@ void test_adding_front(kernel_list<helper> &head, helper &e, std::vector<int> &c
     REQUIRE_FALSE(head.empty());
 }
 
-void test_removing(kernel_list<helper> &head, helper &e, std::vector<int> &comp) {
+void test_removing(kernel_list<helper>& head, helper& e, std::vector<int>& comp)
+{
     head.erase(e);
     size_t size = 0;
-    for (const auto &h : head) {
+    for (const auto& h : head)
+    {
         REQUIRE_EQ(comp[size], h.a);
         size++;
     };
@@ -49,13 +58,15 @@ void test_removing(kernel_list<helper> &head, helper &e, std::vector<int> &comp)
 
 } // namespace
 
-TEST(kernel_list, can_create_empty) {
+TEST(kernel_list, can_create_empty)
+{
     kernel_list<helper> list(&helper::list);
     REQUIRE(list.empty());
     REQUIRE_EQ(list.size(), 0u);
 }
 
-TEST(kernel_list, can_add_elements) {
+TEST(kernel_list, can_add_elements)
+{
     kernel_list<helper> list(&helper::list);
     helper e1(2), e2(44), e3(26), e4(94), e5(24);
     std::vector<int> v{2, 44, 26, 94};
@@ -67,7 +78,8 @@ TEST(kernel_list, can_add_elements) {
     test_adding_front(list, e5, v2, 5);
 }
 
-TEST(kernel_list, can_delete_elements) {
+TEST(kernel_list, can_delete_elements)
+{
     kernel_list<helper> list(&helper::list);
     helper e1(2), e2(44), e3(26), e4(94);
     std::vector<int> v{2, 44, 26, 94};
@@ -81,7 +93,8 @@ TEST(kernel_list, can_delete_elements) {
     test_removing(list, e1, v3);
 }
 
-TEST(kernel_list, can_iterate) {
+TEST(kernel_list, can_iterate)
+{
     kernel_list<helper> list(&helper::list);
     helper e1(2), e2(44), e3(26), e4(94);
     list.push_back(e1);
@@ -110,7 +123,8 @@ TEST(kernel_list, can_iterate) {
     REQUIRE_EQ(const_it->a, 26);
 }
 
-TEST(kernel_list, can_insert) {
+TEST(kernel_list, can_insert)
+{
     kernel_list<helper> list(&helper::list);
     helper e1(2), e2(44), e3(26), e4(94);
     list.push_back(e1);
@@ -145,7 +159,8 @@ TEST(kernel_list, can_insert) {
     REQUIRE(it == list.end());
 }
 
-TEST(kernel_list, can_erase) {
+TEST(kernel_list, can_erase)
+{
     kernel_list<helper> list(&helper::list);
     helper e1(2), e2(44), e3(26), e4(94);
     list.push_back(e1);
@@ -172,7 +187,8 @@ TEST(kernel_list, can_erase) {
     REQUIRE(it == list.end());
 }
 
-TEST(kernel_list, can_clear) {
+TEST(kernel_list, can_clear)
+{
     kernel_list<helper> list(&helper::list);
     helper e1(2), e2(44), e3(26), e4(94);
     list.push_back(e1);
@@ -183,3 +199,24 @@ TEST(kernel_list, can_clear) {
     REQUIRE(list.empty());
 }
 
+TEST(kernel_list, can_get_front)
+{
+    kernel_list<helper> list(&helper::list);
+    helper e1(2), e2(44), e3(26), e4(94);
+    list.push_back(e1);
+    list.push_back(e2);
+    list.push_back(e3);
+    list.push_back(e4);
+    REQUIRE_EQ(list.front().a, 2);
+}
+
+TEST(kernel_list, can_get_back)
+{
+    kernel_list<helper> list(&helper::list);
+    helper e1(2), e2(44), e3(26), e4(94);
+    list.push_back(e1);
+    list.push_back(e2);
+    list.push_back(e3);
+    list.push_back(e4);
+    REQUIRE_EQ(list.back().a, 94);
+}
